@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context=".SendMailActivity">
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            style="@style/TopButton"
+            android:id="@+id/send"
+            android:text="@string/caption_send"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="10dp" />
+
+    <ListView
+        android:layout_weight="40"
+        android:id="@+id/recipients"
+        android:background="@drawable/border"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp">
+    </ListView>
+
+    <Button
+        style="@style/BButton"
+        android:id="@+id/to"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="1dp"
+        android:text="@string/caption_recipients"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_weight="15"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="3dp">
+
+        <TextView
+            android:paddingEnd="5dp"
+            android:text="@string/caption_subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/StaticText"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:id="@+id/mailSubject"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            />
+
+    </LinearLayout>
+
+    <EditText
+        android:hint="@string/caption_comment"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:gravity="top|start"
+        android:background="@drawable/border"
+        android:inputType="textMultiLine"
+        android:id="@+id/comment"
+        android:layout_width="fill_parent"
+        android:layout_weight="40"
+        android:layout_height="0dp" />
+
+    <LinearLayout
+        android:layout_weight="40"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp">
+
+        <TextView
+            android:id="@+id/message_caption"
+            android:text="@string/caption_original"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ScrollView
+            android:id="@+id/messageView"
+            style="@style/StaticText"
+            android:layout_width="fill_parent"
+            android:scrollbars="vertical"
+            android:layout_weight="1"
+            android:layout_height="0dp">
+
+            <TextView
+                android:id="@+id/message"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+
+    </LinearLayout>
+</LinearLayout>

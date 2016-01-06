@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_material_light">#ffffff</color>
+    <color name="light_gray">#d2d2d2</color>
+    <color name="light_blue">#00BCF2</color>
+    <color name="medium_blue">#0072c6</color>
+    <color name="dark_blue">#002050</color>
+    <color name="pressed_blue">#1EBAED</color>
+    <color name="focused_blue">#6DC2E8</color>
+    <color name="office_orange">#DC3C00</color>
+</resources>

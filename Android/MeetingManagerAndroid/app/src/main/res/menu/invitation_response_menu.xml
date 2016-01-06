@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/edit"
+        android:title="Edit response before sending"/>
+
+    <item
+        android:id="@+id/send"
+        android:title="Send response now"/>
+
+    <item
+        android:id="@+id/go"
+        android:title="Don't send response"/>
+
+</menu>

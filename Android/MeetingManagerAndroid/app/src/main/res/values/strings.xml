@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+
+    <!-- Regular UI text -->
+    <string name="app_name">Office 365 Meeting Manager</string>
+    <string name="app_name_short">Meeting Manager</string>
+    <string name="connect_button_text">Connect to Office 365</string>
+    <string name="title_page">Get everything you need to get work done anytime, anywhere</string>
+    <string name="connecting">Connecting...</string>
+
+    <!-- Activity titles -->
+    <string name="title_activity_calendar">Calendar</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_event_info_activity">Meeting Details</string>
+    <string name="title_activity_new_meeting">Create/Modify Meeting</string>
+    <string name="title_activity_add_attendee">Add Attendee</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_select_location">Select Location</string>
+    <string name="title_activity_free_slots">Select Free Time Slot</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_send_mail">Send Mail</string>
+    <string name="title_activity_select_attendee">Select Attendee</string>
+    <string name="title_activity_contacts">Select Contact</string>
+    <string name="title_activity_select_room">Select Room</string>
+    <string name="title_activity_create_event">Create New Meeting</string>
+    <string name="title_activity_modify_event">Modify Meeting</string>
+    <string name="title_activity_recurrent">Recurrence Settings</string>
+
+    <string name="title_sendMail_replyAll">Reply All</string>
+    <string name="title_sendMail_reply">Reply</string>
+    <string name="title_sendMail_forward">Forward Invitation</string>
+    <string name="title_sendMail_accept">Accept Invitation</string>
+    <string name="title_sendMail_tentativelyAccept">Tentatively Accept Invitation</string>
+    <string name="title_sendMail_decline">Decline Invitation</string>
+
+    <!-- Menu captions -->
+    <string name="menu_instance">Instance</string>
+    <string name="menu_master">Series</string>
+    <string name="menu_view">View</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_late">Running Late</string>
+    <string name="menu_cancel">Cancel</string>
+    <string name="menu_send_log">Send Log</string>
+    <string name="menu_disconnect">Disconnect</string>
+
+    <!-- Recurrence button captions -->
+    <string name="recur_once">Once</string>
+    <string name="recur_daily">Daily</string>
+    <string name="recur_weekly">Weekly</string>
+    <string name="recur_monthly">Monthly</string>
+    <string name="recur_yearly">Yearly</string>
+
+    <!-- Recurrence activity captions -->
+    <string name="every">Every</string>
+    <string name="every_weekday">Every weekday</string>
+    <string name="days">day(s)</string>
+    <string name="week_on">week(s) on</string>
+    <string name="months">month(s)</string>
+    <string name="years">year(s)</string>
+    <string name="day">Day</string>
+    <string name="of_every">of every</string>
+    <string name="the">The</string>
+    <string name="on_the">On the</string>
+    <string name="on">On</string>
+    <string name="of">of</string>
+
+    <string name="no_end_date">No end date</string>
+    <string name="end_after">End after</string>
+    <string name="end_by">End by</string>
+    <string name="occurrences">occurrences</string>
+    <string name="start">Start on</string>
+    <string name="one">1</string>
+
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+
+    <string name="first">1st</string>
+    <string name="second">2nd</string>
+    <string name="third">3rd</string>
+    <string name="fourth">4th</string>
+    <string name="last">last</string>
+
+    <!-- Representation of recurrent date -->
+    <string name="occurs_part">Occurs\u0020</string>
+    <string name="every_part">every</string>
+    <string name="daily_part">every %s day(s)</string>
+    <string name="abs_monthly_part" formatted="false">day %1s of every %2s month(s)</string>
+    <string name="rel_monthly_part" formatted="false">every %1s %2s of every %3s month(s)</string>
+    <string name="abs_yearly_part" formatted="false">every %1s year(s) on %2s %3s</string>
+    <string name="rel_yearly_part" formatted="false">every %1s year(s) on the %2s %3s of %4s</string>
+    <string name="effective_part">\u0020effective %s</string>
+    <string name="until_part">\u0020until %s</string>
+    <string name="weekly_part_first">\u0020%s</string>
+    <string name="weekly_part_next">, %s</string>
+    <string name="weekly_part_last">\u0020and %s</string>
+
+    <!-- Attendee status -->
+    <string name="status_organizer">Organizer</string>
+    <string name="status_noResponse">No response</string>
+
+    <!-- Calendar view strings -->
+    <string name="calendar_today">Today</string>
+    <string name="calendar_tomorrow">Tomorrow</string>
+    <string name="calendar_yesterday">Yesterday</string>
+
+    <!-- Toast strings -->
+    <string name="logged_in_as">Logged in as %s</string>
+    <string name="message_sent">"Message has been sent"</string>
+
+    <!-- Misc strings -->
+    <string name="default_arg_name">arg</string>
+    <string name="running_late">I\'m running late</string>
+    <string name="time_interval" formatted="false">from %s to %s</string>
+    <string name="location_not_specified">Not specified</string>
+    <string name="attendee_required">Required</string>
+    <string name="attendee_optional">Optional</string>
+
+    <!-- Various captions -->
+    <string name="caption_recurrence">Recurrence</string>
+    <string name="caption_save">Save</string>
+    <string name="caption_search">Search</string>
+    <string name="filter_hint">No Filter</string>
+    <string name="caption_prev">&lt;&lt;</string>
+    <string name="caption_next">&gt;&gt;</string>
+    <string name="caption_refresh">Refresh</string>
+    <string name="caption_new">New</string>
+    <string name="caption_edit">Edit</string>
+    <string name="caption_location">Location:</string>
+    <string name="caption_attendees">Attendees</string>
+    <string name="caption_redirect_uri">Redirect URI</string>
+    <string name="caption_client_id">Client ID</string>
+    <string name="caption_graph_api">Use Graph API</string>
+    <string name="caption_send">Send</string>
+    <string name="caption_recipients">+Recipient</string>
+    <string name="caption_subject">Subject</string>
+    <string name="caption_comment">Comment</string>
+    <string name="caption_original">Original Message</string>
+    <string name="caption_all_day">All Day</string>
+    <string name="caption_add_attendee">+Attendee</string>
+    <string name="caption_find_room">Find Room</string>
+    <string name="caption_time_slots">Time Slots</string>
+    <string name="caption_asap">ASAP</string>
+    <string name="caption_from">From</string>
+    <string name="caption_to">To</string>
+    <string name="caption_late">Running Late</string>
+    <string name="caption_email">Email</string>
+    <string name="caption_accept">Accept</string>
+    <string name="caption_decline">Decline</string>
+    <string name="caption_tentative">Tentative</string>
+
+    <!-- Hints -->
+    <string name="hint_description">Description</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_location">Location</string>
+
+    <!-- Meeting list headers -->
+    <string name="header_start">Start</string>
+    <string name="header_subject">Subject</string>
+    <string name="header_location">Location</string>
+    <string name="header_organizer">Organizer</string>
+
+    <!-- Alerts -->
+    <string name="alert_title">Alert</string>
+    <string name="alert_caption_neutral">Close</string>
+    <string name="alert_caption_positive">Yes</string>
+    <string name="alert_caption_negative">No</string>
+
+    <string name="app_needs_registration">Please register this app in AAD. Then, enter app\'s client ID and redirect URI on the Settings screen.</string>
+
+    <string name="alert_msg_cancel_series" formatted="false">Do you really want to cancel the meeting series \'%s\'?</string>
+    <string name="alert_msg_cancel_series_occurrence" formatted="false">Do you really want to cancel the meeting occurrence \'%s\'?</string>
+    <string name="alert_msg_cancel_instance" formatted="false">Do you really want to cancel the meeting \'%s\'?</string>
+
+</resources>

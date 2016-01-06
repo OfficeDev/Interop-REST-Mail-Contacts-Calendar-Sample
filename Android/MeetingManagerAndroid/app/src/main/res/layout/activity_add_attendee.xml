@@ -1,0 +1,77 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".AddAttendeeActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                style="@style/Editable"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/filter"
+                android:hint="@string/filter_hint"
+                />
+
+            <Button
+                style="@style/BButton"
+                android:text="@string/caption_search"
+                android:id="@+id/apply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="5dp" />
+
+        <RelativeLayout
+            android:layout_weight="10"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp">
+
+            <Button
+                style="@style/BButton"
+                android:id="@+id/prev"
+                android:text="@string/caption_prev"
+                android:layout_toStartOf="@+id/next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                style="@style/BButton"
+                android:id="@+id/next"
+                android:text="@string/caption_next"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="5dp" />
+
+        <ListView
+            android:background="@drawable/border"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:id="@+id/users"
+            android:layout_weight="70"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

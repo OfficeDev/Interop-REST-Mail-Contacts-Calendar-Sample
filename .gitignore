@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/UWP/MeetingManagerUWP/.vs/MeetingManager/v14/.suo
+*.zip
+/UWP/MeetingManagerUWP/MeetingManager/bin/x86/Debug

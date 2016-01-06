@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="daily_weekly">
+        <item>@string/recur_daily</item>
+        <item>@string/recur_weekly</item>
+        <item>@string/recur_monthly</item>
+        <item>@string/recur_yearly</item>
+    </string-array>
+</resources>

@@ -1,0 +1,95 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:colorBackground">@color/background_material_light</item>
+    </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="TopButton" parent="android:style/Widget.Button">
+        <item name="android:background">@drawable/top_button</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
+        <item name="android:minHeight">36dp</item>
+        <item name="android:minWidth">56dp</item>
+        <item name="android:textColor">@drawable/top_button_text_color</item>
+    </style>
+
+    <style name="BButton" parent="android:style/Widget.Button">
+        <item name="android:background">@drawable/button</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:minHeight">36dp</item>
+        <item name="android:textColor">@drawable/bbutton_text_color</item>
+   </style>
+
+    <style name="DropDown" parent="android:style/Widget.Button.Small">
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">30dp</item>
+        <item name="android:minHeight">36dp</item>
+        <item name="android:background">@drawable/spinner</item>
+    </style>
+
+    <style name="Editable">
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:background">@drawable/frame</item>
+    </style>
+
+    <style name="StaticText">
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:background">@drawable/static_text</item>
+    </style>
+
+    <style name="caption">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="StaticList">
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:background">@drawable/static_frame</item>
+    </style>
+
+    <style name="List">
+        <item name="android:paddingStart">1dp</item>
+        <item name="android:paddingEnd">1dp</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="android:background">@drawable/frame</item>
+    </style>
+
+    <style name="DateEntry">
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:background">@drawable/date_time</item>
+    </style>
+
+    <style name="FramedPanel">
+        <item name="android:paddingStart">2dp</item>
+        <item name="android:paddingEnd">2dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:background">@drawable/frame</item>
+    </style>
+
+</resources>

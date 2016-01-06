@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".RecurrenceActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            style="@style/DropDown"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:id="@+id/mode"
+            android:spinnerMode="dropdown"
+             />
+
+        <Button
+            style="@style/TopButton"
+            android:layout_alignParentEnd="true"
+            android:text="@string/caption_save"
+            android:id="@+id/done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <LinearLayout
+        style="@style/FramedPanel"
+        android:id="@+id/daily"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/every"
+                android:text="@string/every"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                style="@style/Editable"
+                android:layout_marginStart="5dp"
+                android:id="@+id/interval_day"
+                android:text="@string/one"
+                android:minEms="1"
+                android:inputType="number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                style="@style/caption"
+                android:layout_marginStart="5dp"
+                android:text="@string/days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <RadioButton
+            android:id="@+id/every_weekday"
+            android:text="@string/every_weekday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <TableLayout
+        style="@style/FramedPanel"
+        android:id="@+id/weekly"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow>
+
+            <TextView
+                android:text="@string/every"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:layout_marginStart="5dp"
+                style="@style/Editable"
+                android:id="@+id/interval_week"
+                android:text="@string/one"
+                android:minEms="1"
+                android:inputType="number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/caption"
+                android:layout_marginStart="5dp"
+                android:text="@string/week_on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <CheckBox
+                android:id="@+id/sunday"
+                android:tag="Sunday"
+                android:text="@string/sunday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <CheckBox
+                android:id="@+id/monday"
+                android:tag="Monday"
+                android:text="@string/monday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <CheckBox
+                android:id="@+id/tuesday"
+                android:tag="Tuesday"
+                android:text="@string/tuesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <CheckBox
+                android:id="@+id/wednesday"
+                android:tag="Wednesday"
+                android:text="@string/wednesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </TableRow>
+
+        <TableRow>
+            <CheckBox
+                android:id="@+id/thursday"
+                android:tag="Thursday"
+                android:text="@string/thursday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false" />
+            <CheckBox
+                android:id="@+id/friday"
+                android:tag="Friday"
+                android:text="@string/friday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <CheckBox
+                android:id="@+id/saturday"
+                android:tag="Saturday"
+                android:text="@string/saturday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        style="@style/FramedPanel"
+        android:id="@+id/monthly"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/month_day"
+                android:text="@string/day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                style="@style/Editable"
+                android:layout_marginStart="5dp"
+                android:id="@+id/day_of_month"
+                android:text="@string/one"
+                android:minEms="2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/caption"
+                android:layout_marginStart="5dp"
+                android:text="@string/of_every"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                style="@style/Editable"
+                android:layout_marginStart="5dp"
+                android:id="@+id/interval_month"
+                android:text="@string/one"
+                android:minEms="1"
+                android:inputType="number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/caption"
+                android:layout_marginStart="5dp"
+                android:text="@string/months"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/week_day"
+                android:text="@string/the"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Spinner
+                android:id="@+id/first_last"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </Spinner>
+
+            <Spinner
+                android:id="@+id/day_of_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </Spinner>
+
+            <TextView
+                style="@style/caption"
+                android:text="@string/of_every"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                style="@style/Editable"
+                android:layout_marginStart="5dp"
+                android:id="@+id/interval_month2"
+                android:text="@string/one"
+                android:minEms="1"
+                android:inputType="number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/caption"
+                android:layout_marginStart="5dp"
+                android:text="@string/months"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/FramedPanel"
+        android:id="@+id/yearly"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                style="@style/caption"
+                android:text="@string/every"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                style="@style/Editable"
+                android:layout_marginStart="5dp"
+                android:id="@+id/interval_year"
+                android:text="@string/one"
+                android:minEms="1"
+                android:inputType="number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                style="@style/caption"
+                android:layout_marginStart="5dp"
+                android:text="@string/years"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/absolute_day"
+                android:text="@string/on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Spinner
+                android:id="@+id/month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </Spinner>
+
+            <EditText
+                style="@style/Editable"
+                android:id="@+id/day_of_month2"
+                android:text="@string/one"
+                android:minEms="2"
+                android:inputType="number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/relative_day"
+                android:text="@string/on_the"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Spinner
+                android:id="@+id/first_last2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </Spinner>
+
+            <Spinner
+                android:id="@+id/day_of_week2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </Spinner>
+
+            <TextView
+                style="@style/caption"
+                android:text="@string/of"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Spinner
+                android:id="@+id/month2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </Spinner>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/FramedPanel"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/caption"
+                android:text="@string/start"
+                android:layout_width="0dp"
+                android:layout_weight="20"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/DateEntry"
+                android:layout_marginStart="5dp"
+                android:id="@+id/start_date"
+                android:layout_width="0dp"
+                android:layout_weight="80"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/no_end"
+                android:text="@string/no_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <RadioButton
+                    android:id="@+id/end_after"
+                    android:text="@string/end_after"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <EditText
+                    style="@style/Editable"
+                    android:layout_marginStart="5dp"
+                    android:id="@+id/number"
+                    android:inputType="number"
+                    android:minEms="2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    style="@style/caption"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/occurrences"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/end_by"
+                    android:text="@string/end_by"
+                    android:layout_width="0dp"
+                    android:layout_weight="20"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    style="@style/DateEntry"
+                    android:layout_marginStart="5dp"
+                    android:id="@+id/end_date"
+                    android:layout_width="0dp"
+                    android:layout_weight="80"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

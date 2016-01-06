@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See full license at the bottom of this file. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.microsoft.office365.meetingmgr" >
+
+    <!-- Required to connect to Office 365 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Required to use outlook services -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".MeetingMgrApp"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
+        <activity
+            android:name=".ConnectActivity"
+            android:label="@string/app_name" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CalendarActivity"
+            android:label="@string/title_activity_calendar" >
+        </activity>
+        <activity
+            android:name=".EventInfoActivity"
+            android:label="@string/title_activity_event_info_activity" >
+        </activity>
+        <activity
+            android:name=".NewMeetingActivity">
+        </activity>
+        <activity
+            android:name=".AddAttendeeActivity"
+            android:label="@string/title_activity_add_attendee" >
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" >
+        </activity>
+        <activity android:name=".TimeSuggestionsActivity"
+            android:label="@string/title_activity_free_slots">
+        </activity>
+        <activity
+            android:name=".SendMailActivity"
+            android:label="@string/title_activity_send_mail"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity android:name=".RecurrenceActivity"
+            android:label="@string/title_activity_recurrent">
+        </activity>
+        <activity android:name=".RegistrationActivity"
+            android:label="@string/title_activity_settings">
+        </activity>
+        <activity android:name=".ContactsActivity"
+            android:label="@string/title_activity_contacts">
+        </activity>
+    </application>
+
+</manifest>
