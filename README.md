@@ -10,15 +10,15 @@ For documentation, see the [wiki page](https://github.com/OfficeDev/Interop-REST
 
 ###Table of Contents
 
-* Prerequisites
+* [Prerequisites](#prerequisites)
 
-  * System Requirements
+  * [System Requirements](#system-requirements)
 
-  * Install Android SDK
+  * [Install Android SDK](#install-android-sdk)
 
-* Configuration
+* [Configuration](#configuration)
 
-* Dependencies
+* [Dependencies](#dependencies)
 
 ##Prerequisites
 
@@ -70,3 +70,7 @@ For the full installation instructions visit [the Android Developer Website](htt
 1. Download or clone [The Interop REST Mail Calendar Android App](https://github.com/OfficeDev/Interop-REST-Mail-Contacts-Calendar-Sample).
 
 2. Start Android Studio
+
+###Dependencies
+
+Coming Soon
