@@ -11,8 +11,8 @@ public class MeetingOld extends Meeting {
     public String Start;
     public String End;
 
-    public String StartTimeZone = TimeZone.getDefault().getDisplayName();
-    public String EndTimeZone = TimeZone.getDefault().getDisplayName();
+    public String StartTimeZone = TimeZone.getDefault().getID();
+    public String EndTimeZone = TimeZone.getDefault().getID();
 
     public String DateTimeCreated;
 
@@ -23,11 +23,7 @@ public class MeetingOld extends Meeting {
 
     @Override
     public String getStart() {
-        if (IsAllDay) {
-            return DateFmt.getApiDateTime(Start, "UTC");
-        } else {
-            return Start;
-        }
+        return getTimeConditional(Start);
     }
 
     @Override
@@ -37,10 +33,14 @@ public class MeetingOld extends Meeting {
 
     @Override
     public String getEnd() {
+        return getTimeConditional(End);
+    }
+
+    private String getTimeConditional(String timeString) {
         if (IsAllDay) {
-            return DateFmt.getApiDateTime(End, "UTC");
+            return DateFmt.getApiDateTime(timeString, "UTC");
         } else {
-            return End;
+            return timeString;
         }
     }
 

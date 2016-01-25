@@ -142,15 +142,20 @@ public class NewMeetingActivity extends BaseActivity {
                     mStartCal.set(Calendar.HOUR_OF_DAY, 0);
                     mEndCal = (Calendar) mStartCal.clone();
                     mEndCal.add(Calendar.HOUR_OF_DAY, 24);
-
-                    bindTimeFields();
+                } else {
+                    setDefaultTimes();
                 }
 
+                bindTimeFields();
                 mMeeting.IsAllDay = isChecked;
-                mTextStartTime.setEnabled(!isChecked);
-                mTextEndTime.setEnabled(!isChecked);
+                setTimeEnabled();
             }
         });
+    }
+
+    private void setTimeEnabled() {
+        mTextStartTime.setEnabled(!mMeeting.IsAllDay);
+        mTextEndTime.setEnabled(!mMeeting.IsAllDay);
     }
 
     private void registerLoaders() {
@@ -343,11 +348,7 @@ public class NewMeetingActivity extends BaseActivity {
     }
 
     private Meeting createNewMeeting() {
-        mStartCal.add(Calendar.MINUTE, 60);
-        mStartCal.set(Calendar.MINUTE, (mStartCal.get(Calendar.MINUTE) / 60) * 60);
-        mStartCal.set(Calendar.SECOND, 0);
-
-        mEndCal.setTimeInMillis(mStartCal.getTimeInMillis() + TimeUnit.MINUTES.toMillis(30));
+        setDefaultTimes();
 
         Meeting meeting = Meeting.newInstance();
         meeting.setStart(DateFmt.toApiUtcString(mStartCal.getTime()));
@@ -364,6 +365,15 @@ public class NewMeetingActivity extends BaseActivity {
         return meeting;
     }
 
+    private void setDefaultTimes() {
+        mStartCal = Calendar.getInstance();
+        mStartCal.add(Calendar.MINUTE, 60);
+        mStartCal.set(Calendar.MINUTE, (mStartCal.get(Calendar.MINUTE) / 60) * 60);
+        mStartCal.set(Calendar.SECOND, 0);
+
+        mEndCal.setTimeInMillis(mStartCal.getTimeInMillis() + TimeUnit.MINUTES.toMillis(30));
+    }
+
     // Create meeting from the screen data
     private Meeting createMeetingFromView() {
         Meeting meeting = Meeting.newInstance();
@@ -372,21 +382,9 @@ public class NewMeetingActivity extends BaseActivity {
         meeting.Subject = mEditTitle.getText().toString();
         meeting.IsAllDay = mChkAllDay.isChecked();
 
-        if (meeting.IsAllDay && HttpHelper.isUnified()) {
-            // With Graph API, "all day" meeting should be from midnight to midnight in UTC;
-            // that means zeroes in the time component
-            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-
-            cal.setTime(new Date(0));
-
-            cal.set(Calendar.YEAR, mStartCal.get(Calendar.YEAR));
-            cal.set(Calendar.DAY_OF_YEAR, mStartCal.get(Calendar.DAY_OF_YEAR));
-            cal.add(Calendar.DAY_OF_MONTH, 1);  // always starting next day
-
-            meeting.setStart(DateFmt.toApiUtcString(cal.getTime()));
-
-            cal.add(Calendar.HOUR_OF_DAY, 24);  // the whole day
-            meeting.setEnd(DateFmt.toApiUtcString(cal.getTime()));
+        if (HttpHelper.isUnified()) {
+            meeting.setStart(DateFmt.toApiLocalString(mStartCal.getTime()));
+            meeting.setEnd(DateFmt.toApiLocalString(mEndCal.getTime()));
         } else {
             meeting.setStart(DateFmt.toApiUtcString(mStartCal.getTime()));
             meeting.setEnd(DateFmt.toApiUtcString(mEndCal.getTime()));
@@ -423,7 +421,7 @@ public class NewMeetingActivity extends BaseActivity {
         });
 
         mChkAllDay.setChecked(mMeeting.IsAllDay);
-
+        setTimeEnabled();
         mBtnDone.setEnabled(mEditTitle.getText().length() > 0);
     }
 

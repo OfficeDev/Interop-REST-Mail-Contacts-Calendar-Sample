@@ -23,11 +23,7 @@ public class MeetingNew extends Meeting {
 
     @Override
     public String getStart() {
-        if (IsAllDay) {
-            return DateFmt.getApiDateTime(start.dateTime, "UTC");
-        } else {
-            return DateFmt.getApiDateTimeWithTZ(start.dateTime, start.timezone);
-        }
+        return getTimeConditional(start);
     }
 
     @Override
@@ -37,11 +33,14 @@ public class MeetingNew extends Meeting {
 
     @Override
     public String getEnd() {
+        return getTimeConditional(end);
+    }
+
+    private String getTimeConditional(DateTimeZone dtz) {
         if (IsAllDay) {
-            return DateFmt.getApiDateTime(end.dateTime, "UTC");
-        } else {
-            return DateFmt.getApiDateTimeWithTZ(end.dateTime, end.timezone);
+            return DateFmt.getApiDateTime(dtz.dateTime, "UTC");
         }
+        return DateFmt.getApiDateTimeWithTZ(dtz.dateTime, dtz.timezone);
     }
 
     @Override
@@ -81,7 +80,7 @@ public class MeetingNew extends Meeting {
 
     public static class DateTimeZone {
         public String dateTime;
-        public String timezone = "UTC";
+        public String timezone = TimeZone.getDefault().getID();
 
         private DateTimeZone() {}
     }

@@ -13,6 +13,7 @@ import com.microsoft.office365.meetingmgr.Models.Meeting;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -32,7 +33,7 @@ import java.util.TimeZone;
  * 7. Send message
  */
 public class CalendarActivity extends BaseActivity {
-    private final static int MAX_DAILY_EVENTS = 20;
+    private final static int MAX_DAILY_EVENTS = 32;
 
     private CalendarView mCalendar;
     private TextView mTextCurrentDate;
@@ -163,11 +164,12 @@ public class CalendarActivity extends BaseActivity {
 
     private String buildCalendarUri() {
         Calendar startDate = (Calendar) mCurrentDate.clone();
+        startDate.add(Calendar.DAY_OF_MONTH, -1);
         startDate.set(Calendar.HOUR_OF_DAY, 0);
         startDate.add(Calendar.MINUTE, 1);
 
         Calendar endDate = (Calendar) startDate.clone();
-        endDate.add(Calendar.HOUR_OF_DAY, 24);
+        endDate.add(Calendar.DAY_OF_MONTH, 3);
 
         String start = DateFmt.toApiUtcString(startDate.getTime());
         String end = DateFmt.toApiUtcString(endDate.getTime());
@@ -275,10 +277,38 @@ public class CalendarActivity extends BaseActivity {
         @Override
         void onFinished(List<T> data) {
             List<Meeting> dataNew = new ArrayList<>();
-            dataNew.addAll(data);
+
+            for (Meeting m : data) {
+                boolean toAdd = m.IsAllDay ?
+                        isDateUtcCurrent(m.getStart()) :
+                        isDateLocalCurrent(m.getStart());
+
+                if (toAdd) {
+                    dataNew.add(m);
+                }
+            }
 
             new MeetingsAdapter(mListMeetings, dataNew);
         }
+    }
+
+    private boolean isDateUtcCurrent(String dateString) {
+        Date date = DateFmt.toDateUTC(dateString);
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
+        return isDateCurrent(cal, date);
+    }
+
+    private boolean isDateLocalCurrent(String dateString) {
+        Date date = DateFmt.toDate(dateString);
+        Calendar cal = Calendar.getInstance();
+
+        return isDateCurrent(cal, date);
+    }
+
+    private boolean isDateCurrent(Calendar cal, Date date){
+        cal.setTime(date);
+        return cal.get(Calendar.DAY_OF_MONTH) == mCurrentDate.get(Calendar.DAY_OF_MONTH);
     }
 
     private View buildHeaderView(View list) {

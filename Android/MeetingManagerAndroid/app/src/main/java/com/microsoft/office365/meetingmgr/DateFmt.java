@@ -22,7 +22,7 @@ import java.util.TimeZone;
 public class DateFmt {
     private static final String mApiDateFormat = "yyyy-MM-dd";
     private static final String mFullFormatTZ = "yyyy-MM-dd'T'HH:mm:ssZ";
-    private static final String mFullFormatNoTZ = "yyyy-MM-dd'T'hh:mm:ss";
+    private static final String mFullFormatNoTZ = "yyyy-MM-dd'T'HH:mm:ss";
 
     private static DateFormat createInstance(String pattern) {
         return new SimpleDateFormat(pattern, Locale.US);
@@ -60,12 +60,20 @@ public class DateFmt {
             }
         }
 
+        return parseDate(sdf, dateString);
+    }
+
+    public static Date toDateUTC(String dateString) {
+        DateFormat fmt = instanceUTC(mFullFormatNoTZ);
+        return parseDate(fmt, dateString);
+    }
+
+    private static Date parseDate(DateFormat fmt, String dateString) {
         try {
-            return sdf.parse(dateString);
+            return fmt.parse(dateString);
         } catch (ParseException e) {
             ErrorLogger.log(e);
         }
-
         return new Date(0);
     }
 
@@ -140,6 +148,10 @@ public class DateFmt {
 
     public static String toApiUtcString(Date date) {
         return instanceUTC("yyyy-MM-dd'T'HH:mm:ss'Z'").format(date);
+    }
+
+    public static String toApiLocalString(Date date) {
+        return instance(mFullFormatNoTZ).format(date);
     }
 
     public static String toApiDateString(Date date) {
