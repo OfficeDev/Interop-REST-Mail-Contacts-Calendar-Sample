@@ -16,6 +16,8 @@ For documentation, see the [wiki page](https://github.com/OfficeDev/Interop-REST
 
   * [Install Android SDK](#install-android-sdk)
 
+  * [Sign Up for Office 365 Developer Account](#sign-up-for-office-365-developer-account)
+
 * [Configuration](#configuration)
 
 * [Dependencies](#dependencies)
@@ -61,7 +63,7 @@ To us the Interop REST Mail Contacts Calendar you need to install the Android SD
 
 ###Install Android SDK
 
-The Android SDK can be downloaded from the Android Developer site [here](http://developer.android.com/sdk/index.html). You may also need to install the [Java SE Development Kit 7u79](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html). 
+The Android SDK can be downloaded from the Android Developer site [here](http://developer.android.com/sdk/index.html). You may also need to install the [Java SE Development Kit 7u79](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html). If you have questions about installing the Java SDK, you can refer to this [tutorial](http://www.wikihow.com/Install-the-Java-Software-Development-Kit).
 
 For the full installation instructions visit [the Android Developer Website](http://developer.android.com/sdk/installing/index.html).
 
@@ -70,6 +72,24 @@ For the full installation instructions visit [the Android Developer Website](htt
 1. Download or clone [The Interop REST Mail Calendar Android App](https://github.com/OfficeDev/Interop-REST-Mail-Contacts-Calendar-Sample).
 
 2. Start Android Studio
+
+3. Click on "Open an existing Android Studio project" and select the folder that contains the the project, then open the "Android" folder and select the build.gradle file. This will trigger the initial build.
+
+4. Click Run > Run 'app' or click the green triangle play button. 
+
+5. Click the down arrow next to the selection for "Android virtual device:" to select a different device or click the ellipsis next to it to add more devices, then click "Ok".
+
+ * If you get the error message: 
+
+    emulator: ERROR: x86 emulation currently requires hardware acceleration!
+    Please ensure Intel HAXM is properly installed and usable.
+    CPU acceleration status: HAX kernel module is not installed!
+
+  Refer to this [Stackoverflow question](http://stackoverflow.com/questions/26355645/error-in-launching-avd) for how to install HAXM
+
+6. Your app will now start in the emulator. If you already have an Office365 developer account, click "CONNECT TO OFFICE 365" and the app will start. Otherwise, continue with [Sign Up for Office 365 Developer Account](#sign-up-for-office-365-developer-account).
+
+###Sign Up for Office 365 Developer Account
 
 ###Dependencies
 
