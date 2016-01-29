@@ -16,6 +16,8 @@ For documentation, see the [wiki page](https://github.com/OfficeDev/Interop-REST
 
   * [Install Android SDK](#install-android-sdk)
 
+  * [Sign Up for Office 365 Developer Account](#)
+
 * [Configuration](#configuration)
 
 * [Dependencies](#dependencies)
@@ -75,15 +77,19 @@ For the full installation instructions visit [the Android Developer Website](htt
 
 4. Click Run > Run 'app' or click the green triangle play button. 
 
+5. Click the down arrow next to the selection for "Android virtual device:" to select a different device or click the ellipsis next to it to add more devices, then click "Ok".
+
  * If you get the error message: 
 
-```emulator: ERROR: x86 emulation currently requires hardware acceleration!
-Please ensure Intel HAXM is properly installed and usable.
-CPU acceleration status: HAX kernel module is not installed!
-```
+    emulator: ERROR: x86 emulation currently requires hardware acceleration!
+    Please ensure Intel HAXM is properly installed and usable.
+    CPU acceleration status: HAX kernel module is not installed!
+
   Refer to this [Stackoverflow question](http://stackoverflow.com/questions/26355645/error-in-launching-avd) for how to install HAXM
 
-5. Click the down arrow next to the selection for "<u>A</u>ndroid virtual device:"
+6. Your app will now start in the emulator. If you already have an Office365 developer account, click "CONNECT TO OFFICE 365" and the app will start. 
+
+###Sign Up for Office 365 Developer Account
 
 ###Dependencies
 
