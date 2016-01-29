@@ -16,7 +16,7 @@ For documentation, see the [wiki page](https://github.com/OfficeDev/Interop-REST
 
   * [Install Android SDK](#install-android-sdk)
 
-  * [Sign Up for Office 365 Developer Account](#)
+  * [Sign Up for Office 365 Developer Account](#sign-up-for-office-365-developer-account)
 
 * [Configuration](#configuration)
 
@@ -87,7 +87,7 @@ For the full installation instructions visit [the Android Developer Website](htt
 
   Refer to this [Stackoverflow question](http://stackoverflow.com/questions/26355645/error-in-launching-avd) for how to install HAXM
 
-6. Your app will now start in the emulator. If you already have an Office365 developer account, click "CONNECT TO OFFICE 365" and the app will start. 
+6. Your app will now start in the emulator. If you already have an Office365 developer account, click "CONNECT TO OFFICE 365" and the app will start. Otherwise, continue with [Sign Up for Office 365 Developer Account](#sign-up-for-office-365-developer-account).
 
 ###Sign Up for Office 365 Developer Account
 
