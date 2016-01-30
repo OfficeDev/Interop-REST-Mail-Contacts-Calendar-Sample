@@ -10,19 +10,15 @@ For documentation, see the [wiki page](https://github.com/OfficeDev/Interop-REST
 
 ###Table of Contents
 
-* [Prerequisites](#prerequisites)
+* [System Requirements](#system-requirements)
 
-  * [System Requirements](#system-requirements)
+* [Install Android SDK](#install-android-sdk)
 
-  * [Install Android SDK](#install-android-sdk)
-
-  * [Sign Up for Office 365 Developer Account](#sign-up-for-office-365-developer-account)
+* [Sign Up for Office 365 Developer Account](#sign-up-for-office-365-developer-account)
 
 * [Configuration](#configuration)
 
 * [Dependencies](#dependencies)
-
-##Prerequisites
 
 ###System Requirements
 
@@ -63,7 +59,7 @@ To us the Interop REST Mail Contacts Calendar you need to install the Android SD
 
 ###Install Android SDK
 
-The Android SDK can be downloaded from the Android Developer site [here](http://developer.android.com/sdk/index.html). You may also need to install the [Java SE Development Kit 7u79](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html). If you have questions about installing the Java SDK, you can refer to this [tutorial](http://www.wikihow.com/Install-the-Java-Software-Development-Kit).
+The Android SDK can be downloaded from the Android Developer site [here](http://developer.android.com/sdk/index.html). You may also need to install the [Java SE Development Kit 7u80](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html). If you have questions about installing the Java SDK, you can refer to this [tutorial](http://www.wikihow.com/Install-the-Java-Software-Development-Kit).
 
 For the full installation instructions visit [the Android Developer Website](http://developer.android.com/sdk/installing/index.html).
 
@@ -90,6 +86,14 @@ For the full installation instructions visit [the Android Developer Website](htt
 6. Your app will now start in the emulator. If you already have an Office365 developer account, click "CONNECT TO OFFICE 365" and the app will start. Otherwise, continue with [Sign Up for Office 365 Developer Account](#sign-up-for-office-365-developer-account).
 
 ###Sign Up for Office 365 Developer Account
+
+1. To register your App you need to have an account with the Office 365 Dev Program. To register, visit [dev.office.com/devprogram](http://dev.office.com/devprogram). Note that these instructions use the Azure classic portal. You can access the [Azure classic portal here](https://manage.windowsazure.com/).
+
+2. Follow these [detailed instructions](https://github.com/jasonjoh/office365-azure-guides/blob/master/RegisterAnAppInAzure.md) to register your app in Azure. 
+
+2. Once you have created an Office 365 Dev Account, go to [graph.microsoft.io](http://graph.microsoft.io/) to register your app and click "Get started" or you can go directly to the registration page [dev.office.com/app-registration](http://dev.office.com/app-registration).
+
+4. Give your app a name and permissions and click "Register App".
 
 ###Dependencies
 

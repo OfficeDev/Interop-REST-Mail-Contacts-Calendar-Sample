@@ -6,3 +6,4 @@
 *.zip
 /UWP/MeetingManagerUWP/MeetingManager/bin/x86/Debug
 /.idea
+.env
