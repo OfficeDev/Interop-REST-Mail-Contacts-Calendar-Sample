@@ -6,15 +6,13 @@ This example app demonstrates the Representational State Transfer (REST) interfa
 
 In the app, after you log into an Office 365 account, you can create single and recurring meetings on a calendar. Meetings can be scheduled with a given location, time slot, and a set of invitees, where the available locations and attendees are queried from Office 365. Each invitee has the option to accept, decline, or tentatively accept a meeting, or to email the organizer. An organizer has the option to reply all or forward the meeting invitation, and to send a "running late" message to the invitees.
 
-For documentation, see the [wiki page](https://github.com/OfficeDev/Interop-REST-Mail-Contacts-Calendar-Sample/wiki).
-
 ###Table of Contents
 
 * [System Requirements](#system-requirements)
 
 * [Install Android SDK](#install-android-sdk)
 
-* [Register the App with Office 365 Developer Account](#register-the-app-with-office-365-developer-account)
+* [Register the App with Office 365 Developer Account](#add-documentation#register-the-app-with-office-365-developer-account)
 
 * [Configuration](#configuration)
 
@@ -95,11 +93,11 @@ For the full installation instructions visit [the Android Developer Website](htt
 
 4. Give your app a name and permissions and click "Register App" then enter the "CLIENT ID" and "REDIRECT URI". The permissions the app needs are:
 
-* Read user profiles
-* Read user contacts
-* Read and write user calendars
-* Read user calendars
-* Send mail as user
-* Read and write user mail
+  * Read user profiles
+  * Read user contacts
+  * Read and write user calendars
+  * Read user calendars
+  * Send mail as user
+  * Read and write user mail
 
 5. If you need more control of the registration options, you can follow these [detailed instructions](https://github.com/jasonjoh/office365-azure-guides/blob/master/RegisterAnAppInAzure.md) to register your app in Azure. Note that these instructions use the Azure classic portal. You can access the [Azure classic portal here](https://manage.windowsazure.com/).
