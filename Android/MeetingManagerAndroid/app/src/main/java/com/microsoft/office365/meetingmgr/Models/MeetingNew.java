@@ -80,7 +80,7 @@ public class MeetingNew extends Meeting {
 
     public static class DateTimeZone {
         public String dateTime;
-        public String timezone = TimeZone.getDefault().getID();
+        public String timezone = TimeZone.getDefault().getDisplayName();
 
         private DateTimeZone() {}
     }

@@ -14,6 +14,7 @@ import com.microsoft.office365.meetingmgr.Models.Attendee;
 import com.microsoft.office365.meetingmgr.Models.Meeting;
 import com.microsoft.office365.meetingmgr.Models.MeetingTimeCandidate;
 import com.microsoft.office365.meetingmgr.Models.MeetingTimeCandidates;
+import com.microsoft.office365.meetingmgr.Models.MeetingTimeSlot;
 import com.microsoft.office365.meetingmgr.Models.User;
 
 import java.text.DateFormat;
@@ -253,30 +254,49 @@ public class NewMeetingActivity extends BaseActivity {
     }
 
     private void populateTimeFromSlot(MeetingTimeCandidate slot) {
-        DateFormat inFormat = DateFmt.instance("hh:mm:ss.SSS");
-
-        try {
-            mStartCal.setTime(inFormat.parse(slot.MeetingTimeSlot.Start.Time));
-            mEndCal.setTime(inFormat.parse(slot.MeetingTimeSlot.End.Time));
-        } catch (ParseException e) {
-            ErrorLogger.log(e);
-            return;
-        }
+        setTimeFromSlot(mStartCal, slot.MeetingTimeSlot.Start);
+        setTimeFromSlot(mEndCal, slot.MeetingTimeSlot.End);
 
         bindTimeFields();
+    }
+
+    private void setTimeFromSlot(Calendar cal, MeetingTimeSlot.Time dateTime) {
+        DateFormat inTimeFormat = DateFmt.instance("hh:mm:ss.SSS");
+        DateFormat inDateFormat = DateFmt.instance("yyyy-MM-dd");
+
+        try {
+            Date time = inTimeFormat.parse(dateTime.Time);
+            Date date = inDateFormat.parse(dateTime.Date);
+
+            cal.setTime(time);
+            setDateComponents(cal, date);
+        } catch (ParseException e) {
+            ErrorLogger.log(e);
+        }
+    }
+
+    private void setDateComponents(Calendar cal, Date date) {
+        Calendar dateCal = Calendar.getInstance();
+        dateCal.setTime(date);
+
+        copyCalendarDate(dateCal, cal);
     }
 
     private void bindDateTime() {
         bindDateField(mTextDate, mStartCal, new Runnable() {
             @Override
             public void run() {
-                mEndCal.set(mStartCal.get(Calendar.YEAR),
-                        mStartCal.get(Calendar.MONTH),
-                        mStartCal.get(Calendar.DAY_OF_MONTH));
+                copyCalendarDate(mStartCal, mEndCal);
             }
         });
 
         bindTimeFields();
+    }
+
+    private void copyCalendarDate(Calendar calSrc, Calendar calDst) {
+        calDst.set(calSrc.get(Calendar.YEAR),
+                calSrc.get(Calendar.MONTH),
+                calSrc.get(Calendar.DAY_OF_MONTH));
     }
 
     private void bindTimeFields() {

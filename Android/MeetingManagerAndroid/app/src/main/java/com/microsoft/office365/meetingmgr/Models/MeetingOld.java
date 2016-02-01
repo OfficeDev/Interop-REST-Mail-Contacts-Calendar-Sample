@@ -11,8 +11,8 @@ public class MeetingOld extends Meeting {
     public String Start;
     public String End;
 
-    public String StartTimeZone = TimeZone.getDefault().getID();
-    public String EndTimeZone = TimeZone.getDefault().getID();
+    public String StartTimeZone = TimeZone.getDefault().getDisplayName();
+    public String EndTimeZone = TimeZone.getDefault().getDisplayName();
 
     public String DateTimeCreated;
 
