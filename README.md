@@ -67,7 +67,7 @@ For the full installation instructions visit [the Android Developer Website](htt
 
 2. Start Android Studio
 
-3. Click on "Open an existing Android Studio project" and select the folder that contains the the project, then open the "MeetingManagerAndroid" folder inside of the "Android" folder and select the build.gradle file. This will trigger the initial build.
+3. Click on "Open an existing Android Studio project" and select the folder that contains the app, then open the "MeetingManagerAndroid" folder then the "Android" folder and select the build.gradle file.
 
 4. Click Run > Run 'app' or click the green triangle play button. 
 
@@ -81,7 +81,7 @@ For the full installation instructions visit [the Android Developer Website](htt
 
   Refer to this [Stackoverflow question](http://stackoverflow.com/questions/26355645/error-in-launching-avd) for how to install HAXM
 
-6. Your app will now start in the emulator. In order to connect the app to an account you first have to [Register the app with Office 365](#register-the-app-with-office-365-developer-account) and copy your "CLIENT ID" and "REDIRECT URI".
+6. Your app will now start in the emulator. But in order to connect the app to an account you first have to [Register the app with Office 365](#register-the-app-with-office-365-developer-account) and copy your "CLIENT ID" and "REDIRECT URI".
 
 7. You can enter your "CLIENT ID" and "REDIRECT URI" by clicking on the three vertical dots in the upper right of the emulator screen and click "settings" or navigate to "app" > "src/main" > "java" > "com/microsoft/office365/meetingmgr" > Constants.java and paste your "CLIENT ID" and "REDIRECT URI" as strings and save the file.
 
@@ -91,7 +91,7 @@ For the full installation instructions visit [the Android Developer Website](htt
 
 2. Once you have created an Office 365 Dev Account, go to [graph.microsoft.io](http://graph.microsoft.io/) to register your app and click "Get started" or you can go directly to the registration page [dev.office.com/app-registration](http://dev.office.com/app-registration).
 
-4. Give your app a name and permissions and click "Register App" then enter the "CLIENT ID" and "REDIRECT URI". The permissions the app needs are:
+3. Give your app a name and permissions and click "Register App" then enter the "CLIENT ID" and "REDIRECT URI". The permissions the app needs are:
 
   * Read user profiles
   * Read user contacts
@@ -100,4 +100,4 @@ For the full installation instructions visit [the Android Developer Website](htt
   * Send mail as user
   * Read and write user mail
 
-5. If you need more control of the registration options, you can follow these [detailed instructions](https://github.com/jasonjoh/office365-azure-guides/blob/master/RegisterAnAppInAzure.md) to register your app in Azure. Note that these instructions use the Azure classic portal. You can access the [Azure classic portal here](https://manage.windowsazure.com/).
+4. If you need more control of the registration options, you can follow these [detailed instructions](https://github.com/jasonjoh/office365-azure-guides/blob/master/RegisterAnAppInAzure.md) to register your app in Azure. Note that these instructions use the Azure classic portal. You can access the [Azure classic portal here](https://manage.windowsazure.com/).
