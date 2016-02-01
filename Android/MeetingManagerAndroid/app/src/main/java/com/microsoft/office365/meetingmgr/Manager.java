@@ -51,7 +51,7 @@ public class Manager {
 
                 try {
                     mSettings = loadSettings(settingsFile);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     ErrorLogger.log(e);
                 }
             }
