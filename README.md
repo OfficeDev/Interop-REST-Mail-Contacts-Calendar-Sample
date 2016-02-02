@@ -12,9 +12,9 @@ In the app, after you log into an Office 365 account, you can create single and 
 
 * [Install Android SDK](#install-android-sdk)
 
-* [Register the App with Office 365 Developer Account](#add-documentation#register-the-app-with-office-365-developer-account)
-
 * [Configuration](#configuration)
+
+* [Register the App with Office 365 Developer Account](#register-the-app-with-office-365-developer-account)
 
 * [Dependencies](#dependencies)
 
@@ -83,7 +83,7 @@ For the full installation instructions visit [the Android Developer Website](htt
 
 6. Your app will now start in the emulator. But in order to connect the app to an account you first have to [Register the app with Office 365](#register-the-app-with-office-365-developer-account) and copy your "CLIENT ID" and "REDIRECT URI".
 
-7. You can enter your "CLIENT ID" and "REDIRECT URI" by clicking on the three vertical dots in the upper right of the emulator screen and click "settings" or navigate to "app" > "src/main" > "java" > "com/microsoft/office365/meetingmgr" > Constants.java and paste your "CLIENT ID" and "REDIRECT URI" as strings and save the file.
+7. You can enter your "CLIENT ID" and "REDIRECT URI" by clicking on the three vertical dots in the upper right of the emulator screen and click "settings" and enter them there or navigate to "app" > "src/main" > "java" > "com/microsoft/office365/meetingmgr" > Constants.java and paste your "CLIENT ID" and "REDIRECT URI" as strings and save the file.
 
 ###Register the App with Office 365 Developer Account
 
