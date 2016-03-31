@@ -1,0 +1,65 @@
+﻿<UserControl
+    x:Class="MeetingManager.Views.LogWindowControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MeetingManager.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:vm="using:MeetingManager.ViewModels"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+            <Button Margin="5,0,0,0" Content="Copy Selected" Command="{Binding CopySelectedCommand}"
+                        IsEnabled="{Binding HasAnyItems}"/>
+            <Button Margin="5,0,0,0" Content="Copy All" Command="{Binding CopyAllCommand}"
+                        IsEnabled="{Binding HasAnyItems}"/>
+            <Button Margin="5,0,0,0" Content="Popup Window"
+                        Visibility="{Binding IsMainWindow, Converter={StaticResource BoolToVisible}}"
+                        Click="NewWindowClick"
+                        />
+            <Button Margin="5,0,0,0" Content="Show JSON" Command="{Binding ShowJsonCommand}"
+                        IsEnabled="{Binding HasAnyItems}"/>
+        </StackPanel>
+        
+        <ListView x:Name="LogEntries" Grid.Row="1" Margin="0,5,0,0"
+            SelectionMode="Single"
+            ItemsSource="{Binding LogEntries}" 
+            SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+            IsEnabled="{Binding IsEnabled, Mode=TwoWay}"
+            IsEnabledChanged="LogEntries_EnabledChanged"
+            >
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="{Binding IsRequest, Converter={StaticResource BoolToBackground}, ConverterParameter=LightBlue:Beige}">
+                        <TextBlock Text="{Binding Text}" TextWrapping="Wrap"/>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+            <i:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="Tapped">
+                    <core:InvokeCommandAction Command="{Binding ItemToggleCommand}" />
+                </core:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+
+        </ListView>
+    </Grid>
+</UserControl>

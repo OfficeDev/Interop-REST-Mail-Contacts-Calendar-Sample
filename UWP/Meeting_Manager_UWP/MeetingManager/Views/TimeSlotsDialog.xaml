@@ -1,0 +1,55 @@
+﻿<ContentDialog
+    x:Class="MeetingManager.Views.TimeSlotsDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MeetingManager.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:prism="using:Prism.Windows.Mvvm"
+    prism:ViewModelLocator.AutoWireViewModel="True"    
+    mc:Ignorable="d"
+    PrimaryButtonText="OK"
+    SecondaryButtonText="Cancel"
+    PrimaryButtonCommand="{Binding OkCommand}"
+    IsPrimaryButtonEnabled="{Binding HasSelected}"
+    Title="Select Time Slot"
+    >
+
+    <Grid Style="{StaticResource DialogGrid}">
+        <Grid.Resources>
+            <DataTemplate x:Key="TimeSlotTemplate">
+                <Grid Width="500">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="{Binding TimeSlot}"/>
+                    <TextBlock Grid.Column="1" Text="{Binding TimeZone}"/>
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
+
+        <ProgressRing IsActive="{Binding IsLoading}"
+                      Width="100"
+                      Height="100"/>
+
+        <Border BorderBrush="Gray" BorderThickness="2" MinWidth="400">
+            <ListView
+                    MinHeight="600" MaxHeight="600"
+                    DoubleTapped="ListView_DoubleTapped"
+                    ItemTemplate="{StaticResource TimeSlotTemplate}"
+                    ItemsSource="{Binding MeetingTimeCandidates}"
+                    SelectedItem="{Binding SelectedMeetingTimeCandidate, Mode=TwoWay}">
+                <i:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="DoubleTapped">
+                        <core:InvokeCommandAction Command="{Binding DoubleTappedCommand}" />
+                    </core:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+            </ListView>
+        </Border>
+
+    </Grid>
+</ContentDialog>
