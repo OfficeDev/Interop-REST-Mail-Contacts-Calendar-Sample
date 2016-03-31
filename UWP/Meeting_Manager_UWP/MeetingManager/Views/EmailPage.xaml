@@ -1,0 +1,159 @@
+﻿<local:NavigationAwarePage
+    x:Class="MeetingManager.Views.EmailPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MeetingManager.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:prism="using:Prism.Windows.Mvvm"
+    prism:ViewModelLocator.AutoWireViewModel="True"  
+    Style="{StaticResource Page}"
+    mc:Ignorable="d"
+    x:Name="ThisPage"
+    xmlns:ext="using:MeetingManager.Views"
+    d:DesignHeight="600"
+    d:DesignWidth="600">
+<!--
+    <local:NavigationAwarePage.TopAppBar>
+        <local:TopBarControl/>
+    </local:NavigationAwarePage.TopAppBar>
+-->
+    <Grid Background="Honeydew" Style="{StaticResource MainGrid}">
+        <Grid.Resources>
+            <DataTemplate x:Key="RecipientTemplate">
+                <Grid>
+                    <i:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="RightTapped">
+                            <local:OpenMenuFlyoutAction/>
+                        </core:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <FlyoutBase.AttachedFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Delete" IsEnabled="{Binding IsOrganizer, Converter={StaticResource Negation}}" Command="{Binding DataContext.DeleteRecipientCommand, ElementName=ThisPage}" CommandParameter="{Binding}"/>
+                        </MenuFlyout>
+                    </FlyoutBase.AttachedFlyout>
+
+                    <TextBlock Text="{Binding Path=EmailAddress}"/>
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="{Binding Title}" Grid.ColumnSpan="2" Style="{StaticResource PageTitle}"/>
+
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource CmdBar}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ProgressBar IsIndeterminate="True"
+                Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisible}}"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Content="Send" Style="{StaticResource TopButton}" Command="{Binding SendCommand}"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Details" Style="{StaticResource SubTitle}"/>
+
+              <Border Grid.Row="1" Style="{StaticResource StaticText}">
+                    <TextBlock Text="{Binding Message.Subject}" Style="{StaticResource StaticTextBlock}"
+                        FontSize="24"
+                        />
+                </Border>
+
+                 <TextBox Grid.Row="2" Margin="0,10,0,0" Text="{Binding Comment, Mode=TwoWay}" PlaceholderText="Comment"
+                             TextWrapping="NoWrap" AcceptsReturn="True"/>
+
+                <Grid Grid.Row="3" Margin="0,10,0,0" Visibility="{Binding IsEmailAction, Converter={StaticResource BoolToVisible}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <TextBlock Text="Original Message" Style="{StaticResource ProfileLabel}"/>
+
+                <Border Grid.Row="1" Style="{StaticResource StaticText}" Visibility="{Binding IsContentText, Converter={StaticResource BoolToCollapsed}}"
+                        BorderBrush="Gray" BorderThickness="2" Padding="5">
+                    <WebView local:AttachedProperties.Html="{Binding Message.Body.Content}"
+                        />
+                </Border>
+
+                <Border Grid.Row="1" Style="{StaticResource StaticText}" Visibility="{Binding IsContentText, Converter={StaticResource BoolToVisible}}"
+                        Padding="5">
+                    <TextBlock Text="{Binding Message.Body.Content}"/>
+                </Border>
+
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2" Grid.Column="1" Grid.RowSpan="1" Style="{StaticResource PeopleColumn}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="People" Style="{StaticResource SubTitle}"/>
+
+            <Button Grid.Row="1" Content="+Recipient" 
+                        IsEnabled="{Binding IsEmailAction}"
+                        HorizontalAlignment="Stretch" Margin="0,0,0,1">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Add User" Command="{Binding AddUserRecipientCommand}"/>
+                        <MenuFlyoutItem Text="Add Contact" Command="{Binding AddContactRecipientCommand}"/>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+<!--
+            <Border Grid.Row="2" BorderBrush="Gray" BorderThickness="2">
+-->
+            <ListView Grid.Row="2" Background="Beige"
+                           IsEnabled="{Binding IsEmailAction}"
+                           ItemTemplate="{StaticResource RecipientTemplate}"
+                           ItemsSource="{Binding Recipients}"
+                    >
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+<!--
+            </Border>
+-->
+        </Grid>
+
+        <Border Style="{StaticResource LogWindow}" 
+                Grid.Row="3" Grid.ColumnSpan="2">
+            <local:LogWindowControl DataContext="{StaticResource LogWindowVM}"/>
+        </Border>
+
+    </Grid>
+</local:NavigationAwarePage>

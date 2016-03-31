@@ -1,0 +1,39 @@
+﻿<local:NavigationAwarePage
+    x:Class="MeetingManager.Views.ConnectPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MeetingManager.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="using:Prism.Windows.Mvvm"
+    prism:ViewModelLocator.AutoWireViewModel="True"    
+    mc:Ignorable="d"
+    d:DesignHeight="600"
+    d:DesignWidth="400">
+
+    <Grid>
+        <ProgressRing IsActive="{Binding IsLoading}"
+                      Width="100"
+                      Height="100"/>
+        
+        <StackPanel Orientation="Vertical">
+
+            <Image Source="ms-appx:///Assets/office365_logo.png" Stretch="None"/>
+
+            <TextBlock Text="Meeting Manager" 
+                       HorizontalAlignment="Center" Foreground="#FFDC3C00" FontSize="32"
+                    />
+
+            <Button Content="Connect to Office 365" Command="{Binding ConnectCommand}"
+                    HorizontalAlignment="Center" Height="65" Width="207" Background="#FFDC3C00" Foreground="White"
+                    Margin="0,20,0,0" FontSize="18.667"
+                    />
+
+            <Image Source="ms-appx:///Assets/people.png" Margin="0,40,0,0"
+                    HorizontalAlignment="Center" Stretch="None"
+                   />
+
+        </StackPanel>
+    </Grid>
+
+</local:NavigationAwarePage>
