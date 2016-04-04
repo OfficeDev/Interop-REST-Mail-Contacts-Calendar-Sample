@@ -53,7 +53,7 @@ For the full installation instructions visit [the Android Developer Website](htt
 
   ![Start the emulator](../img/android-studio-run-emulator.jpg)
 
-7. Your app will now start in the emulator. But in order to connect the app to an account you first have to [Register the app with Office 365](#register-the-app-with-office-365-developer-account) and copy your "CLIENT ID" and "REDIRECT URI".
+7. Your app will now start in the emulator. But in order to connect the app to an account you first have to [Register the app with Office 365](../#register-the-app-with-office-365-developer-account) and copy your "CLIENT ID" and "REDIRECT URI".
 
 8. You can enter your "CLIENT ID" and "REDIRECT URI" by clicking on the three vertical dots in the upper right of the emulator screen and click "settings" and enter them there or navigate to "app" > "src/main" > "java" > "com/microsoft/office365/meetingmgr" > Constants.java and paste your "CLIENT ID" and "REDIRECT URI" as strings and save the file.
 
@@ -70,11 +70,9 @@ For the full installation instructions visit [the Android Developer Website](htt
 
 Android Studio comes with its own Android emulator, but Microsoft has designed an emulator focused on performance, speed, and efficiency that can be used independently or in conjuction with Visual Studio 2015. You can learn more about the Visual Studio Emulator for Android [here](https://channel9.msdn.com/Events/Visual-Studio/Connect-event-2014/516).
 
-###Install Visual Studio
+###Install Visual Studio Android Emulator
 
 The Visual Studio Emulator for Android does not require you to download and/or use Visual Studio, but if you would like to use the free (Community) or paid (Enterprise) Visual Studio, you can download and install Visual Studio Community or Visual Studio Enterprise from the [Visual Studio Website](https://www.visualstudio.com/). Whichever version you choose, it must be Visual Studio 2015 in order to run the emulator.
-
-###Install Visual Studio Android Emulator
 
 Download and install the [Visual Studio Emulator for Android](https://www.visualstudio.com/en-us/features/msft-android-emulator-vs.aspx).
 

@@ -1,26 +1,30 @@
-# Interop REST Mail Contacts Calendar Android App
+# Interop REST Mail Contacts Calendar App
 
 Office Interoperability Examples - REST Mail, Contacts, and Calendar App
 
-This example app demonstrates the Representational State Transfer (REST) interface for Office 365, including authentication, interacting with the calendar, querying the address book, and sending email. 
+This example app demonstrates the Representational State Transfer (REST) interface for Office 365, including authentication, interacting with the calendar, querying the address book, and sending email. The app can be built for Android or the Universal Windows Platform. To get started, register your app with an Office 365 Developer Account, then choose which platform(s) you want to build for. 
 
 ##Table of Contents
 
 * [Register the App with Office 365 Developer Account](#register-the-app-with-office-365-developer-account)
 
-* [Android Studio Configuration](/Android#android-studio-configuration)
+* [Build Your App for the Universal Windows Platform](/UWP)
 
-  * [Install Android SDK](/Android#install-android-sdk)
+  * [Install Visual Studio](/UWP#install-visual-studio)
 
-  * [Android Configuration](/Android#android-configuration)
+* [Build Your App for Android](/Android)
 
-* [Visual Studio Emulator Configuration](/Android#visual-studio-emulator-configuration)
-  
-  * [Install Visual Studio](/Android#install-visual-studio)
+  * [Android Studio Configuration](/Android#android-studio-configuration)
 
-  * [Install Visual Studio Android Emulator](/Android#install-visual-studio-android-emulator)
+    * [Install Android SDK](/Android#install-android-sdk)
 
-  * [Launch the App in Visual Studio Android Emulator](/Android#launch-the-app-in-visual-studio-android-emulator)
+    * [Android Configuration](/Android#android-configuration)
+
+  * [Visual Studio Emulator Configuration](/Android#visual-studio-emulator-configuration)
+
+    * [Install Visual Studio Android Emulator](/Android#install-visual-studio-android-emulator)
+
+    * [Launch the App in Visual Studio Android Emulator](/Android#launch-the-app-in-visual-studio-android-emulator)
 
 In the app, after you log into an Office 365 account, you can view your calendar and create single or recurring meetings on your calendar. Meetings can be scheduled with a given location, time slot, and a set of invitees, where the available locations and attendees are queried from Office 365. Each invitee has the option to accept, decline, or tentatively accept a meeting, or to email the organizer. An organizer has the option to reply all or forward the meeting invitation, and to send a "running late" message to the invitees.
 
@@ -36,7 +40,7 @@ Modify meeting details | Create a new meeting
 
 ##Register the App with Office 365 Developer Account
 
-1. No matter what you use to configure your app, you will need to register it with and Office 365 Developer Account. To register your app you need to have an account with the Office 365 Dev Program. To sign up, visit [dev.office.com/devprogram](http://dev.office.com/devprogram) or you can go directly to the [profile creation page](https://profile.microsoft.com/RegSysProfileCenter/wizardnp.aspx?wizid=14b845d0-938c-45af-b061-f798fbb4d170&lcid=1033) and create a profile. Once you have created your profile, you also need to sign up for an Office 365 developer account. The link to create your account will be in the confirmation email you receive after creating your profile. You can view detailed instructions on signing up for a developer account [here](https://msdn.microsoft.com/en-us/library/office/fp179924.aspx#o365_signup).
+1. No matter what you use to configure your app, you will need to register it with an Office 365 Developer Account. To register your app you need to have an account with the Office 365 Dev Program. To sign up, visit [dev.office.com/devprogram](http://dev.office.com/devprogram) or you can go directly to the [profile creation page](https://profile.microsoft.com/RegSysProfileCenter/wizardnp.aspx?wizid=14b845d0-938c-45af-b061-f798fbb4d170&lcid=1033) and create a profile. Once you have created your profile, you also need to sign up for an Office 365 developer account. The link to create your account will be in the confirmation email you receive after creating your profile. You can view detailed instructions on signing up for a developer account [here](https://msdn.microsoft.com/en-us/library/office/fp179924.aspx#o365_signup).
 
 2. Once you have created an Office 365 Dev Account, go to [graph.microsoft.io](http://graph.microsoft.io/en-us/) to register your app and click "App Registration" then click "Office 365 App Registration Tool" or you can go directly to the registration page [dev.office.com/app-registration](http://dev.office.com/app-registration).
 
@@ -56,10 +60,11 @@ Modify meeting details | Create a new meeting
 
   ![Register App](/img/ms-graph-get-started-3.jpg)
 
-5. When your registration is complete, you will receive a "Client ID". Make note of the "Client ID" and "Redirect URI" you will need them for step 7 in [Configuration](#configuration).
+5. When your registration is complete, you will receive a "Client ID". Make note of the "Client ID" and "Redirect URI" you will need them for step 7 in [Android Configuration](/Android#android-configuration).
 
 6. If you need more control of the registration options, you can follow these [detailed instructions](https://github.com/jasonjoh/office365-azure-guides/blob/master/RegisterAnAppInAzure.md) to register your app in Azure. Note that these instructions use the Azure classic portal. You can access the [Azure classic portal here](https://manage.windowsazure.com/).
 
+7. Now you're ready to build your app with [Android](/Android) or [the Universal Windows Platform](/UWP) or both!
 
 ---
 
