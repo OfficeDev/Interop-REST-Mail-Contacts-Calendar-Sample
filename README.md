@@ -8,19 +8,19 @@ This example app demonstrates the Representational State Transfer (REST) interfa
 
 * [Register the App with Office 365 Developer Account](#register-the-app-with-office-365-developer-account)
 
-* [Android Studio Configuration](/Android/README.md#android-studio-configuration)
+* [Android Studio Configuration](/Android#android-studio-configuration)
 
-  * [Install Android SDK](/Android/README.md#install-android-sdk)
+  * [Install Android SDK](/Android#install-android-sdk)
 
-  * [Android Configuration](/Android/README.md#android-configuration)
+  * [Android Configuration](/Android#android-configuration)
 
-* [Visual Studio Emulator Configuration](/Android/README.md#visual-studio-emulator-configuration)
+* [Visual Studio Emulator Configuration](/Android#visual-studio-emulator-configuration)
   
-  * [Install Visual Studio](/Android/README.md#install-visual-studio)
+  * [Install Visual Studio](/Android#install-visual-studio)
 
-  * [Install Visual Studio Android Emulator](/Android/README.md#install-visual-studio-android-emulator)
+  * [Install Visual Studio Android Emulator](/Android#install-visual-studio-android-emulator)
 
-  * [Launch the App in Visual Studio Android Emulator](/Android/README.md#launch-the-app-in-visual-studio-android-emulator)
+  * [Launch the App in Visual Studio Android Emulator](/Android#launch-the-app-in-visual-studio-android-emulator)
 
 In the app, after you log into an Office 365 account, you can view your calendar and create single or recurring meetings on your calendar. Meetings can be scheduled with a given location, time slot, and a set of invitees, where the available locations and attendees are queried from Office 365. Each invitee has the option to accept, decline, or tentatively accept a meeting, or to email the organizer. An organizer has the option to reply all or forward the meeting invitation, and to send a "running late" message to the invitees.
 
