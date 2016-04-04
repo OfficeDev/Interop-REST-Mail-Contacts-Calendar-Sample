@@ -84,7 +84,7 @@ Android | UWP
 
   ![Register App](/img/ms-graph-get-started-3.jpg)
 
-5. When your registration is complete, you will receive a "Client ID". Make note of the "Client ID" and "Redirect URI" you will need them for step 7 in [Android Configuration](/Android#android-configuration).
+5. When your registration is complete, you will receive a "Client ID". Make note of the "Client ID" and "Redirect URI" you will need them to configure your app.
 
 6. If you need more control of the registration options, you can follow these [detailed instructions](https://github.com/jasonjoh/office365-azure-guides/blob/master/RegisterAnAppInAzure.md) to register your app in Azure. Note that these instructions use the Azure classic portal. You can access the [Azure classic portal here](https://manage.windowsazure.com/).
 

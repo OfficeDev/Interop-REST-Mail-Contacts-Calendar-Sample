@@ -4,11 +4,13 @@ The Universal Windows Platform allows developers to build their apps for a wide 
 
 ##Table of Contents
 
-[Install Visual Studio](#install-visual-studio)
+* [Register the App with Office 365 Developer Account](../#register-the-app-with-office-365-developer-account)
+
+* [Install Visual Studio](#install-visual-studio)
 
 ##Install Visual Studio
 
-In order to build the app for the Universal Windows Platform, you need to install Visual Studio 2015 Community (free) or Enterprise (paid). To build the app for Android, does not require Visual Studio, but 
+In order to build the app for the Universal Windows Platform, you need to install Visual Studio 2015 Community (free) or Enterprise (paid).  
 
 
 ---
