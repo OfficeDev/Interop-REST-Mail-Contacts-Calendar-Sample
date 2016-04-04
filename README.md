@@ -37,15 +37,30 @@ The basic app is able to:
 Android | UWP
 --- | ---
 ![Calendar Page](/img/app-calendar.jpg) | ![Calendar Page UWP](/img/app-calendar-uwp.jpg)
---- | ---
 
-View your calendar | View meeting details | Send a message to other meeting attendees
---- | --- | ---
-![Calendar Page](/img/app-calendar.jpg) | ![Details Page](/img/app-meeting-details.jpg) | ![Send a message](/img/app-reply-all.jpg)
+####View Meeting Details
 
-Modify meeting details | Create a new meeting
+Android | UWP
 --- | ---
-![modify meeting details](/img/app-modify-meeting.jpg) | ![create new meeting](/img/app-create-meeting.jpg)
+![Details Page](/img/app-meeting-details.jpg) | ![Details Page](/img/app-meeting-details-uwp.jpg)
+
+####Send a Message to Other Meeting Attendees
+
+Android | UWP
+--- | ---
+![Send a message](/img/app-reply-all.jpg) | ![Send a message](/img/app-reply-all-UWP.jpg)
+
+####Modify Meeting Details
+
+Android | UWP
+--- | ---
+![modify meeting details](/img/app-modify-meeting.jpg) | ![modify meeting details](/img/app-modify-meeting-UWP.jpg)
+
+####Create a New Meeting
+
+Android | UWP
+--- | ---
+![create new meeting](/img/app-create-meeting.jpg) | ![Create New Meeting](/img/app-create-meeting-uwp.jpg)
 
 ##Register the App with Office 365 Developer Account
 
