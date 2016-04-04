@@ -1,5 +1,7 @@
 ##Android Studio Configuration
 
+  * [Android Configuration](#android-configuration)
+
 ###Install Android SDK
 
 The Android SDK can be downloaded from the Android Developer site [here](http://developer.android.com/sdk/index.html). You may also need to install the [Java SE Development Kit 7u80](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html). If you have questions about installing the Java SDK, you can refer to this [tutorial](http://www.wikihow.com/Install-the-Java-Software-Development-Kit).
