@@ -19,10 +19,10 @@ This example app demonstrates the Representational State Transfer (REST) interfa
     * [Install Android SDK](/Android#install-android-sdk)
 
     * [Android Configuration](/Android#android-configuration)
+    
+    * [test](/Android#android-configuration2)
 
   * [Visual Studio Emulator Configuration](/Android#visual-studio-emulator-configuration)
-  
-  * [test](/Android#android-configuration2)
 
     * [Install Visual Studio Android Emulator](/Android#install-visual-studio-android-emulator)
 
