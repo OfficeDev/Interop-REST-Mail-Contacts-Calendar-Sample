@@ -2,6 +2,8 @@
 
   * [Android Configuration](#android-configuration)
 
+  * [test](#visual-studio-emulator-configuration)
+
 ###Install Android SDK
 
 The Android SDK can be downloaded from the Android Developer site [here](http://developer.android.com/sdk/index.html). You may also need to install the [Java SE Development Kit 7u80](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html). If you have questions about installing the Java SDK, you can refer to this [tutorial](http://www.wikihow.com/Install-the-Java-Software-Development-Kit).
@@ -66,7 +68,6 @@ For the full installation instructions visit [the Android Developer Website](htt
 
 10. Your app is now ready for you to build with. Go create something awesome!
 
-{: id="visual-studio-emulator-configuration"}
 ##Visual Studio Emulator Configuration
 
 Android Studio comes with its own Android emulator, but Microsoft has designed an emulator focused on performance, speed, and efficiency that can be used independently or in conjuction with Visual Studio 2015. You can learn more about the Visual Studio Emulator for Android [here](https://channel9.msdn.com/Events/Visual-Studio/Connect-event-2014/516).
