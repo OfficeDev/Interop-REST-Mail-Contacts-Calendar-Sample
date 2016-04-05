@@ -12,6 +12,7 @@ For the full installation instructions visit [the Android Developer Website](htt
 
 ###Android Configuration
 
+###Android Configuration2
 1. Download or clone [The Interop REST Mail Calendar Android App](https://github.com/OfficeDev/Interop-REST-Mail-Contacts-Calendar-Sample).
 
 2. Start Android Studio
@@ -26,7 +27,6 @@ For the full installation instructions visit [the Android Developer Website](htt
 
   ![Run the app](../img/android-studio-run-app.jpg)
 
-###Android Configuration2
 5. The first time you run the app you will need to add an ARM device to the emulator. To do this:  
 
   Click on the ellipsis (three dots in a row) next to the down arrow. 
