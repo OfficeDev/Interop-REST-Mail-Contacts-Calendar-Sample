@@ -12,8 +12,8 @@ For the full installation instructions visit [the Android Developer Website](htt
 
 ###Android Configuration
 
-###Android Configuration2
 1. Download or clone [The Interop REST Mail Calendar Android App](https://github.com/OfficeDev/Interop-REST-Mail-Contacts-Calendar-Sample).
+###Android Configuration2
 
 2. Start Android Studio
 
