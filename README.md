@@ -1,7 +1,5 @@
 # Interop REST Mail Contacts Calendar App
 
-Office Interoperability Examples - REST Mail, Contacts, and Calendar App
-
 This example app demonstrates the Representational State Transfer (REST) interface for Office 365, including authentication, interacting with the calendar, querying the address book, and sending email. The app can be built for Android or the Universal Windows Platform. To get started, register your app with an Office 365 Developer Account, then choose which platform(s) you want to build for. 
 
 ##Table of Contents
