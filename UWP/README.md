@@ -6,7 +6,7 @@ Before you begin, you need to [register your app with an Office 365 Developer ac
 
 ##Table of Contents
 
-* [Register the App with Office 365 Developer Account](../)
+* [Register the App with Office 365 Developer Account](/)
 
 * [Install Visual Studio](#install-visual-studio)
 
