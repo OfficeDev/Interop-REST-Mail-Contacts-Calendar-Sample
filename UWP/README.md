@@ -24,7 +24,8 @@ Open from menu | Open from start page
 	--- | ---
 	![](../img/vs-openproject.jpg) | ![](../img/vs-openproject-2.jpg)
 
-####Select MeetingManage.sln 
+#### Select MeetingManage.sln 
+
 	![](../img/vs-select-file.jpg)
 
 4. With the project open select App.xaml from the Solution Explorer: 
