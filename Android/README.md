@@ -14,7 +14,7 @@ Before you configure your app for Android, you need to [register your app with a
 
   * [Install Visual Studio Android Emulator](#install-visual-studio-android-emulator)
 
-  * [Launch the App in Visual Studio Android Emulator](./Android/README.md#launch-the-app-in-visual-studio-android-emulator)
+  * [Launch the App in Visual Studio Android Emulator](#launch-the-app-in-visual-studio-android-emulator)
 
 ###Install Android SDK
 
