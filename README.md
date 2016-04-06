@@ -8,23 +8,11 @@ This example app demonstrates the Representational State Transfer (REST) interfa
 
 * [Register the App with an Office 365 Developer Account](#register-the-app-with-an-office-365-developer-account)
 
-* [Build the App for the Universal Windows Platform](/UWP)
+* Build the App
 
-  * [Install Visual Studio](/UWP/#install-visual-studio)
+  * [Build the App for the Universal Windows Platform](/UWP)
   
-  * [Windows UWP Configuration](/UWP/#windows-uwp-configuration)
-
-* [Build the App for Android](/Android)
-  
-  * [Install Android SDK](/Android#install-android-sdk)
-  
-  * [Android Configuration](/Android#android-configuration)
-
-  * [Visual Studio Emulator Configuration](/Android#visual-studio-emulator-configuration)
-
-    * [Install Visual Studio Android Emulator](/Android#install-visual-studio-android-emulator)
-
-    * [Launch the App in Visual Studio Android Emulator](/Android#launch-the-app-in-visual-studio-android-emulator)
+  * [Build the App for Android](/Android)
 
 ##About the Interop REST Mail Contacts Calendar App
 
