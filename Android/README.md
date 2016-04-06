@@ -4,7 +4,7 @@ Before you configure your app for Android, you need to [register your app with a
 
 ##Table of Contents
 
-* [Register the App with Office 365 Developer Account](../#register-the-app-with-an-office-365-developer-account)
+* [Register the App with Office 365 Developer Account](../)
 
 * [Install Android SDK](#install-android-sdk)
 
