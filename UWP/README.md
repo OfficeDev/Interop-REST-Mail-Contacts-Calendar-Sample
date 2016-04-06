@@ -16,6 +16,14 @@ In order to build the app for the Universal Windows Platform, you need to instal
 
 1. Download or clone The Interop REST Mail Calendar Android App from the [GitHub repo](https://github.com/OfficeDev/Interop-REST-Mail-Contacts-Calendar-Sample).
 
+2. Start Visual Studio.
+
+3. To open the app, click File then hover over Open which will open a new menu and click Project/Solution or click Open Project... on the start page:
+
+Open from menu | Open from start page
+--- | ---
+![](../img/vs-openproject.jpg) | ![](../img/vs-openproject-2.jpg)
+
 
 ---
 
