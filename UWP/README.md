@@ -24,7 +24,7 @@ In order to build the app for the Universal Windows Platform, you need to instal
 	--- | ---
 	![](../img/vs-openproject.jpg) | ![](../img/vs-openproject-2.jpg)
 
-#### Select MeetingManage.sln 
+	#### Select MeetingManage.sln 
 
 	![](../img/vs-select-file.jpg)
 
