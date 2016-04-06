@@ -21,33 +21,33 @@ In order to build the app for the Universal Windows Platform, you need to instal
 3. To open the app, click File then hover over Open which will open a new menu and click Project/Solution or click Open Project... on the start page. Then navigate to the Meeting_Manager_UWP folder \Interop-REST-Mail-Contacts-Calendar-Sample\UWP\Meeting_Manager_UWP and open MeetingManager.sln:
 
 Open from menu | Open from start page
---- | ---
-![](../img/vs-openproject.jpg) | ![](../img/vs-openproject-2.jpg)
+	--- | ---
+	![](../img/vs-openproject.jpg) | ![](../img/vs-openproject-2.jpg)
 
 ####Select MeetingManage.sln 
-![](../img/vs-select-file.jpg)
+	![](../img/vs-select-file.jpg)
 
 4. With the project open select App.xaml from the Solution Explorer: 
 
-![](../img/vs-select-appxaml.jpg)
+	![](../img/vs-select-appxaml.jpg)
 
 5. In the App.xaml file, replace the ClientID with your Client ID, replace the RedirectUri with your Redirect URI and then replace the Domain with your developer tenant domain. For example, I used "https://greencricketcreations.onmicrosoft.com/MyUWPCalendarApp" for my Redirect URI, so my developer tenant domain is "greencricketcreations.onmicrosoft.com": 
 
-![](../img/vs-enter-login.jpg)
+	![](../img/vs-enter-login.jpg)
 
 6. Once you have entered your app registration information, click on the Solution Platforms dropdown on the menu (it's directly left of the green arrow pointing right, see the image below) and choose either x64 or x86 depending on your system, then click on "Local Machine" next to the green arrow.
 
-![](../img/vs-64-or-86.jpg) | ![](../img/vs-start-app.jpg)
---- | ---
+	![](../img/vs-64-or-86.jpg) | ![](../img/vs-start-app.jpg)
+	--- | ---
 
 7. Next Click "Connect to Office 365" then enter your login info from your Office 365 Developer Account and click accept on the next page:
 
-![](vs-connect-to-office.jpg) | ![](../img/vs-login.jpg) | ![](../img/vs-click-accept.jpg)
---- | --- | ---
+	![](../img/vs-connect-to-office.jpg) | ![](../img/vs-login.jpg) | ![](../img/vs-click-accept.jpg)
+	--- | --- | ---
 
 8. Your app is now ready to go. You can see the requests and responses from the Microsoft Graph API on the bottom of your screen.
 
-![](../img/vs-running.jpg)
+	![](../img/vs-running.jpg)
 
 9. Your app is now running on the Microsoft Universal Platform, go make something great!
 
