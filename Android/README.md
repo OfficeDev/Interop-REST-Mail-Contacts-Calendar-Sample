@@ -1,8 +1,14 @@
-##Android Studio Configuration
+#Interop REST Mail Contacts Calendar App Android Configuration
+
+  * [Install Android SDK](#install-android-sdk)
 
   * [Android Configuration](#android-configuration)
 
-  * [test](#visual-studio-emulator-configuration)
+  * [Visual Studio Emulator Configuration](#visual-studio-emulator-configuration)
+
+    * [Install Visual Studio Android Emulator](#install-visual-studio-android-emulator)
+
+    * [Launch the App in Visual Studio Android Emulator](#launch-the-app-in-visual-studio-android-emulator)
 
 ###Install Android SDK
 
@@ -19,7 +25,6 @@ For the full installation instructions visit [the Android Developer Website](htt
 3. Click on "Open an existing Android Studio project" and select the folder that contains the app, then open the "MeetingManagerAndroid" folder then the "Android" folder and select the build.gradle file.
 
   ![Open the App in Android Studio](../img/android-studio-open-project.jpg)
-###Android Configuration2
 
   ![App file location](../img/android-studio-file-location.jpg)
 
