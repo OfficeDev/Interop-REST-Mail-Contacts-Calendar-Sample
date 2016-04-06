@@ -22,7 +22,7 @@ For the full installation instructions visit [the Android Developer Website](htt
 
 2. Start Android Studio
 
-3. Click on "Open an existing Android Studio project" and select the folder that contains the app, then open the "MeetingManagerAndroid" folder then the "Android" folder and select the build.gradle file.
+3. <a name="step3"/>Click on "Open an existing Android Studio project" and select the folder that contains the app, then open the "MeetingManagerAndroid" folder then the "Android" folder and select the build.gradle file.
 
   ![Open the App in Android Studio](../img/android-studio-open-project.jpg)
 
@@ -61,7 +61,7 @@ For the full installation instructions visit [the Android Developer Website](htt
 
   ![Start the emulator](../img/android-studio-run-emulator.jpg)
 
-7. Your app will now start in the emulator. But in order to connect the app to an account you first have to [Register the app with Office 365](../#register-the-app-with-office-365-developer-account) and copy your "CLIENT ID" and "REDIRECT URI".
+7. <a href="#step7" />Your app will now start in the emulator. But in order to connect the app to an account you first have to [Register the app with Office 365](../#register-the-app-with-office-365-developer-account) and copy your "CLIENT ID" and "REDIRECT URI".
 
 8. You can enter your "CLIENT ID" and "REDIRECT URI" by clicking on the three vertical dots in the upper right of the emulator screen and click "settings" and enter them there or navigate to "app" > "src/main" > "java" > "com/microsoft/office365/meetingmgr" > Constants.java and paste your "CLIENT ID" and "REDIRECT URI" as strings and save the file.
 
@@ -106,13 +106,13 @@ To launch the Visual Studio Android Emulator as part of Visual Studio, click on 
   
   ![choose a device](../img/vs-emulator-choose-device.jpg)
 
-2. When you have chosen a device, open your project in Android Studio and start your app using steps 3 - 4 in the [Android Configuration](#android-configuration) section above.
+2. When you have chosen a device, open your project in Android Studio and start your app using steps [3 - 4 in the Android Configuration](#step3) section above.
 
 3. After running your app, instead of choosing to launch the emulator, select "Choose a running device" and then select a device using the VS Emulator then click "OK".
   
   ![choose the vs emulator](../img/choose-vs-emulator.jpg) 
 
-4. Your app will now open the connect page in the Visual Studio Emulator for Android. To login and use the app complete steps 7 - 10 in the [Android Configuration](#android-configuration) section.
+4. Your app will now open the connect page in the Visual Studio Emulator for Android. To login and use the app complete steps [7 - 10 in the Android Configuration](#step7) section.
 
 ---
 

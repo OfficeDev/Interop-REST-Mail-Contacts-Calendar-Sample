@@ -6,7 +6,7 @@ This example app demonstrates the Representational State Transfer (REST) interfa
 
 ##Table of Contents
 
-* [About the Interop REST Mail Contacts Calendar App](about-the-interop-rest-mail-contacts-calendarapp)
+* [About the Interop REST Mail Contacts Calendar App](#about-the-interop-rest-mail-contacts-calendar-app)
 
 * [Register the App with Office 365 Developer Account](#register-the-app-with-office-365-developer-account)
 
