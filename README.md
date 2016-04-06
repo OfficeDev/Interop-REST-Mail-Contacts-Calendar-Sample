@@ -26,7 +26,7 @@ This example app demonstrates the Representational State Transfer (REST) interfa
   
       * [Launch the App in Visual Studio Android Emulator](/Android#launch-the-app-in-visual-studio-android-emulator)
 
-      * [test](/Android#step7)
+[test](/Android#install-visual-studio-android-emulator)
 
 ##About the Interop REST Mail Contacts Calendar App
 
