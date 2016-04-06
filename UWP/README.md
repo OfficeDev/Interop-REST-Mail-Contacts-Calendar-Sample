@@ -2,17 +2,21 @@
 
 The Universal Windows Platform allows developers to build their apps for a wide range of devives including mobile, desktop, HoloLens, Surface Hub and Xbox. You can learn more about the Universal Windows Platform on the [UWP Quick Start Guide](http://microsoft.github.io/UWPQuickStart/index.html#). 
 
+Before you begin, you need to [register your app with an Office 365 Developer account](../#register-the-app-with-an-office-365-developer-account).
+
 ##Table of Contents
 
-* [Register the App with Office 365 Developer Account](../#register-the-app-with-office-365-developer-account)
+* [Register the App with Office 365 Developer Account](../#register-the-app-with-an-office-365-developer-account)
 
 * [Install Visual Studio](#install-visual-studio)
+
+* [Windows UWP Configuration](#windows-uwp-configuration)
 
 ##Install Visual Studio
 
 In order to build the app for the Universal Windows Platform, you need to install Visual Studio 2015 Community (free) or Enterprise (paid). You can download Visual Studio 2015 Community or Enterprise from the [Visual Studio Website](https://www.visualstudio.com/).
 
-##Windows UWP Platform
+##Windows UWP Configuration
 
 1. Download or clone The Interop REST Mail Calendar Android App from the [GitHub repo](https://github.com/OfficeDev/Interop-REST-Mail-Contacts-Calendar-Sample).
 
@@ -41,7 +45,7 @@ In order to build the app for the Universal Windows Platform, you need to instal
 	![](../img/vs-64-or-86.jpg) | ![](../img/vs-start-app.jpg)
 	--- | ---
 
-7. Next Click "Connect to Office 365" then enter your login info from your Office 365 Developer Account and click accept on the next page:
+7. Once your app starts, click "Connect to Office 365" and enter your login info from your Office 365 Developer Account then click accept on the next page:
 
 	![](../img/vs-connect-to-office.jpg) | ![](../img/vs-login.jpg) | ![](../img/vs-click-accept.jpg)
 	--- | --- | ---

@@ -6,11 +6,25 @@ This example app demonstrates the Representational State Transfer (REST) interfa
 
 * [About the Interop REST Mail Contacts Calendar App](#about-the-interop-rest-mail-contacts-calendar-app)
 
-* [Register the App with Office 365 Developer Account](#register-the-app-with-office-365-developer-account)
+* [Register the App with an Office 365 Developer Account](#register-the-app-with-an-office-365-developer-account)
 
 * [Build the App for the Universal Windows Platform](/UWP)
 
+  * [Install Visual Studio](/UWP/#install-visual-studio)
+  
+  * [Windows UWP Configuration](/UWP/#windows-uwp-configuration)
+
 * [Build the App for Android](/Android)
+  
+  * [Install Android SDK](/Android#install-android-sdk)
+  
+    * [Android Configuration](/Android#android-configuration)
+  
+    * [Visual Studio Emulator Configuration](/Android#visual-studio-emulator-configuration)
+  
+      * [Install Visual Studio Android Emulator](/Android#install-visual-studio-android-emulator)
+  
+      * [Launch the App in Visual Studio Android Emulator](/Android#launch-the-app-in-visual-studio-android-emulator)
 
 ##About the Interop REST Mail Contacts Calendar App
 
@@ -50,7 +64,7 @@ Android | UWP
 --- | ---
 ![create new meeting](/img/app-create-meeting.jpg) | ![Create New Meeting](/img/app-create-meeting-uwp.jpg)
 
-##Register the App with Office 365 Developer Account
+##Register the App with an Office 365 Developer Account
 
 1. No matter what you use to configure your app, you will need to register it with an Office 365 Developer Account. To register your app you need to have an account with the Office 365 Dev Program. To sign up, visit [dev.office.com/devprogram](http://dev.office.com/devprogram) or you can go directly to the [profile creation page](https://profile.microsoft.com/RegSysProfileCenter/wizardnp.aspx?wizid=14b845d0-938c-45af-b061-f798fbb4d170&lcid=1033) and create a profile. Once you have created your profile, you also need to sign up for an Office 365 developer account. The link to create your account will be in the confirmation email you receive after creating your profile. You can view detailed instructions on signing up for a developer account [here](https://msdn.microsoft.com/en-us/library/office/fp179924.aspx#o365_signup).
 
