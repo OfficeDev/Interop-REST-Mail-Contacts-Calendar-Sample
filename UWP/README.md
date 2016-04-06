@@ -18,12 +18,15 @@ In order to build the app for the Universal Windows Platform, you need to instal
 
 2. Start Visual Studio.
 
-3. To open the app, click File then hover over Open which will open a new menu and click Project/Solution or click Open Project... on the start page:
+3. To open the app, click File then hover over Open which will open a new menu and click Project/Solution or click Open Project... on the start page. Then navigate to the Meeting_Manager_UWP folder \Interop-REST-Mail-Contacts-Calendar-Sample\UWP\Meeting_Manager_UWP and open MeetingManager.sln:
 
 Open from menu | Open from start page
 --- | ---
 ![](../img/vs-openproject.jpg) | ![](../img/vs-openproject-2.jpg)
 
+Select MeetingManage.sln |
+--- |
+![](../img/vs-select-file.jpg)
 
 ---
 
