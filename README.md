@@ -18,15 +18,13 @@ This example app demonstrates the Representational State Transfer (REST) interfa
   
   * [Install Android SDK](/Android#install-android-sdk)
   
-    * [Android Configuration](/Android#android-configuration)
-  
-    * [Visual Studio Emulator Configuration](/Android#visual-studio-emulator-configuration)
-  
-      * [Install Visual Studio Android Emulator](/Android#install-visual-studio-android-emulator)
-  
-      * [Launch the App in Visual Studio Android Emulator](/Android#launch-the-app-in-visual-studio-android-emulator)
+  * [Android Configuration](/Android#android-configuration)
 
-[test](/Android#install-visual-studio-android-emulator)
+  * [Visual Studio Emulator Configuration](/Android#visual-studio-emulator-configuration)
+
+    * [Install Visual Studio Android Emulator](/Android#install-visual-studio-android-emulator)
+
+    * [Launch the App in Visual Studio Android Emulator](/Android#launch-the-app-in-visual-studio-android-emulator)
 
 ##About the Interop REST Mail Contacts Calendar App
 
