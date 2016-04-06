@@ -61,7 +61,7 @@ For the full installation instructions visit [the Android Developer Website](htt
 
   ![Start the emulator](../img/android-studio-run-emulator.jpg)
 
-7. <a name="#step7"/>Your app will now start in the emulator. But in order to connect the app to an account you first have to [Register the app with Office 365](../#register-the-app-with-office-365-developer-account) and copy your "CLIENT ID" and "REDIRECT URI".
+7. <a name="step7"/>Your app will now start in the emulator. But in order to connect the app to an account you first have to [Register the app with Office 365](../#register-the-app-with-office-365-developer-account) and copy your "CLIENT ID" and "REDIRECT URI".
 
 8. You can enter your "CLIENT ID" and "REDIRECT URI" by clicking on the three vertical dots in the upper right of the emulator screen and click "settings" and enter them there or navigate to "app" > "src/main" > "java" > "com/microsoft/office365/meetingmgr" > Constants.java and paste your "CLIENT ID" and "REDIRECT URI" as strings and save the file.
 
