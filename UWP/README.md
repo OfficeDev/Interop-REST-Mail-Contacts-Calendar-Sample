@@ -1,12 +1,10 @@
 # Interop REST Mail Contacts Calendar App for the Universal Windows Platform
 
-The Universal Windows Platform allows developers to build their apps for a wide range of devives including mobile, desktop, HoloLens, Surface Hub and Xbox. You can learn more about the Universal Windows Platform on the [UWP Quick Start Guide](http://microsoft.github.io/UWPQuickStart/index.html#). 
+The Universal Windows Platform allows developers to build their apps for a wide range of devices including mobile, desktop, HoloLens, Surface Hub, and Xbox. You can learn more about the Universal Windows Platform on the [UWP Quick Start Guide](http://microsoft.github.io/UWPQuickStart/index.html#). 
 
-Before you begin, you need to [register your app with an Office 365 Developer account](../README.md).
+Before you begin, you need to register your app with an Office 365 Developer account. The directions for registering are in the [README.md file in the root of this repo](../README.md).
 
 ##Table of Contents
-
-* [Register the App with Office 365 Developer Account](../README.md)
 
 * [Install Visual Studio](#install-visual-studio)
 
