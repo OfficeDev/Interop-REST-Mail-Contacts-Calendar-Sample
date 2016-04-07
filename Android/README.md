@@ -1,10 +1,8 @@
 #Interop REST Mail Contacts Calendar App Android Configuration
 
-Before you configure your app for Android, you need to [register your app with an Office 365 Developer account](../README.md). Once your app is registered, [install the Android SDK](#install-android-sdk) and you're ready to get started [configuring your app for Android](#android-configuration).
+Before you configure your app for Android, you need to register your app with an Office 365 Developer account. The directions for registering are in the [README.md file in the root of this repo](../README.md).Once your app is registered, [install the Android SDK](#install-android-sdk) and you're ready to get started [configuring your app for Android](#android-configuration).
 
 ##Table of Contents
-
-* [Register the App with Office 365 Developer Account](../README.md)
 
 * [Install Android SDK](#install-android-sdk)
 
