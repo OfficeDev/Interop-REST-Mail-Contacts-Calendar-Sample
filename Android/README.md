@@ -16,7 +16,7 @@ Before you configure your app, you need to register your app with an Office 365 
 
 ###Install Android SDK
 
-The Android SDK can be downloaded from the Android Developer site [here](http://developer.android.com/sdk/index.html). You may also need to install [JDK (Java SE Development Kit)](http://www.oracle.com/technetwork/java/javase/downloads/index.html). If you have questions about installing the Java SDK, you can refer to this [tutorial](http://www.wikihow.com/Install-the-Java-Software-Development-Kit).
+The Android SDK can be downloaded from the Android Developer site [here](http://developer.android.com/sdk/index.html). You may also need to install [JDK (Java SE Development Kit)](http://www.oracle.com/technetwork/java/javase/downloads/index.html). If you have questions about installing JDK, you can refer to this [tutorial](http://www.wikihow.com/Install-the-Java-Software-Development-Kit).
 
 For the full installation instructions visit [the Android Developer Website](http://developer.android.com/sdk/installing/index.html).
 
@@ -54,16 +54,16 @@ For the full installation instructions visit [the Android Developer Website](htt
   ![Click finish](../img/android-studio-click-finish.jpg)
 
 6. The next time you start the app, you can skip step 5 and select a device by clicking the down arrow next to "Android virtual device:". To add more devices simply repeat step 5 for as many devices as you want to add.
-
-If you get the error message: 
-
-```
-emulator: ERROR: x86 emulation currently requires hardware acceleration!
-Please ensure Intel HAXM is properly installed and usable.
-CPU acceleration status: HAX kernel module is not installed!
-```
-
-Refer to this [Stackoverflow question](http://stackoverflow.com/questions/26355645/error-in-launching-avd) for how to install HAXM
+  
+  If you get the error message: 
+  
+  ```
+  emulator: ERROR: x86 emulation currently requires hardware acceleration!
+  Please ensure Intel HAXM is properly installed and usable.
+  CPU acceleration status: HAX kernel module is not installed!
+  ```
+  
+  Refer to this [Stackoverflow question](http://stackoverflow.com/questions/26355645/error-in-launching-avd) for how to install HAXM
 
   ![Start the emulator](../img/android-studio-run-emulator.jpg)
 

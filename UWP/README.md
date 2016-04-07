@@ -30,7 +30,7 @@ In order to build the app for the Universal Windows Platform, you need to instal
 
 	![](../img/vs-select-file.jpg)
 
-4. With the project open select App.xaml from the Solution Explorer: 
+4. With the project open select **App.xaml** from the Solution Explorer: 
 
 	![](../img/vs-select-appxaml.jpg)
 
@@ -38,7 +38,7 @@ In order to build the app for the Universal Windows Platform, you need to instal
 
 	![](../img/vs-enter-login.jpg)
 
-6. Once you have entered your app registration information, click on the Solution Platforms dropdown on the menu (it's directly left of the green arrow pointing right, see the image below) and choose either **x6**4 or **x86** depending on your system, then click on **Local Machine** next to the green arrow.
+6. Once you have entered your app registration information, click on the Solution Platforms dropdown on the menu (it's directly left of the green arrow pointing right, see the image below) and choose either **x64** or **x86** depending on your system, then click on **Local Machine** next to the green arrow.
 
 	![](../img/vs-64-or-86.jpg) | ![](../img/vs-start-app.jpg)
 	--- | ---
