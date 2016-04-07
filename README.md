@@ -85,7 +85,7 @@ Android | UWP
 
 6. If you need more control of the registration options, you can follow these [detailed instructions](https://github.com/jasonjoh/office365-azure-guides/blob/master/RegisterAnAppInAzure.md) to register your app in Azure. Note that these instructions use the Azure classic portal. You can access the [Azure classic portal here](https://manage.windowsazure.com/).
 
-7. Now you're ready to build your app with [Android](/Android) or [the Universal Windows Platform](/UWP) or both!
+7. Now you're ready to build your app with [Android](/Android) or the [Universal Windows Platform](/UWP) or both!
 
 ---
 
