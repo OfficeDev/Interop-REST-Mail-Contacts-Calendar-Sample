@@ -48,11 +48,11 @@ In order to build the app for the Universal Windows Platform, you need to instal
 	![](../img/vs-connect-to-office.jpg) | ![](../img/vs-login.jpg) | ![](../img/vs-click-accept.jpg)
 	--- | --- | ---
 
-8. Your app is now ready to go. You can see the requests and responses from the Microsoft Graph API on the bottom of your screen.
+8. Your app is now ready to go. You can see the requests and responses from the Microsoft Graph API on the bottom of your screen. If you want to see the JSON values for any of the requests or responses, select the request or response in the console and then click **Show JSON**.
 
 	![](../img/vs-running.jpg)
 
-9. Your app is now running on the Microsoft Universal Platform, go make something great!
+9. Your app is now running on the Universal Windows Platform, go make something great!
 
 ---
 
