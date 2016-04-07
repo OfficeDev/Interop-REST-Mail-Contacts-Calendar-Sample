@@ -55,13 +55,15 @@ For the full installation instructions visit [the Android Developer Website](htt
 
 6. The next time you start the app, you can skip step 5 and select a device by clicking the down arrow next to "Android virtual device:". To add more devices simply repeat step 5 for as many devices as you want to add.
 
- * If you get the error message: 
-    ```
-    emulator: ERROR: x86 emulation currently requires hardware acceleration!
-    Please ensure Intel HAXM is properly installed and usable.
-    CPU acceleration status: HAX kernel module is not installed!
-    ```
-  Refer to this [Stackoverflow question](http://stackoverflow.com/questions/26355645/error-in-launching-avd) for how to install HAXM
+If you get the error message: 
+
+```
+emulator: ERROR: x86 emulation currently requires hardware acceleration!
+Please ensure Intel HAXM is properly installed and usable.
+CPU acceleration status: HAX kernel module is not installed!
+```
+
+Refer to this [Stackoverflow question](http://stackoverflow.com/questions/26355645/error-in-launching-avd) for how to install HAXM
 
   ![Start the emulator](../img/android-studio-run-emulator.jpg)
 
