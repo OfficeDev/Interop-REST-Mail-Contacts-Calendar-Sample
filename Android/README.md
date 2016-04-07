@@ -67,7 +67,7 @@ For the full installation instructions visit [the Android Developer Website](htt
 
   ![Start the emulator](../img/android-studio-run-emulator.jpg)
 
-7. <a name="step7"/>Your app will now start in the emulator. But in order to connect the app to an account you first have to Register the app with Office 365 and copy your "CLIENT ID" and "REDIRECT URI". The directions for registering are in the [README.md file in the root of this repo](../README.md).
+7. <a name="step7"/>Your app will now start in the emulator. But in order to connect the app to an account, you first have to Register the app with Office 365 and copy your "CLIENT ID" and "REDIRECT URI". The directions for registering are in the [README.md file in the root of this repo](../README.md).
 
 8. You can enter your "CLIENT ID" and "REDIRECT URI" by clicking on the three vertical dots in the upper right of the emulator screen and click **settings** and enter them there or navigate to **app** > **src/main** > **java** > **com/microsoft/office365/meetingmgr** > **Constants.java** and paste your "CLIENT ID" and "REDIRECT URI" as strings and save the file.
 
@@ -86,7 +86,7 @@ Android Studio comes with its own Android emulator, but Microsoft has designed a
 
 ###Install Visual Studio Android Emulator
 
-You can download and install the Visual Studio Emulator for Android [from this page](https://www.visualstudio.com/en-us/features/msft-android-emulator-vs.aspx). Then you can use it as a stand alone emulator or in conjunction with Visual Studio.
+You can download and install the Visual Studio Emulator for Android [from this page](https://www.visualstudio.com/en-us/features/msft-android-emulator-vs.aspx). Then you can use it as a stand-alone emulator or in conjunction with Visual Studio.
 
 The Visual Studio Emulator for Android does not require you to download and/or use Visual Studio, but if you would like to use the free (Community) or paid (Enterprise) Visual Studio, you can download and install either version from the [Visual Studio Website](https://www.visualstudio.com/). Whichever version you choose, it must be Visual Studio 2015 in order to run the emulator.
 

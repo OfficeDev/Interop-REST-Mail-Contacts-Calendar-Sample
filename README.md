@@ -18,7 +18,7 @@ This example app demonstrates the Representational State Transfer (REST) interfa
 
 In the app, after you log into an Office 365 account, you can view your calendar and create single or recurring meetings on your calendar. Meetings can be scheduled with a given location, time slot, and a set of invitees, where the available locations and attendees are queried from Office 365. Each invitee has the option to accept, decline, or tentatively accept a meeting, or to email the organizer. An organizer has the option to reply all or forward the meeting invitation, and to send a running-late message to the invitees.
 
-If the app is built with the Universal Windows Platform you will be able to see the requests and responses from the Microsoft Graph Universal API live in a console at the bottom of the app.
+If the app is built with the Universal Windows Platform you will be able to see the live requests and responses from the Microsoft Graph Universal API in a console at the bottom of the app.
 
 The basic app is able to:
 
@@ -68,7 +68,7 @@ Android | UWP
 
   ![Next step](/img/ms-graph-get-started-2.jpg)
 
-3. Give your app a name and select **Native App** in the **App type** line. Then pick a Redirect URI, the preferred naming convention is: "your Office 365 domain + a unique name for your app", but it is not required, it must however be formatted as a URI and be unique. For example, I named my app https://greencricketcreations.onmicrosoft.com/MyCalendarApp. The Redirect URI isn't a real website; it is more of a unique identifier for your app. Once you have entered a name and Redirect URI set the permissions. The necessary permissions are:
+3. Give your app a name and select **Native App** in the **App type** line. Then pick a Redirect URI, the preferred naming convention is: "your Office 365 domain + a unique name for your app", but it is not required, it must however, be formatted as a URI and be unique. For example, I named my app https://greencricketcreations.onmicrosoft.com/MyCalendarApp. The Redirect URI isn't a real website; it is more of a unique identifier for your app. Once you have entered a name and Redirect URI set the permissions. The necessary permissions are:
 
   * Read user profiles
   * Read user contacts
