@@ -1,6 +1,6 @@
 # Interop REST Mail Contacts Calendar App for the Universal Windows Platform
 
-The Universal Windows Platform allows developers to build their apps for a wide range of devices including mobile, desktop, HoloLens, Surface Hub, and Xbox. You can learn more about the Universal Windows Platform on the [UWP Quick Start Guide](http://microsoft.github.io/UWPQuickStart/index.html#). 
+The Universal Windows Platform (UWP) allows developers to build their apps for a wide range of devices including mobile, desktop, HoloLens, Surface Hub, and Xbox. You can learn more about the Universal Windows Platform on the [UWP Quick Start Guide](http://microsoft.github.io/UWPQuickStart/index.html#). 
 
 Before you begin, you need to register your app with an Office 365 Developer account. The directions for registering are in the [README.md file in the root of this repo](../README.md).
 
@@ -20,7 +20,7 @@ In order to build the app for the Universal Windows Platform, you need to instal
 
 2. Start Visual Studio.
 
-3. To open the app, click File then hover over Open which will open a new menu and click Project/Solution or click Open Project... on the start page. Then navigate to the Meeting_Manager_UWP folder \Interop-REST-Mail-Contacts-Calendar-Sample\UWP\Meeting_Manager_UWP and open MeetingManager.sln:
+3. To open the app, click **file** then hover over Open which will open a new menu and click **Project/Solution** or click **Open Project...** on the start page. Then navigate to the Meeting_Manager_UWP folder \Interop-REST-Mail-Contacts-Calendar-Sample\UWP\Meeting_Manager_UWP and open MeetingManager.sln:
 
 	Open from menu | Open from start page
 	--- | ---
@@ -38,12 +38,12 @@ In order to build the app for the Universal Windows Platform, you need to instal
 
 	![](../img/vs-enter-login.jpg)
 
-6. Once you have entered your app registration information, click on the Solution Platforms dropdown on the menu (it's directly left of the green arrow pointing right, see the image below) and choose either x64 or x86 depending on your system, then click on "Local Machine" next to the green arrow.
+6. Once you have entered your app registration information, click on the Solution Platforms dropdown on the menu (it's directly left of the green arrow pointing right, see the image below) and choose either **x6**4 or **x86** depending on your system, then click on **Local Machine** next to the green arrow.
 
 	![](../img/vs-64-or-86.jpg) | ![](../img/vs-start-app.jpg)
 	--- | ---
 
-7. Once your app starts, click "Connect to Office 365" and enter your login info from your Office 365 Developer Account then click accept on the next page:
+7. Once your app starts, click **Connect to Office 365** and enter your login info from your Office 365 Developer Account then click **Accept** on the next page:
 
 	![](../img/vs-connect-to-office.jpg) | ![](../img/vs-login.jpg) | ![](../img/vs-click-accept.jpg)
 	--- | --- | ---
