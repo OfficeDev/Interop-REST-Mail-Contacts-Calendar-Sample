@@ -45,8 +45,11 @@ In order to build the app for the Universal Windows Platform, you need to instal
 
 7. Once your app starts, click **Connect to Office 365** and enter your login info from your Office 365 Developer Account then click **Accept** on the next page:
 
-	![](../img/vs-connect-to-office.jpg) | ![](../img/vs-login.jpg) | ![](../img/vs-click-accept.jpg)
-	--- | --- | ---
+	![](../img/vs-connect-to-office.jpg) 
+
+	![](../img/vs-login.jpg) 
+
+	![](../img/vs-click-accept.jpg)
 
 8. Your app is now ready to go. You can see the requests and responses from the Microsoft Graph API on the bottom of your screen. If you want to see the JSON values for any of the requests or responses, select the request or response in the console and then click **Show JSON**.
 
