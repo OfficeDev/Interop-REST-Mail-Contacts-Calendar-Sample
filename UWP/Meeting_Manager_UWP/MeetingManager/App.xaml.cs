@@ -5,13 +5,21 @@ using Prism.Mvvm;
 using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using System.Diagnostics;
+using Prism.Windows.AppModel;
 using MeetingManager.Models;
 using MeetingManager.ViewModels;
+using System.Collections.Concurrent;
+using Windows.ApplicationModel.Core;
+using MeetingManager.Views;
 using Windows.UI.Core;
+using System.Collections.ObjectModel;
 using System.Reflection;
 
 namespace MeetingManager
@@ -51,7 +59,7 @@ namespace MeetingManager
         public IGraphService OfficeService { get; private set; }
         public IAuthenticationService AuthenticationService { get; private set; }
 
-        private async void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
             if (!inExceptionHandler)
             {
@@ -60,10 +68,9 @@ namespace MeetingManager
                 StackTrace stackTrace = new StackTrace(args.Exception, true);
                 string stackTraceString = args.Exception.StackTrace == null ? stackTrace.ToString() : args.Exception.StackTrace;
 
-                string errText = string.Format("An unhandled exception occurred: {0}\r\nStack Trace: {1}", args.Exception.Message, stackTraceString);
+//                string errText = string.Format("An unhandled exception occurred: {0}\r\nStack Trace: {1}", e.Exception.Message, stackTraceString);
 
-                Debug.WriteLine(errText);
-
+//                MessageBox.Show(errText, "App Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 args.Handled = true;
             }
         }

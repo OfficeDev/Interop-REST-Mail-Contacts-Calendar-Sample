@@ -131,6 +131,8 @@ namespace MeetingManager.ViewModels
         {
             var item = SelectedItem;
 
+            if (item == null) return;
+
             _jsonWindowId = await NewWindow.Create(typeof(Views.JsonPage), "JSON", _jsonWindowId);
 
             if (item.Data != null)

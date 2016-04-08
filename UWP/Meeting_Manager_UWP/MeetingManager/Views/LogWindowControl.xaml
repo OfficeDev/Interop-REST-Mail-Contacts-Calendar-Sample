@@ -27,7 +27,7 @@
                         Visibility="{Binding IsMainWindow, Converter={StaticResource BoolToVisible}}"
                         Click="NewWindowClick"
                         />
-            <Button Margin="5,0,0,0" Content="Show JSON" Command="{Binding ShowJsonCommand}"
+            <Button Margin="5,0,0,0" Content="Show JSON for selection" Command="{Binding ShowJsonCommand}"
                         IsEnabled="{Binding HasAnyItems}"/>
         </StackPanel>
         
