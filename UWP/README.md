@@ -47,7 +47,11 @@ In order to build the app for the Universal Windows Platform, you need to instal
 
 	![](../img/vs-connect-to-office.jpg) 
 
+	---
+
 	![](../img/vs-login.jpg) 
+
+	---
 
 	![](../img/vs-click-accept.jpg)
 
