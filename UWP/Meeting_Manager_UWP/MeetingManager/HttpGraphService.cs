@@ -41,8 +41,8 @@ namespace MeetingManager
 
         private string BuildCalendarUri(DateTimeOffset startDate, DateTimeOffset endDate)
         {
-            string start = startDate.ToString("O");
-            string end = endDate.ToString("O");
+            string start = startDate.Date.ToString("s");
+            string end = endDate.Date.ToString("s");
 
             string uri = $"calendarview?startDateTime={start}&endDateTime={end}";
             uri += "&$orderby=start/dateTime";
