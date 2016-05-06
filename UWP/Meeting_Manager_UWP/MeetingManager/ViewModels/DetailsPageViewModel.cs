@@ -111,7 +111,7 @@ namespace MeetingManager.ViewModels
 
         private void Populate()
         {
-            IsContentText = _meeting.Body.ContentType.EqualsCaseInsensitive("text");
+            IsContentText = _meeting.IsContentText;
 
             DateTimeDescription = BuildDateTimeDescription(_meeting);
 

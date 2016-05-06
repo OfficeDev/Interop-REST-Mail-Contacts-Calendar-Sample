@@ -62,7 +62,7 @@ namespace MeetingManager.ViewModels
 
         public string Title => GetString(IsNewMeeting ? "CreateMeetingTitle" : "UpdateMeetingTitle");
 
-        public bool IsContentText => Meeting.Body.ContentType.EqualsCaseInsensitive("text");
+        public bool IsContentText => Meeting.IsContentText;
 
         public bool IsNewMeeting => string.IsNullOrEmpty(Meeting.Id);
 
@@ -344,10 +344,11 @@ namespace MeetingManager.ViewModels
 
         private void EnsureAllDay()
         {
+            var length = (_meeting.End.DateTime - _meeting.Start.DateTime).TotalDays;
             // Set time to midnight (12:00 AM)
             _meeting.Start.DateTime = _meeting.Start.DateTime.Date;
             // Set the whole day duration
-            _meeting.End.DateTime = _meeting.Start.DateTime + TimeSpan.FromHours(24);
+            _meeting.End.DateTime = _meeting.Start.DateTime + TimeSpan.FromDays((int) length);
             // It should be midnight in local time zone
             _meeting.Start.TimeZone = _meeting.End.TimeZone = TimeZoneInfo.Local.Id;
         }

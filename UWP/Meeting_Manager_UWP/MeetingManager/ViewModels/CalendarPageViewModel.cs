@@ -173,7 +173,7 @@ namespace MeetingManager.ViewModels
 
             if (added.Count > 0)
             {
-                SelectedDate = added[0];
+                SelectedDate = added[0].Date;
                 await GetEventsForSelectedDate();
             }
         }
@@ -194,11 +194,11 @@ namespace MeetingManager.ViewModels
             {
                 var events = await OfficeService.GetCalendarEvents(
                             SelectedDate - TimeSpan.FromDays(1),
-                            SelectedDate + TimeSpan.FromDays(1));
+                            SelectedDate + TimeSpan.FromDays(2));
 
                 var selectedDateEvents = events.Where(x =>
                         x.IsAllDay ?
-                        x.Start.DateTime.Date.CompareTo(SelectedDate.Date) == 0 :
+                        x.Start.DateTime.Date.CompareTo(SelectedDate.Date) <= 0 && x.End.DateTime.Date.CompareTo(SelectedDate.Date) >= 0 :
                         x.Start.DateTime.ToLocalTime().Date.CompareTo(SelectedDate.Date) == 0);
 
                 // We use Index property just for visualization
