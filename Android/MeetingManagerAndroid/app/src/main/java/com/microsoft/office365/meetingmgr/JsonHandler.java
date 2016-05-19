@@ -28,4 +28,13 @@ public class JsonHandler {
             return null;
         }
     }
+
+    public String prettyPrint(Object object) {
+        try {
+            return mMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+        } catch (IOException e) {
+            ErrorLogger.log(e);
+            return null;
+        }
+    }
 }

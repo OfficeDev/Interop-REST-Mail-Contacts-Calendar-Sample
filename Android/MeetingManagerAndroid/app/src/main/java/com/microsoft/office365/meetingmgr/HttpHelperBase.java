@@ -80,18 +80,20 @@ public abstract class HttpHelperBase {
 
     private <TBody, TResult> TResult doHttp(HttpRequestBaseHC4 httpRequest, TBody body, Class<TResult> clazz) {
         String requestBody;
+        String requestString;
 
         if (body == null) {
-            requestBody = null;
+            requestString = requestBody = null;
         } else if (body instanceof String) {
-            requestBody = (String) body;
+            requestString = requestBody = (String) body;
             httpRequest.setHeader("Content-Type", "application/x-www-form-urlencoded");
         } else {
             requestBody = mJson.serialize(body);
+            requestString = mJson.prettyPrint(body);
             httpRequest.setHeader("Content-Type", "application/json");
         }
 
-        traceRequest(httpRequest, requestBody);
+        traceRequest(httpRequest, requestString);
 
         try {
             if (requestBody != null) {
@@ -126,30 +128,31 @@ public abstract class HttpHelperBase {
             input = responseToString(response);
         }
 
-        traceResponse(response.getStatusLine().getStatusCode(), input);
+        TResult result = null;
 
-        if (!isStatusOk(response)) {
-            return null;
-        }
+        if (isStatusOk(response)) {
+            if (clazz == String.class) {
+                result = (TResult) input;
 
-        if (clazz == String.class) {
-            return (TResult) input;
+            } else if (clazz == byte[].class) {
+                return (TResult) responseToByteArray(response);
 
-        } else if (clazz == byte[].class) {
-            return (TResult) responseToByteArray(response);
-
-        } else if (!Utils.isNullOrEmpty(input)){
-            try {
-                if (input.charAt(0) == 0xfeff) {
-                    input = input.substring(1);
+            } else if (!Utils.isNullOrEmpty(input)) {
+                try {
+                    if (input.charAt(0) == 0xfeff) {
+                        input = input.substring(1);
+                    }
+                    result = mJson.deserialize(input, clazz);
+                    input = mJson.prettyPrint(result);
+                } catch (Exception e) {
+                    ErrorLogger.log(e);
                 }
-                return mJson.deserialize(input, clazz);
-            } catch (Exception e) {
-                ErrorLogger.log(e);
             }
         }
 
-        return null;
+        traceResponse(response.getStatusLine().getStatusCode(), input);
+
+        return result;
     }
 
     protected boolean isStatusOk(HttpResponse response) {
