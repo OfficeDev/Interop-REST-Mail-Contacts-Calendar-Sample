@@ -167,11 +167,16 @@ namespace MeetingManager
         public async Task<IEnumerable<MeetingTimeCandidate>> GetMeetingTimeCandidates(Meeting meeting, string startTime, string endTime)
         {
             var body = BuildRequestBody(meeting, startTime, endTime);
-            string uri = "https://outlook.office365.com/api/beta/me/findmeetingtimes";
+            string uri = "https://graph.microsoft.com/beta/me/findmeetingtimesOld";
 
             var candidates = await GetHttpHelper().PostItemAsync<MeetingTimes, MeetingTimeCandidates> (uri, body);
 
-            return candidates == null ? Enumerable.Empty<MeetingTimeCandidate>(): candidates.Value;
+            if (candidates == null || candidates.Value == null)
+            {
+                return Enumerable.Empty<MeetingTimeCandidate>();
+            }
+
+            return candidates.Value;
         }
 
         private MeetingTimes BuildRequestBody(Meeting meeting, string startTime, string endTime)
