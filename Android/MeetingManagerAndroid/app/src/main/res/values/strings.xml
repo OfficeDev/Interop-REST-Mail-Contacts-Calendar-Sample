@@ -3,7 +3,7 @@
 
     <!-- Regular UI text -->
     <string name="app_name">Office 365 Meeting Manager</string>
-    <string name="app_name_short">Meeting Manager</string>
+    <string name="app_name_short">Meeting Manager Sample</string>
     <string name="connect_button_text">Connect to Office 365</string>
     <string name="title_page">Get everything you need to get work done anytime, anywhere</string>
     <string name="connecting">Connecting...</string>

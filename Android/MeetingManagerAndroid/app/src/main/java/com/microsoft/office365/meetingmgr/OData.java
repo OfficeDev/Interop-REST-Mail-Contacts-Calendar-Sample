@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+ * See LICENSE in the project root for license information.
+ */
 package com.microsoft.office365.meetingmgr;
 
 /**
@@ -16,7 +20,6 @@ public final class OData {
     public final static String CREATE_REPLY = "createreply";
     public final static String CREATE_REPLY_ALL = "createreplyall";
     public final static String CREATE_FORWARD = "createforward";
-//    public final static String SEND_MAIL = "sendmail";
     public final static String SEND = "send";
 
     public final static String SUNDAY = "sunday";
@@ -44,15 +47,11 @@ public final class OData {
     public final static String FOURTH = "fourth";
     public final static String LAST = "last";
 
-//    public final static String SERIES_MASTER = "seriesmaster";
-//    public final static String SINGLE_INSTANCE = "singleinstance";
-
     public final static String OCCURRENCE = "occurrence";
     public final static String EXCEPTION = "exception";
 
     public final static String ACCEPTED = "accepted";
     public final static String TENTATIVELY_ACCEPTED = "tentativelyaccepted";
-//    public final static String NOT_RESPONDED = "notresponded";
     public final static String REQUIRED = "required";
     public final static String NONE = "none";
 
