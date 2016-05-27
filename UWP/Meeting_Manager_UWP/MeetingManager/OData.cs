@@ -1,4 +1,7 @@
-﻿using System;
+﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+//See LICENSE in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +21,6 @@ namespace MeetingManager
         public const string CreateReply = "createreply";
         public const string CreateReplyAll = "createreplyall";
         public const string CreateForward = "createforward";
-    //    public const string SEND_MAIL = "sendmail";
         public const string Send = "send";
 
         public const string Sunday = "sunday";
@@ -46,16 +48,12 @@ namespace MeetingManager
         public const string Fourth = "fourth";
         public const string Last = "last";
 
-        //    public const string SeriesMaster = "seriesmaster";
-        //    public const string SingleInstance = "singleinstance";
-
         public const string Occurrence = "occurrence";
         public const string Exception = "exception";
 
         public const string Accepted = "accepted";
         public const string TentativelyAccepted = "tentativelyaccepted";
         public const string Declined = "declined";
-        //    public const string NotResponded = "notresponded";
         public const string Required = "required";
         public const string None = "none";
     }

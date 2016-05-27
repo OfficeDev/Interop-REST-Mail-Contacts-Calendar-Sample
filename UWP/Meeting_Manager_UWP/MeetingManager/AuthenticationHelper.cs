@@ -1,11 +1,9 @@
-﻿using System;
+﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+//See LICENSE in the project root for license information.
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Windows.Web.Http;
 using System.Net;
-using Windows.UI.Xaml.Controls;
 using Prism.Windows.AppModel;
 
 namespace MeetingManager

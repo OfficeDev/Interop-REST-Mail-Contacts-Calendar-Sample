@@ -1,10 +1,9 @@
-﻿using MeetingManager.Models;
+﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+//See LICENSE in the project root for license information.
+
 using Newtonsoft.Json;
-using Prism.Events;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.Web.Http;

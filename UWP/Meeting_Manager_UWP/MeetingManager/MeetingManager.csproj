@@ -227,9 +227,7 @@
     <None Include="MeetingManager_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\office365_logo.png" />
     <Content Include="Assets\outlook_small.png" />
-    <Content Include="Assets\people.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

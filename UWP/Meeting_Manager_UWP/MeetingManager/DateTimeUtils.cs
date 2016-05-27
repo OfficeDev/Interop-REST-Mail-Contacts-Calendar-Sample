@@ -1,12 +1,11 @@
-﻿using MeetingManager.Models;
-using Prism.Windows.AppModel;
+﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+//See LICENSE in the project root for license information.
+
+using MeetingManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Resources;
 
 namespace MeetingManager
 {

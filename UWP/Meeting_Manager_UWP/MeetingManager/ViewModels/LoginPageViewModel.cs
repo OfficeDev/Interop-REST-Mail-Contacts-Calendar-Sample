@@ -1,4 +1,7 @@
-﻿using MeetingManager.Models;
+﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+//See LICENSE in the project root for license information.
+
+using MeetingManager.Models;
 using Prism.Commands;
 using Prism.Windows.Navigation;
 using System.Collections.Generic;
