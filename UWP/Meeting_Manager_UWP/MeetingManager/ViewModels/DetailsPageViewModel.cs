@@ -8,6 +8,7 @@ using Prism.Windows.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
 
@@ -93,6 +94,8 @@ namespace MeetingManager.ViewModels
         public bool IsContentText { get; set; }
 
         public string Organizer => _meeting.OrganizerName;
+
+        public bool HasAttendees => Attendees.Any();
 
         public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {

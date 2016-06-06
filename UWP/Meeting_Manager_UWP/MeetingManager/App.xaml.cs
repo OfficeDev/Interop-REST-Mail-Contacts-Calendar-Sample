@@ -1,25 +1,20 @@
-﻿using Prism.Unity.Windows;
+﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+//See LICENSE in the project root for license information.
+
+using Prism.Unity.Windows;
 using Prism.Windows.Navigation;
 using Prism.Events;
 using Prism.Mvvm;
 using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using System.Diagnostics;
-using Prism.Windows.AppModel;
 using MeetingManager.Models;
 using MeetingManager.ViewModels;
-using System.Collections.Concurrent;
-using Windows.ApplicationModel.Core;
-using MeetingManager.Views;
 using Windows.UI.Core;
-using System.Collections.ObjectModel;
 using System.Reflection;
 
 namespace MeetingManager
@@ -38,6 +33,7 @@ namespace MeetingManager
             UnhandledException += OnUnhandledException;
         }
 
+        private Logger _logger;
         private CoreDispatcher _mainDispatcher;
 
         public CoreDispatcher MainDispatcher
@@ -48,16 +44,24 @@ namespace MeetingManager
             }
         }
 
+        internal bool UseHttp { get; set; }
 
-        public IEventAggregator EventAggregator { get; private set; }
+        internal IEventAggregator EventAggregator { get; private set; }
 
-        public new INavigationService NavigationService
+        internal new INavigationService NavigationService
         {
             get { return base.NavigationService; }
         }
 
-        public IGraphService OfficeService { get; private set; }
-        public IAuthenticationService AuthenticationService { get; private set; }
+        internal static App Me
+        {
+            get
+            {
+                return Application.Current as App;
+            }
+        }
+
+        internal IAuthenticationService AuthenticationService { get; private set; }
 
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
@@ -68,9 +72,9 @@ namespace MeetingManager
                 StackTrace stackTrace = new StackTrace(args.Exception, true);
                 string stackTraceString = args.Exception.StackTrace == null ? stackTrace.ToString() : args.Exception.StackTrace;
 
-//                string errText = string.Format("An unhandled exception occurred: {0}\r\nStack Trace: {1}", e.Exception.Message, stackTraceString);
+                string errText = string.Format("An unhandled exception occurred: {0}\r\nStack Trace: {1}", args.Message, stackTraceString);
 
-//                MessageBox.Show(errText, "App Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Debug.WriteLine(errText);
                 args.Handled = true;
             }
         }
@@ -96,16 +100,12 @@ namespace MeetingManager
         protected override Task OnInitializeAsync(IActivatedEventArgs args)
         {
             EventAggregator = new EventAggregator();
-            var logger = new Logger(EventAggregator);
+            _logger = new Logger(EventAggregator);
 
-            AuthenticationService = new AuthenticationHelper(SessionStateService, logger);
+            AuthenticationService = new AuthenticationHelper(SessionStateService, _logger);
 
-            Container.RegisterInstance<IAuthenticationService>(AuthenticationService);
-
-
-            OfficeService = new HttpGraphService(AuthenticationService, logger);
-
-            Container.RegisterInstance<INavigationService>(NavigationService);
+            //Container.RegisterInstance<IAuthenticationService>(AuthenticationService);
+            //Container.RegisterInstance<INavigationService>(NavigationService);
 
             ViewModelLocationProvider.SetDefaultViewModelFactory(CachingFactory);
 
@@ -120,6 +120,18 @@ namespace MeetingManager
             }
 
             return _vmCache[type];
+        }
+
+        internal IGraphService GetGraphService()
+        {
+            if (UseHttp)
+            {
+                return new HttpGraphService(AuthenticationService, _logger);
+            }
+            else
+            {
+                return new SDKGraphService(AuthenticationService, _logger);
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace MeetingManager
             _logger = logger;
         }
 
-        public async Task<List<T>> GetItemsAsync<T>(string uri)
+        public async Task<IEnumerable<T>> GetItemsAsync<T>(string uri)
         {
             var list = await GetItemAsync<ODataList<T>>(uri);
 
@@ -33,12 +33,6 @@ namespace MeetingManager
         protected override async Task<TResult> DoHttpAsync<TBody, TResult>(HttpMethod method, string uri, TBody body)
         {
             var response = await CreateAndExecuteRequestAsync(method, uri, body, false);
-
-            if (NeedsTokenRefresh(response)/* || response.StatusCode == HttpStatusCode.BadRequest*/)
-            {
-                // Refresh access token and repeat failed request
-                response = await CreateAndExecuteRequestAsync(method, uri, body, true);
-            }
 
             return await base.GetResultAsync<TResult>(response);
         }
@@ -119,7 +113,7 @@ namespace MeetingManager
 
             if (!string.IsNullOrEmpty(resourceId))
             {
-                string token = await GetAccessTokenAsync(resourceId, refreshToken);
+                string token = await _authService.GetTokenAsync(resourceId);
 
                 if (!string.IsNullOrEmpty(token))
                 {
@@ -139,16 +133,6 @@ namespace MeetingManager
                 return "https://graph.microsoft.com/";
             }
             return null;
-        }
-
-        private bool NeedsTokenRefresh(HttpResponseMessage response)
-        {
-            return (response.StatusCode == HttpStatusCode.Unauthorized);
-        }
-
-        private async Task<string> GetAccessTokenAsync(string resourceId, bool isRefresh)
-        {
-            return await _authService.GetTokenAsync(resourceId, isRefresh);
         }
 
         public class ODataList<T>

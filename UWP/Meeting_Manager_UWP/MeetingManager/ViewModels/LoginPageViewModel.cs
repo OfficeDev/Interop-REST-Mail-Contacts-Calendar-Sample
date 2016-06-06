@@ -22,7 +22,7 @@ namespace MeetingManager.ViewModels
         {
             base.OnNavigatedTo(e, viewModelState);
 
-            LoginUrl = _authenticationService.LoginUrl;
+            LoginUrl = App.Me.AuthenticationService.LoginUrl;
         }
 
         public DelegateCommand<WebViewNavigationStartingEventArgs> NavigationStartingCommand { get; }
@@ -38,7 +38,7 @@ namespace MeetingManager.ViewModels
             string authCode = string.Empty;
             string argsUri = args.Uri.AbsoluteUri;
 
-            if (argsUri.IndexOfCaseInsensitive(_authenticationService.RedirectUri) == 0)
+            if (argsUri.IndexOfCaseInsensitive(App.Me.AuthenticationService.RedirectUri) == 0)
             {
                 string codeKey = "code=";
                 int codeStartIndex = argsUri.IndexOfCaseInsensitive(codeKey);
@@ -60,7 +60,7 @@ namespace MeetingManager.ViewModels
 
         private async void InitializeApp(string authCode)
         {
-            _authenticationService.AuthorizationCode = authCode;
+            App.Me.AuthenticationService.AuthorizationCode = authCode;
 
             GetEvent<LoginEvent>().Publish(new LoginEventData
             {
@@ -69,7 +69,7 @@ namespace MeetingManager.ViewModels
             });
 
             var user = await OfficeService.GetUser();
-            _authenticationService.UserId = user.UserPrincipalName;
+            App.Me.AuthenticationService.UserId = user.UserPrincipalName;
 
             await NavigateTo("Calendar");
         }

@@ -2,6 +2,7 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -63,6 +64,13 @@ namespace MeetingManager
         public static bool IsEqualTo(this EmailAddress input, EmailAddress match)
         {
             return input.Address.EqualsCaseInsensitive(match.Address);
+        }
+
+        public static TDst ConvertObject<TDst>(this object src)
+        {
+            string json = JsonConvert.SerializeObject(src, Formatting.Indented);
+
+            return JsonConvert.DeserializeObject<TDst>(json);
         }
     }
 }

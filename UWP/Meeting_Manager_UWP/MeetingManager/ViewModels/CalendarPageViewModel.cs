@@ -199,10 +199,12 @@ namespace MeetingManager.ViewModels
                             SelectedDate - TimeSpan.FromDays(1),
                             SelectedDate + TimeSpan.FromDays(2));
 
-                var selectedDateEvents = events.Where(x =>
+                var selectedDateEvents = events
+                    .Where(x =>
                         x.IsAllDay ?
-                        x.Start.DateTime.Date.CompareTo(SelectedDate.Date) <= 0 && x.End.DateTime.Date.CompareTo(SelectedDate.Date) >= 0 :
-                        x.Start.DateTime.ToLocalTime().Date.CompareTo(SelectedDate.Date) == 0);
+                        x.Start.DateTime.Date.CompareTo(SelectedDate.Date) <= 0 && x.End.DateTime.Date.CompareTo(SelectedDate.Date) > 0 :
+                        x.Start.DateTime.ToLocalTime().Date.CompareTo(SelectedDate.Date) == 0)
+                    .ToList();
 
                 // We use Index property just for visualization
                 int index = 0;

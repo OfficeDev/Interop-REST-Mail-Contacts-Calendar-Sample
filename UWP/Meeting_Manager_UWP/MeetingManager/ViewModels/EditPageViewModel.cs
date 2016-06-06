@@ -27,8 +27,8 @@ namespace MeetingManager.ViewModels
             AddUserCommand = new DelegateCommand(AddUser);
             AddContactCommand = new DelegateCommand(AddContact);
             FindRoomCommand = new DelegateCommand(FindRoom);
-            GetSuggestedTimeCommand = new DelegateCommand(GetSuggestedTime);
-            ASAPCommand = new DelegateCommand(ASAPMeeting);
+            GetSuggestedTimeCommand = new DelegateCommand(GetSuggestedTime, CanExecuteMeetingTimes);
+            ASAPCommand = new DelegateCommand(ASAPMeeting, CanExecuteMeetingTimes);
             DeleteAttendeeCommand = new DelegateCommand<Attendee>(DeleteAttendee);
             ReplyAllCommand = new DelegateCommand(SendReplyAll);
             ForwardCommand = new DelegateCommand(SendForward);
@@ -82,10 +82,7 @@ namespace MeetingManager.ViewModels
 
             set
             {
-                var local = _meeting.Start.ToLocalTime();
-                var newTime = value.Date + local.TimeOfDay;
-
-                _meeting.Start.DateTime = _meeting.Start.FromLocalTime(newTime);
+                SetTime(_meeting.Start, value);
 
                 if (_meeting.End.DateTime.CompareTo(_meeting.Start.DateTime) < 0)
                 {
@@ -111,16 +108,28 @@ namespace MeetingManager.ViewModels
 
             set
             {
-                var local = _meeting.End.ToLocalTime();
-                var newTime = value.Date + local.TimeOfDay;
-
-                _meeting.End.DateTime = _meeting.End.FromLocalTime(newTime);
+                SetTime(_meeting.End, value);
 
                 if (_meeting.Start.DateTime.CompareTo(_meeting.End.DateTime) > 0)
                 {
                     _meeting.Start.DateTime = _meeting.End.DateTime - TimeSpan.FromMinutes(30);
                     OnPropertyChanged(() => StartTime);
                 }
+            }
+        }
+
+        private void SetTime(ZonedDateTime current, DateTimeOffset value)
+        {
+            if (IsAllDay)
+            {
+                current.DateTime = value.Date;
+            }
+            else
+            {
+                var local = _meeting.Start.ToLocalTime();
+                var newTime = value.Date + local.TimeOfDay;
+
+                current.DateTime = current.FromLocalTime(newTime);
             }
         }
 
@@ -212,6 +221,8 @@ namespace MeetingManager.ViewModels
 
         public string SaveCaption => _meeting.Attendees.Any() ? GetString("SendCaption") : GetString("SaveCaption");
 
+        public bool HasAttendees => Attendees.Any();
+
         private TimeSpan GetTimeSpan(ZonedDateTime dateTime)
         {
             if (IsAllDay)
@@ -274,6 +285,7 @@ namespace MeetingManager.ViewModels
             }
 
             OnPropertyChanged(() => SaveCaption);
+            OnPropertyChanged(() => HasAttendees);
         }
 
         private Meeting CreateNewMeeting()
@@ -519,6 +531,11 @@ namespace MeetingManager.ViewModels
         private async Task NavigateToEmail(string action, string comment = null)
         {
             await base.NavigateToEmail(Meeting, action, comment);
+        }
+
+        private bool CanExecuteMeetingTimes()
+        {
+            return !IsAllDay && App.Me.UseHttp;
         }
     }
 }

@@ -81,11 +81,6 @@ namespace MeetingManager
             await GetHttpHelper().DeleteItemAsync(uri);
         }
 
-        public IUserPager GetUserPager(int pageSize, string filter, bool getHumans)
-        {
-            return new HttpUserPager(pageSize, filter, getHumans, GetHttpHelper());
-        }
-
         public async Task<bool> UpdateAndSendMessage(Message message, string comment, IEnumerable<Message.Recipient> recipients)
         {
             message.Body.Content = comment + message.Body.Content;
@@ -134,6 +129,7 @@ namespace MeetingManager
 
         public async Task<IEnumerable<Contact>> GetContacts(int pageIndex, int pageSize)
         {
+            // Assumption: pageSize is less or equal to the service default page size
             string uri = Contacts +
                         $"?$top={pageSize}&$skip={pageSize * pageIndex}&$orderby=DisplayName";
 
@@ -172,7 +168,7 @@ namespace MeetingManager
             var body = BuildRequestBody(meeting, startTime, endTime);
             string uri = "https://graph.microsoft.com/beta/me/findmeetingtimesOld";
 
-            var candidates = await GetHttpHelper().PostItemAsync<MeetingTimes, MeetingTimeCandidates> (uri, body);
+            var candidates = await GetHttpHelper().PostItemAsync<MeetingTimes, MeetingTimeCandidates>(uri, body);
 
             if (candidates == null || candidates.Value == null)
             {
@@ -315,164 +311,166 @@ namespace MeetingManager
             var createdDateTime = meeting.CreatedDateTime.DateTime - TimeSpan.FromMinutes(1);
             sb.Append(DateTimeUtils.DateToFullApiUtcString(createdDateTime));
         }
-    }
 
-    class HttpUserPager : IUserPager
-    {
-        private readonly int _pageSize;
-        private readonly string _filter;
-        private readonly bool _getHumans;
-        private readonly string _firstPageUri;
-        private readonly HttpHelper _httpHelper;
-
-        private string _nextPageUri;
-        private string _prevPageUri;
-        private int _curPage = -1;
-
-        public HttpUserPager(int pageSize, string filter, bool getHumans, HttpHelper httpHelper)
+        public IUserPager GetUserPager(int pageSize, string filter, bool getHumans)
         {
-            _pageSize = pageSize;
-            _filter = filter;
-            _getHumans = getHumans;
-            _httpHelper = httpHelper;
-
-            _nextPageUri = _firstPageUri = BuildUri();
+            return new HttpUserPager(pageSize, filter, getHumans, GetHttpHelper());
         }
 
-        public async Task<IEnumerable<User>> GetNextPage(bool next)
+        private class HttpUserPager : IUserPager
         {
-            if (next == false)
+            private readonly int _pageSize;
+            private readonly string _filter;
+            private readonly bool _getHumans;
+            private readonly string _firstPageUri;
+            private readonly HttpHelper _httpHelper;
+
+            private string _nextPageUri;
+            private string _prevPageUri;
+            private int _curPage = -1;
+
+            public HttpUserPager(int pageSize, string filter, bool getHumans, HttpHelper httpHelper)
             {
-                if (_curPage <= 1)
+                _pageSize = pageSize;
+                _filter = filter;
+                _getHumans = getHumans;
+                _httpHelper = httpHelper;
+
+                _nextPageUri = _firstPageUri = BuildUri();
+            }
+
+            public bool HasNextPage => _nextPageUri != null;
+
+            public bool HasPrevPage => _curPage > 0;
+
+            public async Task<IEnumerable<User>> GetNextPage(bool next)
+            {
+                if (next == false)
                 {
-                    _nextPageUri = _firstPageUri;
+                    if (_curPage <= 1)
+                    {
+                        _nextPageUri = _firstPageUri;
+                    }
+                    else if (_prevPageUri != null && !_prevPageUri.Contains("previous-page"))
+                    {
+                        _nextPageUri = _prevPageUri + "&previous-page=true";
+                    }
                 }
-                else if (_prevPageUri != null && !_prevPageUri.Contains("previous-page"))
+
+                var list = await _httpHelper.GetItemAsync<HttpHelper.ODataList<User>>(_nextPageUri);
+
+                var items = list.value;
+
+                if (next)
                 {
-                    _nextPageUri = _prevPageUri + "&previous-page=true";
+                    ++_curPage;
                 }
+                else
+                {
+                    --_curPage;
+                }
+
+                _nextPageUri = GetNextPageUri(_nextPageUri, list.NextLink);
+
+                if (_nextPageUri != null && _nextPageUri.Contains("$skiptoken"))
+                {
+                    _prevPageUri = _nextPageUri;
+                }
+
+                return items;
             }
 
-            var list = await _httpHelper.GetItemAsync<HttpHelper.ODataList<User>>(_nextPageUri);
-
-            var items = list.value;
-
-            if (next)
+            private string GetNextPageUri(string currentUri, string nextLink)
             {
-                ++_curPage;
+                if (string.IsNullOrEmpty(nextLink))
+                {
+                    return null;
+                }
+
+                string skiptoken = Utils.GetToken(nextLink, "$skiptoken");
+                if (skiptoken == null)
+                {
+                    return null;
+                }
+
+                string nextUri = Utils.StripToken(currentUri, "&$skiptoken");
+                nextUri = Utils.StripToken(nextUri, "&previous-page");
+
+                if (nextUri.Last() != '&')
+                {
+                    nextUri += '&';
+                }
+
+                nextUri += skiptoken;
+
+                return nextUri;
             }
-            else
+
+            private string BuildUri()
             {
-                --_curPage;
+                string uri = "https://graph.microsoft.com/v1.0/users?";
+                var sb = new StringBuilder(uri);
+                sb.AppendFormat("$top={0}", _pageSize);
+
+                if (_getHumans)
+                {
+                    BuildHumansQuery(sb);
+                }
+                else
+                {
+                    BuildRoomsQuery(sb);
+                }
+
+                AddFilter(sb);
+
+                return sb.ToString();
             }
 
-            _nextPageUri = GetNextPageUri(_nextPageUri, list.NextLink);
-
-            if (_nextPageUri != null && _nextPageUri.Contains("$skiptoken"))
+            private void BuildHumansQuery(StringBuilder sb)
             {
-                _prevPageUri = _nextPageUri;
             }
 
-            return items;
-        }
-
-        private string GetNextPageUri(string currentUri, string nextLink)
-        {
-            if (string.IsNullOrEmpty(nextLink)) {
-                return null;
-            }
-
-            string skiptoken = Utils.GetToken(nextLink, "$skiptoken");
-            if (skiptoken == null) {
-                return null;
-            }
-
-            string nextUri = Utils.StripToken(currentUri, "&$skiptoken");
-            nextUri = Utils.StripToken(nextUri, "&previous-page");
-
-            if (nextUri.Last() != '&') {
-                nextUri += '&';
-            }
-
-            nextUri += skiptoken;
-
-            return nextUri;
-        }
-
-        public bool HasNextPage()
-        {
-            return _nextPageUri != null;
-        }
-
-        public bool HasPrevPage()
-        {
-            return _curPage > 0;
-        }
-
-        private string BuildUri()
-        {
-            string uri = "https://graph.microsoft.com/v1.0/users?";
-            var sb = new StringBuilder(uri);
-            sb.AppendFormat("$top={0}", _pageSize);
-
-            if (_getHumans)
-            {
-                BuildHumansQuery(sb);
-            }
-            else
-            {
-                BuildRoomsQuery(sb);
-            }
-
-            AddFilter(sb);
-
-            return sb.ToString();
-        }
-
-        private void BuildHumansQuery(StringBuilder sb)
-        {
-        }
-
-        private void BuildRoomsQuery(StringBuilder sb)
-        {
-            sb.Append("&$filter=");
-            // For rooms, we are making assumption about their 'givenName' property.
-            AddStartsWith(sb, "Conf Room", "givenName");
-        }
-
-        private void AddFilter(StringBuilder sb)
-        {
-            if (string.IsNullOrEmpty(_filter))
-            {
-                return;
-            }
-
-            if (!_getHumans)
-            {
-                sb.Append(" and ");
-                sb.Append('(');
-                AddMoreNameFilters(sb, _filter);
-                sb.Append(')');
-            }
-            else
+            private void BuildRoomsQuery(StringBuilder sb)
             {
                 sb.Append("&$filter=");
-                AddStartsWith(sb, _filter, "givenName");
-                sb.Append(" or ");
-                AddMoreNameFilters(sb, _filter);
+                // For rooms, we are making assumption about their 'givenName' property.
+                AddStartsWith(sb, "Conf Room", "givenName");
             }
-        }
 
-        private void AddMoreNameFilters(StringBuilder sb, string filter)
-        {
-            AddStartsWith(sb, filter, "userPrincipalName");
-            sb.Append(" or ");
-            AddStartsWith(sb, filter, "displayName");
-        }
+            private void AddFilter(StringBuilder sb)
+            {
+                if (string.IsNullOrEmpty(_filter))
+                {
+                    return;
+                }
 
-        private void AddStartsWith(StringBuilder sb, string filter, string property)
-        {
-            sb.AppendFormat("startswith({0},'{1}')", property, filter);
+                if (!_getHumans)
+                {
+                    sb.Append(" and ");
+                    sb.Append('(');
+                    AddMoreNameFilters(sb, _filter);
+                    sb.Append(')');
+                }
+                else
+                {
+                    sb.Append("&$filter=");
+                    AddStartsWith(sb, _filter, "givenName");
+                    sb.Append(" or ");
+                    AddMoreNameFilters(sb, _filter);
+                }
+            }
+
+            private void AddMoreNameFilters(StringBuilder sb, string filter)
+            {
+                AddStartsWith(sb, filter, "userPrincipalName");
+                sb.Append(" or ");
+                AddStartsWith(sb, filter, "displayName");
+            }
+
+            private void AddStartsWith(StringBuilder sb, string filter, string property)
+            {
+                sb.AppendFormat("startswith({0},'{1}')", property, filter);
+            }
         }
     }
 }

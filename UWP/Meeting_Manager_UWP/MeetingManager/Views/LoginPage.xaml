@@ -17,10 +17,6 @@ See LICENSE in the project root for license information. -->
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <local:NavigationAwarePage.TopAppBar>
-        <local:TopBarControl/>
-    </local:NavigationAwarePage.TopAppBar>
-
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition/>

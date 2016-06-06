@@ -17,11 +17,7 @@ See LICENSE in the project root for license information. -->
     x:Name="ThisPage"
     d:DesignHeight="900"
     d:DesignWidth="900">
-<!--
-    <local:NavigationAwarePage.TopAppBar>
-        <local:TopBarControl/>
-    </local:NavigationAwarePage.TopAppBar>
--->
+
     <Grid Background="White" Style="{StaticResource MainGrid}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
@@ -72,7 +68,8 @@ See LICENSE in the project root for license information. -->
             <ProgressBar IsIndeterminate="True"
                 Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisible}}"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <Button Content="Email" Style="{StaticResource TopButton}" Visibility="{Binding IsNewMeeting, Converter={StaticResource BoolToCollapsed}}">
+                <Button Content="Email" Style="{StaticResource TopButton}" IsEnabled="{Binding HasAttendees}"
+                            Visibility="{Binding IsNewMeeting, Converter={StaticResource BoolToCollapsed}}">
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Reply All" Command="{Binding ReplyAllCommand}"/>
@@ -81,9 +78,10 @@ See LICENSE in the project root for license information. -->
                 </Button.Flyout>
                 </Button>
                 <Button Content="Recurrence" Style="{StaticResource TopButton}" Command="{Binding RecurrenceCommand}"/>
-                <Button Content="Time Slots" Style="{StaticResource TopButton}" Command="{Binding GetSuggestedTimeCommand}" IsEnabled="{Binding IsAllDay, Converter={StaticResource Negation}}"/>
-                <Button Content="ASAP" Style="{StaticResource TopButton}" Command="{Binding ASAPCommand}" IsEnabled="{Binding IsAllDay, Converter={StaticResource Negation}}"/>
-                <Button Content="I'm running late" Style="{StaticResource TopButton}" Command="{Binding LateCommand}"  Visibility="{Binding IsNewMeeting, Converter={StaticResource BoolToCollapsed}}"/>
+                <Button Content="Time Slots" Style="{StaticResource TopButton}" Command="{Binding GetSuggestedTimeCommand}"/>
+                <Button Content="ASAP" Style="{StaticResource TopButton}" Command="{Binding ASAPCommand}"/>
+                <Button Content="I'm running late" Style="{StaticResource TopButton}" IsEnabled="{Binding HasAttendees}"
+                    Command="{Binding LateCommand}"  Visibility="{Binding IsNewMeeting, Converter={StaticResource BoolToCollapsed}}"/>
                 <Button Content="{Binding SaveCaption}" Style="{StaticResource TopButton}" Command="{Binding SaveCommand}"/>
             </StackPanel>
         </Grid>

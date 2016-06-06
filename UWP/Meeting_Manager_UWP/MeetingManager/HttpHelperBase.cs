@@ -3,7 +3,6 @@
 
 using Newtonsoft.Json;
 using System;
-using System.Dynamic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -40,11 +39,6 @@ namespace MeetingManager
         internal async Task PostItemVoidAsync<T>(string uri)
         {
             await DoHttpAsync<T, T>(HttpMethod.Post, uri, default(T));
-        }
-
-        internal async Task<T> PostItemDynamicAsync<T>(string uri, dynamic body)
-        {
-            return await DoHttpAsync<ExpandoObject, T>(HttpMethod.Post, uri, body);
         }
 
         internal async Task DeleteItemAsync(string uri)

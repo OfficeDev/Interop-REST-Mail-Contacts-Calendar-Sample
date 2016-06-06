@@ -18,11 +18,7 @@ See LICENSE in the project root for license information. -->
     xmlns:ext="using:MeetingManager.Views"
     d:DesignHeight="600"
     d:DesignWidth="600">
-<!--
-    <local:NavigationAwarePage.TopAppBar>
-        <local:TopBarControl/>
-    </local:NavigationAwarePage.TopAppBar>
--->
+
     <Grid Background="Honeydew" Style="{StaticResource MainGrid}">
         <Grid.Resources>
             <DataTemplate x:Key="RecipientTemplate">

@@ -30,6 +30,11 @@ See LICENSE in the project root for license information. -->
                     Margin="0,20,0,0" FontSize="18.667"
                     />
 
+            <StackPanel Margin="0,20,0,0" HorizontalAlignment="Center">
+                <RadioButton Content="Use direct HTTP" IsChecked="{Binding UseHttp, Mode=TwoWay}"/>
+                <RadioButton Content="Use Graph SDK" IsChecked="{Binding UseSDK, Mode=TwoWay}"/>
+            </StackPanel>
+
         </StackPanel>
     </Grid>
 

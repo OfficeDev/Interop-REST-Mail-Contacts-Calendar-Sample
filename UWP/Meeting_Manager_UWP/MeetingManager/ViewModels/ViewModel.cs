@@ -11,31 +11,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace MeetingManager.ViewModels
 {
     public class ViewModel : ViewModelBase
     {
-        private readonly INavigationService _navigationService;
-        private readonly IGraphService _officeService;
-        private readonly IEventAggregator _eventAggregator;
-        protected readonly IAuthenticationService _authenticationService;
+        private static readonly Lazy<IGraphService> _officeService =
+                            new Lazy<IGraphService>(() => App.Me.GetGraphService());
         private bool _isLoading;
 
-        protected IGraphService OfficeService
-        {
-            get  { return _officeService; } 
-        }
-
-        protected ViewModel()
-        {
-            _navigationService = (Application.Current as App).NavigationService;
-            _eventAggregator = (Application.Current as App).EventAggregator;
-            _officeService = (Application.Current as App).OfficeService;
-            _authenticationService = (Application.Current as App).AuthenticationService;
-        }
+        protected IGraphService OfficeService => _officeService.Value;
 
         public bool IsLoading
         {
@@ -45,7 +31,7 @@ namespace MeetingManager.ViewModels
 
         private void NavigateToPage(string pageToken, object parameter=null)
         {
-            _navigationService.Navigate(pageToken, SerializeParameter(parameter));
+            App.Me.NavigationService.Navigate(pageToken, SerializeParameter(parameter));
         }
 
         public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
@@ -57,12 +43,12 @@ namespace MeetingManager.ViewModels
 
         protected void GoBack()
         {
-            _navigationService.GoBack();
+            App.Me.NavigationService.GoBack();
         }
 
         protected TEvent GetEvent<TEvent>() where TEvent : EventBase, new()
         {
-            return _eventAggregator.GetEvent<TEvent>();
+            return App.Me.EventAggregator.GetEvent<TEvent>();
         }
 
         protected string Serialize(object obj)

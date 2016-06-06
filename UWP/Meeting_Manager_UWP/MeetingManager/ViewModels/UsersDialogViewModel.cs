@@ -114,8 +114,8 @@ namespace MeetingManager.ViewModels
                 Users = new ObservableCollection<User>(items);
             }
 
-            HasNext = _userPager.HasNextPage();
-            HasPrev = _userPager.HasPrevPage();
+            HasNext = _userPager.HasNextPage;
+            HasPrev = _userPager.HasPrevPage;
         }
 
 

@@ -11,6 +11,6 @@ namespace MeetingManager
         string AuthorizationCode { get; set; }
         string LoginUrl { get; }
         string RedirectUri { get; }
-        Task<string> GetTokenAsync(string resourceId, bool isRefresh);
+        Task<string> GetTokenAsync(string resourceId);
     }
 }

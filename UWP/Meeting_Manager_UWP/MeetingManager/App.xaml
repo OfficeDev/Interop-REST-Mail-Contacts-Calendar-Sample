@@ -17,10 +17,8 @@ See LICENSE in the project root for license information. -->
 
             <!-- Add your client id here. -->
             <x:String x:Key="ida:ClientID">6669f82f-61ac-46ea-a346-7c3444d45819</x:String>
-            <x:String x:Key="ida:AADInstance">https://login.microsoftonline.com/</x:String>
             <x:String x:Key="ida:RedirectUri">MS-APPX-WEB://MICROSOFT.AAD.BROKERPLUGIN/S-1-15-2-2615261976-468863395-2165854654-1528528134-2599808767-1175204876-2313817458</x:String>
-            <!-- Add your developer tenant domain here. -->
-            <x:String x:Key="ida:Domain">ointerop.onmicrosoft.com</x:String>
+            <x:String x:Key="ida:AADInstance">https://login.microsoftonline.com/</x:String>
 
             <cvt:DateFormat x:Key="DateFormat" />
             <cvt:BoolToVisible x:Key="BoolToVisible" />
@@ -33,10 +31,6 @@ See LICENSE in the project root for license information. -->
             <vm:JsonPageViewModel x:Key="JsonPageVM" />
 
             <Style x:Key="Page" TargetType="v:NavigationAwarePage">
-                <Setter Property="v:TitleBar.BackgroundColor" Value="Blue"/>
-                <Setter Property="v:TitleBar.ForegroundColor" Value="White"/>
-                <Setter Property="v:TitleBar.ButtonBackgroundColor" Value="Blue"/>
-                <Setter Property="v:TitleBar.ButtonForegroundColor" Value="White"/>
             </Style>
             
             <Style x:Key="LogWindow" TargetType="Border">

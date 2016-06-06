@@ -4,8 +4,6 @@
 using MeetingManager.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MeetingManager
@@ -32,8 +30,8 @@ namespace MeetingManager
 
     public interface IUserPager
     {
-        bool HasNextPage();
-        bool HasPrevPage();
+        bool HasNextPage { get; }
+        bool HasPrevPage { get; }
         Task<IEnumerable<User>> GetNextPage(bool next);
     }
 }

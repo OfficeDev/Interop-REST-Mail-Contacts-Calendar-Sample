@@ -25,7 +25,7 @@ namespace MeetingManager.ViewModels
 
         public EmailPageViewModel()
         {
-            SendCommand = new DelegateCommand(SendMail);
+            SendCommand = new DelegateCommand(SendMail, CanExecuteSendMail);
             AddUserRecipientCommand = new DelegateCommand(AddUserRecipient);
             AddContactRecipientCommand = new DelegateCommand(AddContactRecipient);
             DeleteRecipientCommand = new DelegateCommand<Message.Recipient>(DeleteRecipient);
@@ -118,6 +118,7 @@ namespace MeetingManager.ViewModels
         {
             int pos = Recipients.IndexOf(x => x.EmailAddress.IsEqualTo(recipient.EmailAddress));
             Recipients.RemoveAt(pos);
+            SendCommand.RaiseCanExecuteChanged();
         }
 
 
@@ -150,7 +151,13 @@ namespace MeetingManager.ViewModels
             if (Recipients.FirstOrDefault(x => x.EmailAddress.IsEqualTo(recipient.EmailAddress)) == null)
             {
                 Recipients.Add(recipient);
+                SendCommand.RaiseCanExecuteChanged();
             }
+        }
+
+        private bool CanExecuteSendMail()
+        {
+            return Recipients.Any();
         }
     }
 }
