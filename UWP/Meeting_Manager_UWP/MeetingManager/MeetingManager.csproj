@@ -116,9 +116,6 @@
     <Compile Include="IAuthenticationService.cs" />
     <Compile Include="IGraphService.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Models\CreateMeetingEvent.cs" />
     <Compile Include="Models\HttpEvent.cs" />
     <Compile Include="Models\HttpEventData.cs" />
@@ -236,10 +233,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\AcceptDeclineDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
