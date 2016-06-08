@@ -28,12 +28,7 @@ namespace MeetingManager
 
         public static void Notify(this INotifyPropertyChanged sender, PropertyChangedEventHandler eventHandler, string propertyName)
         {
-            var handler = eventHandler;
-
-            if (null != handler)
-            {
-                handler(sender, new PropertyChangedEventArgs(propertyName));
-            }
+            eventHandler?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
         }
 
         public static int IndexOf<T>(this IEnumerable<T> source, Func<T, bool> comparer)

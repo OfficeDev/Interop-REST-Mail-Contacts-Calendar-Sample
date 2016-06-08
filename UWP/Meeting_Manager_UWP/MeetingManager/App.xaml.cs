@@ -48,18 +48,9 @@ namespace MeetingManager
 
         internal IEventAggregator EventAggregator { get; private set; }
 
-        internal new INavigationService NavigationService
-        {
-            get { return base.NavigationService; }
-        }
+        internal new INavigationService NavigationService => base.NavigationService;
 
-        internal static App Me
-        {
-            get
-            {
-                return Application.Current as App;
-            }
-        }
+        internal static App Me => Application.Current as App;
 
         internal IAuthenticationService AuthenticationService { get; private set; }
 
@@ -103,9 +94,6 @@ namespace MeetingManager
             _logger = new Logger(EventAggregator);
 
             AuthenticationService = new AuthenticationHelper(SessionStateService, _logger);
-
-            //Container.RegisterInstance<IAuthenticationService>(AuthenticationService);
-            //Container.RegisterInstance<INavigationService>(NavigationService);
 
             ViewModelLocationProvider.SetDefaultViewModelFactory(CachingFactory);
 

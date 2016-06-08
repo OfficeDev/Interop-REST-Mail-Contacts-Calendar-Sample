@@ -14,8 +14,6 @@ namespace MeetingManager
 {
     class HttpHelperBase
     {
-        internal delegate Task<string> TokenFunc(bool isRefresh);
-
         internal async Task<T> GetItemAsync<T>(string uri)
         {
             return await DoHttpAsync<EmptyBody, T>(HttpMethod.Get, uri, null);

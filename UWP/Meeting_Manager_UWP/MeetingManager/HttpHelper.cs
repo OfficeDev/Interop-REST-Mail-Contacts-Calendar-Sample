@@ -32,7 +32,7 @@ namespace MeetingManager
 
         protected override async Task<TResult> DoHttpAsync<TBody, TResult>(HttpMethod method, string uri, TBody body)
         {
-            var response = await CreateAndExecuteRequestAsync(method, uri, body, false);
+            var response = await CreateAndExecuteRequestAsync(method, uri, body);
 
             return await base.GetResultAsync<TResult>(response);
         }
@@ -63,22 +63,22 @@ namespace MeetingManager
         }
 
         private async Task<HttpResponseMessage> CreateAndExecuteRequestAsync<TBody>(
-            HttpMethod method, string uri, TBody body, bool needsTokenRefresh)
+            HttpMethod method, string uri, TBody body)
         {
             var request = base.CreateRequest(method, uri, body);
-            await SetHeaders(request, needsTokenRefresh);
+            await SetHeaders(request);
 
             return await base.ExecuteRequestAsync(request);
         }
 
-        private async Task SetHeaders(HttpRequestMessage request, bool needsTokenRefresh)
+        private async Task SetHeaders(HttpRequestMessage request)
         {
             if (!string.IsNullOrEmpty(_authService.UserId))
             {
                 request.Headers.Add("AnchorMailbox", _authService.UserId);
             }
 
-            await SetAuthorizationHeaderAsync(request, needsTokenRefresh);
+            await SetAuthorizationHeaderAsync(request);
         }
 
         protected override string BuildUri(string uri)
@@ -106,7 +106,7 @@ namespace MeetingManager
             await messageDialog.ShowAsync();
         }
 
-        private async Task SetAuthorizationHeaderAsync(HttpRequestMessage request, bool refreshToken)
+        private async Task SetAuthorizationHeaderAsync(HttpRequestMessage request)
         {
             string uri = request.RequestUri.ToString();
             string resourceId = ResourceIdFromUri(uri);

@@ -236,16 +236,5 @@ namespace MeetingManager
 
             return TimeZoneInfo.ConvertTime(localDateTime, TimeZoneInfo.Local, tzDestination);
         }
-
-        public static ZonedDateTime ToUtc(this ZonedDateTime dateTime)
-        {
-            var utcTime = TimeZoneInfo.ConvertTime(dateTime.DateTime, TimeZoneInfo.Local, TimeZoneInfo.Utc);
-
-            return new ZonedDateTime
-            {
-                DateTime = utcTime,
-                TimeZone = "UTC"
-            };
-        }
     }
 }
