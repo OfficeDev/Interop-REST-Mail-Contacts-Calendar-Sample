@@ -20,12 +20,10 @@ namespace MeetingManager.ViewModels
 
         public AcceptDeclineDialogViewModel()
         {
-            SendCommand = new DelegateCommand(Send);
-
             GetEvent<InitDialogEvent>().Subscribe(OnInitialize);
         }
 
-        public DelegateCommand SendCommand { get; }
+        public DelegateCommand SendCommand => new DelegateCommand(Send);
 
         public string Title { get; set; }
 

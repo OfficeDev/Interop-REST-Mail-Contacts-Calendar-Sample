@@ -22,26 +22,18 @@ namespace MeetingManager.ViewModels
 
         public CalendarPageViewModel()
         {
-            RefreshCommand = new DelegateCommand(RefreshMeetings);
-            CreateCommand = new DelegateCommand(CreateMeeting);
-            ViewInstanceCommand = new DelegateCommand<Meeting>(ViewMeetingInstance);
-            CancelInstanceCommand = new DelegateCommand<Meeting>(CancelMeetingInstance);
-            ViewSeriesCommand = new DelegateCommand<Meeting>(ViewMeetingSeries);
-            CancelSeriesCommand = new DelegateCommand<Meeting>(CancelMeetingSeries);
-            LateCommand = new DelegateCommand<Meeting>(SendLate);
-            DatesChangedCommand = new DelegateCommand<CalendarViewSelectedDatesChangedEventArgs>(SelectedDatesChanged);
-            DoubleTappedCommand = new DelegateCommand(DoubleTapped);
         }
 
-        public DelegateCommand RefreshCommand { get; }
-        public DelegateCommand CreateCommand { get; }
-        public DelegateCommand<Meeting> CancelInstanceCommand { get; }
-        public DelegateCommand<Meeting> ViewInstanceCommand { get; }
-        public DelegateCommand<Meeting> CancelSeriesCommand { get; }
-        public DelegateCommand<Meeting> ViewSeriesCommand { get; }
-        public DelegateCommand<Meeting> LateCommand { get; }
-        public DelegateCommand<CalendarViewSelectedDatesChangedEventArgs> DatesChangedCommand { get; }
-        public DelegateCommand DoubleTappedCommand { get; }
+        public DelegateCommand RefreshCommand => new DelegateCommand(RefreshMeetings);
+        public DelegateCommand CreateCommand => new DelegateCommand(CreateMeeting);
+        public DelegateCommand<Meeting> CancelInstanceCommand => new DelegateCommand<Meeting>(CancelMeetingInstance);
+        public DelegateCommand<Meeting> ViewInstanceCommand => new DelegateCommand<Meeting>(ViewMeetingInstance);
+        public DelegateCommand<Meeting> CancelSeriesCommand => new DelegateCommand<Meeting>(CancelMeetingSeries);
+        public DelegateCommand<Meeting> ViewSeriesCommand => new DelegateCommand<Meeting>(ViewMeetingSeries);
+        public DelegateCommand<Meeting> LateCommand => new DelegateCommand<Meeting>(SendLate);
+        public DelegateCommand<CalendarViewSelectedDatesChangedEventArgs> DatesChangedCommand =>
+                                                new DelegateCommand<CalendarViewSelectedDatesChangedEventArgs>(SelectedDatesChanged);
+        public DelegateCommand DoubleTappedCommand => new DelegateCommand(DoubleTapped);
 
         public ObservableCollection<Meeting> Meetings
         {

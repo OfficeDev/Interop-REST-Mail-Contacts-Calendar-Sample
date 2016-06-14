@@ -25,19 +25,14 @@ namespace MeetingManager.ViewModels
 
         public EmailPageViewModel()
         {
-            SendCommand = new DelegateCommand(SendMail, CanExecuteSendMail);
-            AddUserRecipientCommand = new DelegateCommand(AddUserRecipient);
-            AddContactRecipientCommand = new DelegateCommand(AddContactRecipient);
-            DeleteRecipientCommand = new DelegateCommand<Message.Recipient>(DeleteRecipient);
-
             GetEvent<UserSelectedEvent>().Subscribe(UserSelected);
             GetEvent<ContactSelectedEvent>().Subscribe(ContactSelected);
         }
 
-        public DelegateCommand SendCommand { get; }
-        public DelegateCommand AddUserRecipientCommand { get; }
-        public DelegateCommand AddContactRecipientCommand { get; }
-        public DelegateCommand<Message.Recipient> DeleteRecipientCommand { get; }
+        public DelegateCommand SendCommand => new DelegateCommand(SendMail, CanExecuteSendMail);
+        public DelegateCommand AddUserRecipientCommand => new DelegateCommand(AddUserRecipient);
+        public DelegateCommand AddContactRecipientCommand => new DelegateCommand(AddContactRecipient);
+        public DelegateCommand<Message.Recipient> DeleteRecipientCommand => new DelegateCommand<Message.Recipient>(DeleteRecipient);
 
         [RestorableState]
         public EventMessage Message

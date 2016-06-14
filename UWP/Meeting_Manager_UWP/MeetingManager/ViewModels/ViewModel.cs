@@ -51,17 +51,17 @@ namespace MeetingManager.ViewModels
             return App.Me.EventAggregator.GetEvent<TEvent>();
         }
 
-        protected string Serialize(object obj)
+        static protected string Serialize(object obj)
         {
             return JsonConvert.SerializeObject(obj);
         }
 
-        protected T Deserialize<T>(object parameter)
+        static protected T Deserialize<T>(object parameter)
         {
             return JsonConvert.DeserializeObject<T>((string) parameter);
         }
 
-        protected async Task<bool> YesNoDialog(string message)
+        static protected async Task<bool> YesNoDialog(string message)
         {
             var messageDialog = new MessageDialog(message);
 
@@ -85,7 +85,7 @@ namespace MeetingManager.ViewModels
             return (int)result.Id == 0;
         }
 
-        private async Task MessageDialog(string message)
+        static private async Task MessageDialog(string message)
         {
             var messageDialog = new MessageDialog(message);
 
@@ -145,7 +145,7 @@ namespace MeetingManager.ViewModels
             }
         }
 
-        private object SerializeParameter(object parameter)
+        static private object SerializeParameter(object parameter)
         {
             if (parameter != null)
             {
@@ -167,7 +167,7 @@ namespace MeetingManager.ViewModels
             await NavigateTo("Users", getHumans);
         }
 
-        protected string GetString(string id)
+        static protected string GetString(string id)
         {
             return ResMan.GetString(id);
         }

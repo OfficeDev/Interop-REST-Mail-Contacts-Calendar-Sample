@@ -30,18 +30,13 @@ namespace MeetingManager.ViewModels
 
             LogEntries = new ObservableCollection<EventData>();
 
-            ItemToggleCommand = new DelegateCommand(ToggleItem);
-            CopySelectedCommand = new DelegateCommand(CopySelectedItem);
-            CopyAllCommand = new DelegateCommand(CopyAllItems);
-            ShowJsonCommand = new DelegateCommand(ShowJson);
-
             IsMainWindow = _dispatcher.Equals((Application.Current as App).MainDispatcher);
         }
 
-        public DelegateCommand ItemToggleCommand { get; }
-        public DelegateCommand CopySelectedCommand { get; }
-        public DelegateCommand CopyAllCommand { get; }
-        public DelegateCommand ShowJsonCommand { get; }
+        public DelegateCommand ItemToggleCommand => new DelegateCommand(ToggleItem);
+        public DelegateCommand CopySelectedCommand => new DelegateCommand(CopySelectedItem);
+        public DelegateCommand CopyAllCommand => new DelegateCommand(CopyAllItems);
+        public DelegateCommand ShowJsonCommand => new DelegateCommand(ShowJson);
 
         public ObservableCollection<EventData> LogEntries { get; }
         public EventData SelectedItem { get; set; }

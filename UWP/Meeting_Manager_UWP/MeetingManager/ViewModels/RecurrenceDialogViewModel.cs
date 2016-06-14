@@ -67,13 +67,10 @@ namespace MeetingManager.ViewModels
 
         public RecurrenceDialogViewModel()
         {
-            SaveCommand = new DelegateCommand(SaveRecurrence);
-
             GetEvent<InitDialogEvent>().Subscribe(OnInitialize);
         }
 
-        public DelegateCommand SaveCommand { get; }
-        public DelegateCommand ClosedCommand { get; }
+        public DelegateCommand SaveCommand => new DelegateCommand(SaveRecurrence);
 
         public int OccurencesNumber
         {

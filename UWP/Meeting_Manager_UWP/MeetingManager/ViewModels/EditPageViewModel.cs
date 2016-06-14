@@ -22,18 +22,6 @@ namespace MeetingManager.ViewModels
 
         public EditPageViewModel()
         {
-            SaveCommand = new DelegateCommand(SaveMeetingAsync);
-            RecurrenceCommand = new DelegateCommand(SetRecurrence);
-            AddUserCommand = new DelegateCommand(AddUser);
-            AddContactCommand = new DelegateCommand(AddContact);
-            FindRoomCommand = new DelegateCommand(FindRoom);
-            GetSuggestedTimeCommand = new DelegateCommand(GetSuggestedTime, CanExecuteMeetingTimes);
-            ASAPCommand = new DelegateCommand(ASAPMeeting, CanExecuteMeetingTimes);
-            DeleteAttendeeCommand = new DelegateCommand<Attendee>(DeleteAttendee);
-            ReplyAllCommand = new DelegateCommand(SendReplyAll);
-            ForwardCommand = new DelegateCommand(SendForward);
-            LateCommand = new DelegateCommand(SendLate);
-
             GetEvent<UserSelectedEvent>().Subscribe(UserSelected);
             GetEvent<RoomSelectedEvent>().Subscribe(RoomSelected);
             GetEvent<MeetingTimeCandidateSelectedEvent>().Subscribe(MeetingTimeCandidateSelected);
@@ -41,17 +29,17 @@ namespace MeetingManager.ViewModels
             GetEvent<MeetingRecurrenceUpdatedEvent>().Subscribe(RecurrenceUpdated);
         }
 
-        public DelegateCommand SaveCommand { get; }
-        public DelegateCommand RecurrenceCommand { get; }
-        public DelegateCommand AddUserCommand { get; }
-        public DelegateCommand AddContactCommand { get; }
-        public DelegateCommand FindRoomCommand { get; }
-        public DelegateCommand GetSuggestedTimeCommand { get; }
-        public DelegateCommand ASAPCommand { get; }
-        public DelegateCommand<Attendee> DeleteAttendeeCommand { get; }
-        public DelegateCommand ReplyAllCommand { get; }
-        public DelegateCommand ForwardCommand { get; }
-        public DelegateCommand LateCommand { get; }
+        public DelegateCommand SaveCommand => new DelegateCommand(SaveMeetingAsync);
+        public DelegateCommand RecurrenceCommand => new DelegateCommand(SetRecurrence);
+        public DelegateCommand AddUserCommand => new DelegateCommand(AddUser);
+        public DelegateCommand AddContactCommand => new DelegateCommand(AddContact);
+        public DelegateCommand FindRoomCommand => new DelegateCommand(FindRoom);
+        public DelegateCommand GetSuggestedTimeCommand => new DelegateCommand(GetSuggestedTime, CanExecuteMeetingTimes);
+        public DelegateCommand ASAPCommand => new DelegateCommand(ASAPMeeting, CanExecuteMeetingTimes);
+        public DelegateCommand<Attendee> DeleteAttendeeCommand => new DelegateCommand<Attendee>(DeleteAttendee);
+        public DelegateCommand ReplyAllCommand => new DelegateCommand(SendReplyAll);
+        public DelegateCommand ForwardCommand => new DelegateCommand(SendForward);
+        public DelegateCommand LateCommand => new DelegateCommand(SendLate);
 
         [RestorableState]
         public Meeting Meeting
@@ -158,7 +146,6 @@ namespace MeetingManager.ViewModels
                     EndTime = value + TimeSpan.FromMinutes(30);
                     OnPropertyChanged(() => EndTime);
                 }
-                OnPropertyChanged();
             }
         }
 
@@ -174,7 +161,6 @@ namespace MeetingManager.ViewModels
                     StartTime = value - TimeSpan.FromMinutes(30);
                     OnPropertyChanged(() => StartTime);
                 }
-                OnPropertyChanged();
             }
         }
 
@@ -357,6 +343,7 @@ namespace MeetingManager.ViewModels
         private void EnsureAllDay()
         {
             var length = (_meeting.End.DateTime - _meeting.Start.DateTime).TotalDays;
+            length = Math.Max(length, 1);
             // Set time to midnight (12:00 AM)
             _meeting.Start.DateTime = _meeting.Start.DateTime.Date;
             // Set the whole day duration

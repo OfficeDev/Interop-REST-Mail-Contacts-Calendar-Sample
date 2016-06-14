@@ -25,18 +25,13 @@ namespace MeetingManager.ViewModels
 
         public ContactsDialogViewModel()
         {
-            NextCommand = new DelegateCommand(NextPage);
-            PrevCommand = new DelegateCommand(PrevPage);
-            PickCommand = new DelegateCommand(ItemPicked);
-            OkCommand = new DelegateCommand(OnOk);
-
             GetEvent<InitDialogEvent>().Subscribe(OnInitialize);
         }
 
-        public DelegateCommand NextCommand { get; }
-        public DelegateCommand PrevCommand { get; }
-        public DelegateCommand PickCommand { get; }
-        public DelegateCommand OkCommand { get; }
+        public DelegateCommand NextCommand => new DelegateCommand(NextPage);
+        public DelegateCommand PrevCommand => new DelegateCommand(PrevPage);
+        public DelegateCommand PickCommand => new DelegateCommand(ItemPicked);
+        public DelegateCommand OkCommand => new DelegateCommand(OnOk);
 
         public ObservableCollection<Contact> Contacts
         {
@@ -126,9 +121,9 @@ namespace MeetingManager.ViewModels
 
         private async Task<BitmapImage> GetImage(byte[] data)
         {
-            using (InMemoryRandomAccessStream ms = new InMemoryRandomAccessStream())
+            using (var ms = new InMemoryRandomAccessStream())
             {
-                using (DataWriter writer = new DataWriter(ms.GetOutputStreamAt(0)))
+                using (var writer = new DataWriter(ms.GetOutputStreamAt(0)))
                 {
                     writer.WriteBytes(data);
                     await writer.StoreAsync();

@@ -21,20 +21,14 @@ namespace MeetingManager.ViewModels
 
         public UsersDialogViewModel()
         {
-            FilterCommand = new DelegateCommand(FilterUsers);
-            NextCommand = new DelegateCommand(NextPage);
-            PrevCommand = new DelegateCommand(PrevPage);
-            DoubleTappedCommand = new DelegateCommand(DoubleTapped);
-            OkCommand = new DelegateCommand(OnOk);
-
             GetEvent<InitDialogEvent>().Subscribe(OnInitialize);
         }
 
-        public DelegateCommand FilterCommand { get; }
-        public DelegateCommand NextCommand { get; }
-        public DelegateCommand PrevCommand { get; }
-        public DelegateCommand DoubleTappedCommand { get; }
-        public DelegateCommand OkCommand { get; }
+        public DelegateCommand FilterCommand => new DelegateCommand(FilterUsers);
+        public DelegateCommand NextCommand => new DelegateCommand(NextPage);
+        public DelegateCommand PrevCommand => new DelegateCommand(PrevPage);
+        public DelegateCommand DoubleTappedCommand => new DelegateCommand(DoubleTapped);
+        public DelegateCommand OkCommand => new DelegateCommand(OnOk);
 
         public ObservableCollection<User> Users
         {

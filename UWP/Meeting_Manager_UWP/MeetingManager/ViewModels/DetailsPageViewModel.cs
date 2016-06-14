@@ -29,26 +29,17 @@ namespace MeetingManager.ViewModels
 
         public DetailsPageViewModel()
         {
-            EditCommand = new DelegateCommand(EditMeeting);
-            ReplyCommand = new DelegateCommand(SendReply);
-            ReplyAllCommand = new DelegateCommand(SendReplyAll);
-            ForwardCommand = new DelegateCommand(SendForward);
-            LateCommand = new DelegateCommand(SendLate);
-            AcceptCommand = new DelegateCommand<string>(AcceptMeeting);
-            DeclineCommand = new DelegateCommand<string>(DeclineMeeting);
-            TentativeCommand = new DelegateCommand<string>(TentativeMeeting);
-
             GetEvent<MeetingUpdatedEvent>().Subscribe(OnMeetingUpdate);
         }
 
-        public DelegateCommand EditCommand { get; }
-        public DelegateCommand ReplyCommand { get; }
-        public DelegateCommand ReplyAllCommand { get; }
-        public DelegateCommand ForwardCommand { get; }
-        public DelegateCommand LateCommand { get; }
-        public DelegateCommand<string> AcceptCommand { get; }
-        public DelegateCommand<string> DeclineCommand { get; }
-        public DelegateCommand<string> TentativeCommand { get; }
+        public DelegateCommand EditCommand => new DelegateCommand(EditMeeting);
+        public DelegateCommand ReplyCommand => new DelegateCommand(SendReply);
+        public DelegateCommand ReplyAllCommand => new DelegateCommand(SendReplyAll);
+        public DelegateCommand ForwardCommand => new DelegateCommand(SendForward);
+        public DelegateCommand LateCommand => new DelegateCommand(SendLate);
+        public DelegateCommand<string> AcceptCommand => new DelegateCommand<string>(AcceptMeeting);
+        public DelegateCommand<string> DeclineCommand => new DelegateCommand<string>(DeclineMeeting);
+        public DelegateCommand<string> TentativeCommand => new DelegateCommand<string>(TentativeMeeting);
 
         [RestorableState]
         public Meeting Meeting

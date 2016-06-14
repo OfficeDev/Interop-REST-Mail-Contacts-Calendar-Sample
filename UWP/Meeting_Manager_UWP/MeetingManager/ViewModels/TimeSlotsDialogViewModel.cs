@@ -21,14 +21,11 @@ namespace MeetingManager.ViewModels
 
         public TimeSlotsDialogViewModel()
         {
-            DoubleTappedCommand = new DelegateCommand<DoubleTappedRoutedEventArgs>(DoubleTapped);
-            OkCommand = new DelegateCommand(OnOk);
-
             GetEvent<InitDialogEvent>().Subscribe(OnInitialize);
         }
 
-        public DelegateCommand<DoubleTappedRoutedEventArgs> DoubleTappedCommand { get; }
-        public DelegateCommand OkCommand { get; }
+        public DelegateCommand<DoubleTappedRoutedEventArgs> DoubleTappedCommand => new DelegateCommand<DoubleTappedRoutedEventArgs>(DoubleTapped);
+        public DelegateCommand OkCommand => new DelegateCommand(OnOk);
 
         public ObservableCollection<MeetingTimeCandidate> MeetingTimeCandidates
         {

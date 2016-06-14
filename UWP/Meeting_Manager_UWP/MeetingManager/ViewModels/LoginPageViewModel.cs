@@ -15,7 +15,6 @@ namespace MeetingManager.ViewModels
 
         public LoginPageViewModel()
         {
-            NavigationStartingCommand = new DelegateCommand<WebViewNavigationStartingEventArgs>(NavigationStarting);
         }
 
         public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
@@ -25,7 +24,8 @@ namespace MeetingManager.ViewModels
             LoginUrl = App.Me.AuthenticationService.LoginUrl;
         }
 
-        public DelegateCommand<WebViewNavigationStartingEventArgs> NavigationStartingCommand { get; }
+        public DelegateCommand<WebViewNavigationStartingEventArgs> NavigationStartingCommand =>
+                            new DelegateCommand<WebViewNavigationStartingEventArgs>(NavigationStarting);
 
         public string LoginUrl
         {
