@@ -87,7 +87,10 @@ namespace MeetingManager.ViewModels
 
         private void CopySelectedItem()
         {
-            CopyToClipboard(SelectedItem.Text);
+            if (SelectedItem != null)
+            {
+                CopyToClipboard(SelectedItem.Text);
+            }
         }
 
         private void CopyAllItems()

@@ -10,6 +10,7 @@ using System.Net.Http.Headers;
 
 using MMM = MeetingManager.Models;
 using System.IO;
+using System.Net.Http;
 
 namespace MeetingManager
 {
@@ -20,6 +21,67 @@ namespace MeetingManager
         private readonly GraphServiceClient _graphClient;
         private readonly IAuthenticationService _authService;
         private readonly Logger _logger;
+
+        private class LogHttpProvider : IHttpProvider
+        {
+            private readonly HttpClient _httpClient;
+            private readonly Logger _logger;
+
+            public LogHttpProvider(Logger logger)
+            {
+                var clientHandler = new HttpClientHandler { AllowAutoRedirect = false };
+                _httpClient = new HttpClient(clientHandler, /* disposeHandler */ true);
+                _logger = logger;
+
+                this.Serializer = new Serializer();
+            }
+
+            public ISerializer Serializer { get; private set; }
+
+            public void Dispose()
+            {
+                if (_httpClient != null)
+                {
+                    _httpClient.Dispose();
+                }
+            }
+
+            public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
+            {
+                var response = await _httpClient.SendAsync(request);
+
+                LogResponse(response);
+                
+                return response;
+            }
+
+            private async void LogResponse(HttpResponseMessage response)
+            {
+                var request = response.RequestMessage;
+
+                var method = request.Method.Method;
+                var uri = request.RequestUri.ToString();
+                string requestBody = string.Empty;
+
+                if (request.Content != null)
+                {
+                    requestBody = await request.Content.ReadAsStringAsync();
+                }
+
+                var statusCode = $"{(int)response.StatusCode} ({response.StatusCode.ToString()})";
+                string responseBody = string.Empty;
+
+                var mediaType = response.Content?.Headers?.ContentType.MediaType;
+
+                if (mediaType != null && !mediaType.Contains("image"))
+                {
+                    responseBody = await response.Content.ReadAsStringAsync();
+                }
+
+                _logger.LogHttp(method, uri, requestBody, request.Headers.ToString(),
+                            statusCode, responseBody, response.Headers.ToString());
+            }
+        }
 
         public SDKGraphService(IAuthenticationService authenticationService, Logger logger)
         {
@@ -35,7 +97,8 @@ namespace MeetingManager
                         {
                             var token = await _authService.GetTokenAsync(GraphUrl);
                             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
-                        }));
+                        }),
+                    new LogHttpProvider(logger));
             }
             catch (Exception ex)
             {

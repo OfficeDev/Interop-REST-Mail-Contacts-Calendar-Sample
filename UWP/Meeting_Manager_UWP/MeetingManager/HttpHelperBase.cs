@@ -75,7 +75,7 @@ namespace MeetingManager
                 var buf = await response.Content.ReadAsBufferAsync();
 
                 var bytes = buf.ToArray();
-                LogResponse(response, typeof(byte[]));
+                LogResponse(response);
 
                 var result = Convert.ChangeType(bytes, typeof(TResult));
                 return (TResult)result;
@@ -83,7 +83,7 @@ namespace MeetingManager
             else   // assume string payload
             {
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-                LogResponse(response, typeof(string));
+                LogResponse(response);
 
                 return JsonConvert.DeserializeObject<TResult>(jsonResponse);
             }
@@ -140,7 +140,7 @@ namespace MeetingManager
             }
         }
 
-        protected virtual void LogResponse(HttpResponseMessage response, Type type)
+        protected virtual void LogResponse(HttpResponseMessage response)
         {
         }
 

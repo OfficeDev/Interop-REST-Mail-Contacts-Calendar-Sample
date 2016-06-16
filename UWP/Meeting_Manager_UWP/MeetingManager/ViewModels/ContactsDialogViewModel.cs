@@ -131,9 +131,17 @@ namespace MeetingManager.ViewModels
 
                 var image = new BitmapImage();
 
-                await image.SetSourceAsync(ms);
+                try
+                {
+                    await image.SetSourceAsync(ms);
+                    return image;
+                }
+                catch
+                {
+                    // in case we received invalid data
+                }
 
-                return image;
+                return null;
             }
         }
 

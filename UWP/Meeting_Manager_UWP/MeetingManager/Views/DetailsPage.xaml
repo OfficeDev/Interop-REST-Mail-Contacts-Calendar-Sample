@@ -96,42 +96,35 @@ See LICENSE in the project root for license information. -->
             </StackPanel>
         </Grid>
 
-            <StackPanel Grid.Row="2" Margin="0,0,0,0">
-                <StackPanel>
+        <StackPanel Grid.Row="2" Margin="0,0,0,0">
+            <StackPanel>
 
                 <TextBlock Text="Details" Style="{StaticResource SubTitle}"/>
-                
+
                 <Border Style="{StaticResource StaticText}">
-                        <TextBlock Text="{Binding Meeting.Subject}" Style="{StaticResource StaticTextBlock}"
+                    <TextBlock Text="{Binding Meeting.Subject}" Style="{StaticResource StaticTextBlock}"
                         FontSize="24"
                         />
-                    </Border>
-                </StackPanel>
+                </Border>
+            </StackPanel>
 
             <StackPanel Style="{StaticResource ProfilePanel}" Margin="0,25,0,0">
-                <!--
-                    <TextBlock Text="Location" Style="{StaticResource ProfileLabel}" VerticalAlignment="Center"/>
--->
                 <Border Style="{StaticResource StaticText}">
                     <TextBlock Text="{Binding Location}" Style="{StaticResource StaticTextBlock}"
                     FontSize="18.667"/>
                 </Border>
             </StackPanel>
 
-        <StackPanel Style="{StaticResource ProfilePanel}" 
+            <StackPanel Style="{StaticResource ProfilePanel}" 
                     Margin="0,25,0,0">
-<!--
-                    <TextBlock Text="When" Style="{StaticResource ProfileLabel}"/>
--->
-                    <StackPanel Orientation="Vertical" MaxWidth="400" HorizontalAlignment="Left">
-                        <Border Style="{StaticResource StaticText}">
-                            <TextBlock Text="{Binding DateTimeDescription}" TextWrapping="Wrap" Style="{StaticResource StaticTextBlock}"
+                <StackPanel Orientation="Vertical" MaxWidth="400" HorizontalAlignment="Left">
+                    <Border Style="{StaticResource StaticText}">
+                        <TextBlock Text="{Binding DateTimeDescription}" TextWrapping="Wrap" Style="{StaticResource StaticTextBlock}"
                             FontSize="18.667"/>
-                        </Border>
-                    </StackPanel>
+                    </Border>
                 </StackPanel>
+            </StackPanel>
         </StackPanel>
-
 
         <Grid Grid.Row="3" Margin="0,25,0,0" Background="LightGray">
             <Grid.RowDefinitions>
@@ -148,11 +141,7 @@ See LICENSE in the project root for license information. -->
                          />
             </Border>
         </Grid>
-<!--       
-        <StackPanel Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Style="{StaticResource ProfilePanel}"  MinWidth="300">
-                <TextBlock Text="Attendees" Style="{StaticResource ProfileLabel}"/>
-            <Border BorderBrush="Gray" BorderThickness="2">
--->
+
         <Grid Grid.Row="2" Grid.Column="1" Grid.RowSpan="2" Style="{StaticResource PeopleColumn}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -177,10 +166,7 @@ See LICENSE in the project root for license information. -->
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
-            <!--
-            </Border>
-        </StackPanel>
--->
+
         </Grid>
         <Border Style="{StaticResource LogWindow}" 
                 Grid.Row="4" Grid.ColumnSpan="2">

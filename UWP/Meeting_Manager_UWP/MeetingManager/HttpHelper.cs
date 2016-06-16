@@ -37,7 +37,7 @@ namespace MeetingManager
             return await base.GetResultAsync<TResult>(response);
         }
 
-        protected async override void LogResponse(HttpResponseMessage response, Type type)
+        protected async override void LogResponse(HttpResponseMessage response)
         {
             var request = response.RequestMessage;
 
@@ -53,7 +53,9 @@ namespace MeetingManager
             var statusCode = $"{(int) response.StatusCode} ({response.StatusCode.ToString()})";
             string responseBody = string.Empty;
 
-            if (type == typeof(string) && response.Content != null)
+            var mediaType = response.Content?.Headers?.ContentType.MediaType;
+
+            if (mediaType != null && !mediaType.Contains("image"))
             {
                 responseBody = await response.Content.ReadAsStringAsync();
             }
@@ -95,7 +97,7 @@ namespace MeetingManager
 
         protected async override void HandleFailure(string errorMessage, HttpResponseMessage response)
         {
-            LogResponse(response, typeof(string));
+            LogResponse(response);
 
             var message = string.IsNullOrEmpty(errorMessage) ?
                     string.Format("Failed with {0}", response.StatusCode) :

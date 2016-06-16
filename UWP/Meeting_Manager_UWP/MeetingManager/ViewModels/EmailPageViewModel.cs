@@ -63,7 +63,7 @@ namespace MeetingManager.ViewModels
 
             if (e.NavigationMode == NavigationMode.New)
             {
-                var tuple = Deserialize<Tuple<EventMessage, string, string>>((string)e.Parameter);
+                var tuple = Deserialize<Tuple<EventMessage, string, string>>(e.Parameter);
 
                 Message = tuple.Item1;
                 _action = tuple.Item2.ToLower();

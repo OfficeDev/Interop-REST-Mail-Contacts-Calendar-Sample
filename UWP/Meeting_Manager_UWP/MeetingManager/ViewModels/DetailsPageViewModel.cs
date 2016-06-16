@@ -97,7 +97,7 @@ namespace MeetingManager.ViewModels
 
             if (e.NavigationMode == NavigationMode.New)
             {
-                Meeting = Deserialize<Meeting>((string)e.Parameter);
+                Meeting = Deserialize<Meeting>(e.Parameter);
             }
 
             Populate();
