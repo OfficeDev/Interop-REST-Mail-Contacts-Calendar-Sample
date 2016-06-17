@@ -48,7 +48,9 @@ See LICENSE in the project root for license information. -->
 
                     <FlyoutBase.AttachedFlyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem Text="Delete" IsEnabled="{Binding IsOrganizer, Converter={StaticResource Negation}}" Command="{Binding DataContext.DeleteAttendeeCommand, ElementName=ThisPage}" CommandParameter="{Binding}"/>
+                            <MenuFlyoutItem Text="Delete"
+                                            IsEnabled="{Binding IsOrganizer, Converter={StaticResource Negation}}"
+                                            Command="{Binding DataContext.DeleteAttendeeCommand, ElementName=ThisPage}" CommandParameter="{Binding}"/>
                         </MenuFlyout>
                     </FlyoutBase.AttachedFlyout>
 

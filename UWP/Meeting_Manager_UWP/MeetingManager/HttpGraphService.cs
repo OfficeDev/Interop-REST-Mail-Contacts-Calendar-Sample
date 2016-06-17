@@ -49,6 +49,7 @@ namespace MeetingManager
 
             string uri = $"calendarview?startDateTime={start}&endDateTime={end}";
             uri += "&$orderby=start/dateTime";
+            uri += "&$top=100";
 
             return uri;
         }

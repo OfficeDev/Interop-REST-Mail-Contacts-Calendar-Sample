@@ -19,8 +19,6 @@ namespace MeetingManager
         private const string GraphUrl = "https://graph.microsoft.com";
 
         private readonly GraphServiceClient _graphClient;
-        private readonly IAuthenticationService _authService;
-        private readonly Logger _logger;
 
         private class LogHttpProvider : IHttpProvider
         {
@@ -85,9 +83,6 @@ namespace MeetingManager
 
         public SDKGraphService(IAuthenticationService authenticationService, Logger logger)
         {
-            _authService = authenticationService;
-            _logger = logger;
-
             try
             {
                 _graphClient = new GraphServiceClient(
@@ -95,7 +90,7 @@ namespace MeetingManager
                     new DelegateAuthenticationProvider(
                         async (requestMessage) =>
                         {
-                            var token = await _authService.GetTokenAsync(GraphUrl);
+                            var token = await authenticationService.GetTokenAsync(GraphUrl);
                             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
                         }),
                     new LogHttpProvider(logger));
@@ -230,6 +225,7 @@ namespace MeetingManager
 
             var items = await _graphClient.Me.CalendarView.Request(options)
                                     .OrderBy("start/dateTime")
+                                    .Top(100)
                                     .GetAsync();
 
             return items.Select(ev => ev.ConvertObject<Meeting>());

@@ -76,6 +76,7 @@ namespace MeetingManager.ViewModels
                 {
                     _meeting.End.DateTime = _meeting.Start.DateTime + TimeSpan.FromMinutes(30);
                     OnPropertyChanged(() => EndTime);
+                    OnPropertyChanged(() => EndDate);
                 }
             }
         }
@@ -102,6 +103,7 @@ namespace MeetingManager.ViewModels
                 {
                     _meeting.Start.DateTime = _meeting.End.DateTime - TimeSpan.FromMinutes(30);
                     OnPropertyChanged(() => StartTime);
+                    OnPropertyChanged(() => StartDate);
                 }
             }
         }
