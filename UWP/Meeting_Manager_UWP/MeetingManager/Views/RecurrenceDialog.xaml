@@ -17,12 +17,10 @@ See LICENSE in the project root for license information. -->
     PrimaryButtonText="OK"
     SecondaryButtonText="Cancel"
     PrimaryButtonCommand="{Binding SaveCommand}"
-    d:DesignWidth="800"
+    d:DesignWidth="750" Height="750"
     >
 
     <Grid Style="{StaticResource DialogGrid}">
-        <Grid.Resources>
-        </Grid.Resources>
 
         <Border BorderBrush="Gray" BorderThickness="2">
             <StackPanel Margin="10">

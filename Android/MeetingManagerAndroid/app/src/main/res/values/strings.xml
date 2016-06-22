@@ -123,6 +123,7 @@
     <!-- Various captions -->
     <string name="caption_recurrence">Recurrence</string>
     <string name="caption_save">Save</string>
+    <string name="caption_submit">Submit</string>
     <string name="caption_search">Search</string>
     <string name="filter_hint">No Filter</string>
     <string name="caption_prev">&lt;&lt;</string>

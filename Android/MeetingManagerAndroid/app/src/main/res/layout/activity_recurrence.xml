@@ -25,7 +25,7 @@
         <Button
             style="@style/TopButton"
             android:layout_alignParentEnd="true"
-            android:text="@string/caption_save"
+            android:text="@string/caption_submit"
             android:id="@+id/done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -73,13 +73,17 @@
 
     </LinearLayout>
 
-    <TableLayout
+    <LinearLayout
         style="@style/FramedPanel"
         android:id="@+id/weekly"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-        <TableRow>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:text="@string/every"
@@ -103,72 +107,79 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-        </TableRow>
+        </LinearLayout>
 
-        <TableRow
+        <TableLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="wrap_content">
 
-            <CheckBox
-                android:id="@+id/sunday"
-                android:tag="Sunday"
-                android:text="@string/sunday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <CheckBox
-                android:id="@+id/monday"
-                android:tag="Monday"
-                android:text="@string/monday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <CheckBox
-                android:id="@+id/tuesday"
-                android:tag="Tuesday"
-                android:text="@string/tuesday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <CheckBox
-                android:id="@+id/wednesday"
-                android:tag="Wednesday"
-                android:text="@string/wednesday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
-        <TableRow>
-            <CheckBox
-                android:id="@+id/thursday"
-                android:tag="Thursday"
-                android:text="@string/thursday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false" />
-            <CheckBox
-                android:id="@+id/friday"
-                android:tag="Friday"
-                android:text="@string/friday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <CheckBox
-                android:id="@+id/saturday"
-                android:tag="Saturday"
-                android:text="@string/saturday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </TableRow>
-    </TableLayout>
+                <CheckBox
+                    android:id="@+id/sunday"
+                    android:tag="Sunday"
+                    android:text="@string/sunday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <CheckBox
+                    android:id="@+id/monday"
+                    android:tag="Monday"
+                    android:text="@string/monday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </TableRow>
+            <TableRow>
+                <CheckBox
+                    android:id="@+id/tuesday"
+                    android:tag="Tuesday"
+                    android:text="@string/tuesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <CheckBox
+                    android:id="@+id/wednesday"
+                    android:tag="Wednesday"
+                    android:text="@string/wednesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </TableRow>
+
+            <TableRow>
+                <CheckBox
+                    android:id="@+id/thursday"
+                    android:tag="Thursday"
+                    android:text="@string/thursday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
+                <CheckBox
+                    android:id="@+id/friday"
+                    android:tag="Friday"
+                    android:text="@string/friday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <CheckBox
+                    android:id="@+id/saturday"
+                    android:tag="Saturday"
+                    android:text="@string/saturday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
 
     <LinearLayout
         style="@style/FramedPanel"
         android:id="@+id/monthly"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -216,53 +227,65 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/week_day"
-                android:text="@string/the"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <TableRow>
+                <RadioButton
+                    android:id="@+id/week_day"
+                    android:text="@string/the"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <Spinner
-                android:id="@+id/first_last"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                <Spinner
+                    android:id="@+id/first_last"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-            </Spinner>
+                </Spinner>
 
-            <Spinner
-                android:id="@+id/day_of_week"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </Spinner>
+                <Spinner
+                    android:id="@+id/day_of_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </Spinner>
+            </TableRow>
 
-            <TextView
-                style="@style/caption"
-                android:text="@string/of_every"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <TableRow>
 
-            <EditText
-                style="@style/Editable"
-                android:layout_marginStart="5dp"
-                android:id="@+id/interval_month2"
-                android:text="@string/one"
-                android:minEms="1"
-                android:inputType="number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:layout_column="1"
+                    android:layout_span="3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-            <TextView
-                style="@style/caption"
-                android:layout_marginStart="5dp"
-                android:text="@string/months"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                    <TextView
+                        style="@style/caption"
+                        android:text="@string/of_every"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <EditText
+                        style="@style/Editable"
+                        android:layout_marginStart="5dp"
+                        android:id="@+id/interval_month2"
+                        android:text="@string/one"
+                        android:minEms="1"
+                        android:inputType="number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
-        </LinearLayout>
+                    <TextView
+                        style="@style/caption"
+                        android:layout_marginStart="5dp"
+                        android:text="@string/months"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+            </TableRow>
+
+        </TableLayout>
 
     </LinearLayout>
 
@@ -431,6 +454,7 @@
                     android:text="@string/end_by"
                     android:layout_width="0dp"
                     android:layout_weight="20"
+                    android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content" />
 
                 <TextView
