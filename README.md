@@ -1,5 +1,9 @@
 # Interop REST Mail Contacts Calendar App
 
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
+For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact
+[opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
 This example app demonstrates the Representational State Transfer (REST) interface for Office 365, including authentication, interacting with the calendar, querying the address book, and sending email. The app can be built for Android and the Universal Windows Platform. To get started, [register your app with an Office 365 Developer Account](#register-the-app-with-an-office-365-developer-account), then choose which platform(s) you want to build for. 
 
 ##Table of Contents
