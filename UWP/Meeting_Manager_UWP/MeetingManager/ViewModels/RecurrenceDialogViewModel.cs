@@ -70,7 +70,11 @@ namespace MeetingManager.ViewModels
             GetEvent<InitDialogEvent>().Subscribe(OnInitialize);
         }
 
-        public DelegateCommand SaveCommand => new DelegateCommand(SaveRecurrence);
+        public DelegateCommand SubmitCommand => new DelegateCommand(SubmitRecurrence);
+
+        public DelegateCommand DayClickedCommand => new DelegateCommand(() => OnPropertyChanged(() => CanSubmit));
+
+        public bool CanSubmit => (this.Type != TypeWeekly) || _weekDays.Where(x => x).Any();
 
         public int OccurencesNumber
         {
@@ -304,6 +308,7 @@ namespace MeetingManager.ViewModels
                 }
 
                 SetProperty(ref _type, value);
+                OnPropertyChanged(() => CanSubmit);
             }
         }
 
@@ -438,7 +443,7 @@ namespace MeetingManager.ViewModels
             }
         }
 
-        private void SaveRecurrence()
+        private void SubmitRecurrence()
         {
             var pattern = _recurrence.Pattern;
             pattern.DaysOfWeek = new List<string>();

@@ -180,7 +180,10 @@ namespace MeetingManager.ViewModels
 
         private async Task<Meeting> GetEventById(string eventId)
         {
-            return await OfficeService.GetEvent(eventId);
+            using (new Loading(this))
+            {
+                return await OfficeService.GetEvent(eventId);
+            }
         }
 
         private async Task GetEventsForSelectedDate()

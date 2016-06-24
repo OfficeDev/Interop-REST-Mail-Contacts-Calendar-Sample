@@ -16,7 +16,8 @@ See LICENSE in the project root for license information. -->
     Title="Recurrence"
     PrimaryButtonText="OK"
     SecondaryButtonText="Cancel"
-    PrimaryButtonCommand="{Binding SaveCommand}"
+    PrimaryButtonCommand="{Binding SubmitCommand}"
+    IsPrimaryButtonEnabled="{Binding CanSubmit}"
     d:DesignWidth="750" Height="750"
     >
 
@@ -69,13 +70,13 @@ See LICENSE in the project root for license information. -->
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <CheckBox Content="Sunday" IsChecked="{Binding WeekDays[0], Mode=TwoWay}"/>
-                            <CheckBox Content="Monday" Grid.Column="1" IsChecked="{Binding WeekDays[1], Mode=TwoWay}"/>
-                            <CheckBox Content="Tuesday" Grid.Column="2" IsChecked="{Binding WeekDays[2], Mode=TwoWay}"/>
-                            <CheckBox Content="Wednesday" Grid.Column="3" IsChecked="{Binding WeekDays[3], Mode=TwoWay}"/>
-                            <CheckBox Content="Thursday" Grid.Row="1" IsChecked="{Binding WeekDays[4], Mode=TwoWay}"/>
-                            <CheckBox Content="Friday" Grid.Row="1" Grid.Column="1" IsChecked="{Binding WeekDays[5], Mode=TwoWay}"/>
-                            <CheckBox Content="Saturday" Grid.Row="1" Grid.Column="2" IsChecked="{Binding WeekDays[6], Mode=TwoWay}"/>
+                            <CheckBox Content="Sunday" IsChecked="{Binding WeekDays[0], Mode=TwoWay}" Command="{Binding DayClickedCommand}"/>
+                            <CheckBox Content="Monday" Grid.Column="1" IsChecked="{Binding WeekDays[1], Mode=TwoWay}" Command="{Binding DayClickedCommand}"/>
+                            <CheckBox Content="Tuesday" Grid.Column="2" IsChecked="{Binding WeekDays[2], Mode=TwoWay}" Command="{Binding DayClickedCommand}"/>
+                            <CheckBox Content="Wednesday" Grid.Column="3" IsChecked="{Binding WeekDays[3], Mode=TwoWay}" Command="{Binding DayClickedCommand}"/>
+                            <CheckBox Content="Thursday" Grid.Row="1" IsChecked="{Binding WeekDays[4], Mode=TwoWay}" Command="{Binding DayClickedCommand}"/>
+                            <CheckBox Content="Friday" Grid.Row="1" Grid.Column="1" IsChecked="{Binding WeekDays[5], Mode=TwoWay}" Command="{Binding DayClickedCommand}"/>
+                            <CheckBox Content="Saturday" Grid.Row="1" Grid.Column="2" IsChecked="{Binding WeekDays[6], Mode=TwoWay}" Command="{Binding DayClickedCommand}"/>
                         </Grid>
                     </StackPanel>
                 </Border>
