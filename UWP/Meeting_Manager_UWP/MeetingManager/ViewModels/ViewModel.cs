@@ -29,7 +29,7 @@ namespace MeetingManager.ViewModels
             set { SetProperty(ref _isLoading, value); }
         }
 
-        private void NavigateToPage(string pageToken, object parameter=null)
+        private static void NavigateToPage(string pageToken, object parameter=null)
         {
             App.Me.NavigationService.Navigate(pageToken, SerializeParameter(parameter));
         }
@@ -41,27 +41,27 @@ namespace MeetingManager.ViewModels
             GetEvent<HttpEvent>().Publish(null);
         }
 
-        protected void GoBack()
+        protected static void GoBack()
         {
             App.Me.NavigationService.GoBack();
         }
 
-        protected TEvent GetEvent<TEvent>() where TEvent : EventBase, new()
+        protected static TEvent GetEvent<TEvent>() where TEvent : EventBase, new()
         {
             return App.Me.EventAggregator.GetEvent<TEvent>();
         }
 
-        static protected string Serialize(object obj)
+        protected static string Serialize(object obj)
         {
             return JsonConvert.SerializeObject(obj);
         }
 
-        static protected T Deserialize<T>(object parameter)
+        protected static T Deserialize<T>(object parameter)
         {
             return JsonConvert.DeserializeObject<T>((string) parameter);
         }
 
-        static protected async Task<bool> YesNoDialog(string message)
+        protected static async Task<bool> YesNoDialog(string message)
         {
             var messageDialog = new MessageDialog(message);
 
@@ -85,7 +85,7 @@ namespace MeetingManager.ViewModels
             return (int)result.Id == 0;
         }
 
-        static private async Task MessageDialog(string message)
+        private static async Task MessageDialog(string message)
         {
             var messageDialog = new MessageDialog(message);
 
@@ -145,7 +145,7 @@ namespace MeetingManager.ViewModels
             }
         }
 
-        static private object SerializeParameter(object parameter)
+        private static object SerializeParameter(object parameter)
         {
             if (parameter != null)
             {
@@ -167,7 +167,7 @@ namespace MeetingManager.ViewModels
             await NavigateTo("Users", getHumans);
         }
 
-        static protected string GetString(string id)
+        protected static string GetString(string id)
         {
             return ResMan.GetString(id);
         }
