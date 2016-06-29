@@ -97,7 +97,7 @@ namespace MeetingManager.ViewModels
 
             if (e.NavigationMode == NavigationMode.New)
             {
-                Meeting = Deserialize<Meeting>(e.Parameter);
+                Meeting = UI.Deserialize<Meeting>(e.Parameter);
             }
 
             Populate();
@@ -148,7 +148,7 @@ namespace MeetingManager.ViewModels
 
         private async void EditMeeting()
         {
-            await NavigateTo("Edit", _meeting);
+            await UI.NavigateTo("Edit", _meeting);
         }
 
         private async void SendReply()
@@ -247,14 +247,14 @@ namespace MeetingManager.ViewModels
         private async Task AcceptOrDeclineAndBack(string action, string comment, bool sendResponse)
         {
             await OfficeService.AcceptOrDecline(Meeting.Id, action, comment, sendResponse);
-            GoBack();
+            UI.GoBack();
         }
 
         private async Task PromptAcceptOrDecline(string action)
         {
             var dlg = new Views.AcceptDeclineDialog();
 
-            var parameter = Serialize(Tuple.Create(action, Meeting.Id));
+            var parameter = UI.Serialize(Tuple.Create(action, Meeting.Id));
 
             GetEvent<InitDialogEvent>().Publish(parameter);
 

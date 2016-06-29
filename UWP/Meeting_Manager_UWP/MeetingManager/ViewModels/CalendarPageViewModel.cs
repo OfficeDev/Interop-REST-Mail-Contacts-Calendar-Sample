@@ -108,7 +108,7 @@ namespace MeetingManager.ViewModels
                 format = GetString("CancelInstance");
             }
 
-            return await YesNoDialog(string.Format(format, meeting.Subject));
+            return await UI.YesNoDialog(string.Format(format, meeting.Subject));
         }
 
         private async Task CancelMeeting(string id)
@@ -119,7 +119,7 @@ namespace MeetingManager.ViewModels
 
         private async void CreateMeeting()
         {
-            await NavigateTo("Edit");
+            await UI.NavigateTo("Edit");
         }
 
         private void ViewMeetingInstance(Meeting meeting)
@@ -131,7 +131,7 @@ namespace MeetingManager.ViewModels
         {
             if (meeting != null)
             {
-                await NavigateTo(meeting.IsOrganizer ? "Edit" : "Details", meeting);
+                await UI.NavigateTo(meeting.IsOrganizer ? "Edit" : "Details", meeting);
             }
         }
 

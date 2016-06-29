@@ -71,7 +71,7 @@ namespace MeetingManager.ViewModels
             var user = await OfficeService.GetUser();
             App.Me.AuthenticationService.UserId = user.UserPrincipalName;
 
-            await NavigateTo("Calendar");
+            await UI.NavigateTo("Calendar");
         }
     }
 }

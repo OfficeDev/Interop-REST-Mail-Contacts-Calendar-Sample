@@ -240,7 +240,7 @@ namespace MeetingManager.ViewModels
             {
                 if (e.Parameter != null)
                 {
-                    _meeting = Deserialize<Meeting>(e.Parameter);
+                    _meeting = UI.Deserialize<Meeting>(e.Parameter);
                 }
                 else
                 {
@@ -338,7 +338,7 @@ namespace MeetingManager.ViewModels
             if (newMeeting != null)
             {
                 GetEvent<MeetingUpdatedEvent>().Publish(newMeeting);
-                GoBack();
+                UI.GoBack();
             }
         }
 
@@ -410,7 +410,7 @@ namespace MeetingManager.ViewModels
                 recurrence.Range.EndDate = new DateTime(DateTime.Now.Year, 12, 31).ToString();
             }
 
-            await NavigateTo("Recurrence", recurrence);
+            await UI.NavigateTo("Recurrence", recurrence);
         }
 
         private Meeting.EventRecurrence CreateDefaultRecurrence()
@@ -448,7 +448,7 @@ namespace MeetingManager.ViewModels
 
         private async void GetSuggestedTime()
         {
-            await NavigateTo("TimeSlots", Meeting);
+            await UI.NavigateTo("TimeSlots", Meeting);
         }
 
         private async void ASAPMeeting()

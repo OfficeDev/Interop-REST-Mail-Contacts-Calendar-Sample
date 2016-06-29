@@ -39,6 +39,6 @@ namespace MeetingManager.ViewModels
             UseHttp = true;
         }
 
-        public DelegateCommand ConnectCommand => new DelegateCommand(async() => await NavigateTo("Login"));
+        public DelegateCommand ConnectCommand => new DelegateCommand(async() => await UI.NavigateTo("Login"));
     }
 }

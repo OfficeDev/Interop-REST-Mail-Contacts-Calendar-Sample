@@ -147,6 +147,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResMan.cs" />
     <Compile Include="SDKGraphService.cs" />
+    <Compile Include="UI.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ViewModels\AcceptDeclineDialogViewModel.cs" />
     <Compile Include="ViewModels\CalendarPageViewModel.cs" />

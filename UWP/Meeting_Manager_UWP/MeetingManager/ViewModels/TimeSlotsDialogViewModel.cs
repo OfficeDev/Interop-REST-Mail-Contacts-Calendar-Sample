@@ -6,9 +6,6 @@ using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Input;
 
 namespace MeetingManager.ViewModels
@@ -49,7 +46,7 @@ namespace MeetingManager.ViewModels
         {
             GetEvent<InitDialogEvent>().Unsubscribe(OnInitialize);
 
-            _meeting = Deserialize<Meeting>(parameter);
+            _meeting = UI.Deserialize<Meeting>(parameter);
 
             var items = await GetAllTimeCandidates(_meeting);
             SetTimeSlotProperties(items);

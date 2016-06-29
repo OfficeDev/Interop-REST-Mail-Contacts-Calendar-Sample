@@ -63,7 +63,7 @@ namespace MeetingManager.ViewModels
 
             if (e.NavigationMode == NavigationMode.New)
             {
-                var tuple = Deserialize<Tuple<EventMessage, string, string>>(e.Parameter);
+                var tuple = UI.Deserialize<Tuple<EventMessage, string, string>>(e.Parameter);
 
                 Message = tuple.Item1;
                 _action = tuple.Item2.ToLower();
@@ -96,7 +96,7 @@ namespace MeetingManager.ViewModels
             {
                 _mailHasBeenSent = await OfficeService.UpdateAndSendMessage(Message, Comment, Recipients);
             }
-            GoBack();
+            UI.GoBack();
         }
 
         private async void AddUserRecipient()

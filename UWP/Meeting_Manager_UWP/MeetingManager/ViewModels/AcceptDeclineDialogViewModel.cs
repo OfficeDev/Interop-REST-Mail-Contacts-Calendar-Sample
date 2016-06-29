@@ -27,7 +27,7 @@ namespace MeetingManager.ViewModels
         {
             GetEvent<InitDialogEvent>().Unsubscribe(OnInitialize);
 
-            var payload = Deserialize<Tuple<string, string>>(parameter);
+            var payload = UI.Deserialize<Tuple<string, string>>(parameter);
 
             _action = payload.Item1.ToLower();
             _meetingId = payload.Item2;

@@ -340,7 +340,7 @@ namespace MeetingManager.ViewModels
         {
             GetEvent<InitDialogEvent>().Unsubscribe(OnInitialize);
 
-            _recurrence = Deserialize<Meeting.EventRecurrence>(parameter);
+            _recurrence = UI.Deserialize<Meeting.EventRecurrence>(parameter);
             PopulatePatternViews();
 
             switch (_recurrence.Range.Type.ToLower())
