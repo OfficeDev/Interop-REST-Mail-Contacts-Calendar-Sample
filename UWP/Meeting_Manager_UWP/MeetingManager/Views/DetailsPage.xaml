@@ -131,7 +131,7 @@ See LICENSE in the project root for license information. -->
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Border Grid.Row="1" Visibility="{Binding IsContentText, Converter={StaticResource BoolToVisible}}">
-                <TextBox Text="{Binding Description, Mode=TwoWay}" PlaceholderText="Description"/>
+                <TextBox Text="{Binding Meeting.Body.Content, Mode=TwoWay}" PlaceholderText="Description"/>
             </Border>
             <Border Grid.Row="1" Style="{StaticResource StaticText}" Visibility="{Binding IsContentText, Converter={StaticResource BoolToCollapsed}}"
                     BorderBrush="Gray" BorderThickness="2"

@@ -20,7 +20,6 @@ namespace MeetingManager.ViewModels
         private const string KindSend = "send";
         private const string KindSilent = "silent";
 
-        private string _description;
         private ObservableCollection<Attendee> _attendees;
         private string _dateTimeDescription;
         private bool _isOrganizer;
@@ -62,12 +61,6 @@ namespace MeetingManager.ViewModels
 
                 return string.IsNullOrEmpty(location) ? GetString("NoLocation") : location;
             }
-        }
-
-        public string Description
-        {
-            get { return _description; }
-            private set { SetProperty(ref _description, value); }
         }
 
         public string DateTimeDescription

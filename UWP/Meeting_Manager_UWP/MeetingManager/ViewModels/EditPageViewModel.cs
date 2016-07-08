@@ -207,9 +207,9 @@ namespace MeetingManager.ViewModels
 
         public bool IsSerial => _meeting.Recurrence != null; 
 
-        public string SaveCaption => _meeting.Attendees.Any() ? GetString("SendCaption") : GetString("SaveCaption");
+        public string SaveCaption => GetString(HasAttendees ? "SendCaption" : "SaveCaption");
 
-        public bool HasAttendees => Attendees.Any();
+        public bool HasAttendees => _meeting.Attendees.Any();
 
         private TimeSpan GetTimeSpan(ZonedDateTime dateTime)
         {
@@ -258,17 +258,13 @@ namespace MeetingManager.ViewModels
 
         private void PopulateAttendees()
         {
-            Attendees = new ObservableCollection<Attendee>();
+            Attendees = new ObservableCollection<Attendee>(_meeting.Attendees);
 
-            if (_meeting.Attendees != null)
+            if (_meeting.Organizer != null)
             {
                 foreach (var a in _meeting.Attendees)
                 {
-                    if (_meeting.Organizer != null)
-                    {
-                        a.IsOrganizer = a.EmailAddress.Address.EqualsCaseInsensitive(_meeting.Organizer.EmailAddress.Address);
-                    }
-                    Attendees.Add(a);
+                    a.IsOrganizer = a.EmailAddress.Address.EqualsCaseInsensitive(_meeting.Organizer.EmailAddress.Address);
                 }
             }
 
