@@ -124,7 +124,6 @@
     <Compile Include="Models\LoginEventData.cs" />
     <Compile Include="Models\ShowJsonEvent.cs" />
     <Compile Include="Models\ShowLastLogEntryEvent.cs" />
-    <Compile Include="Models\TimeSlot.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Attendee.cs" />
     <Compile Include="Models\Contact.cs" />

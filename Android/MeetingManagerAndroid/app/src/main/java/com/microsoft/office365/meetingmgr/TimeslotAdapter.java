@@ -26,14 +26,6 @@ public class TimeslotAdapter extends BaseListAdapter<MeetingTimeCandidate> {
     @Override
     protected void setView(MeetingTimeCandidate timeCandidate) {
         DateFormat inFormat = DateFmt.instance("HH:mm:ss.SSS");
-        String timeZone = timeCandidate.MeetingTimeSlot.Start.TimeZone;
-
-        if (timeZone.toLowerCase().contains("microsoft/utc")) {
-            // Some of the slots can be in UTC
-            inFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-            timeZone = TimeZone.getDefault().getDisplayName();
-        }
-
         Date start;
         Date end;
 
@@ -45,12 +37,9 @@ public class TimeslotAdapter extends BaseListAdapter<MeetingTimeCandidate> {
             return;
         }
 
-        // In case the slot is in UTC, convert it to local time zone
-        {
-            inFormat.setTimeZone(TimeZone.getDefault());
-            timeCandidate.MeetingTimeSlot.Start.Time = inFormat.format(start);
-            timeCandidate.MeetingTimeSlot.End.Time = inFormat.format(end);
-        }
+        // Assuming time slots are always in UTC
+        start = DateFmt.utcToLocal(start);
+        end = DateFmt.utcToLocal(end);
 
         DateFormat outFormat = DateFmt.instance("HH:mm");
 
@@ -58,6 +47,5 @@ public class TimeslotAdapter extends BaseListAdapter<MeetingTimeCandidate> {
         String endString = outFormat.format(end);
 
         setText(R.id.timeSlot, String.format("%s - %s", startString, endString));
-        setText(R.id.timeZone, timeZone);
     }
 }

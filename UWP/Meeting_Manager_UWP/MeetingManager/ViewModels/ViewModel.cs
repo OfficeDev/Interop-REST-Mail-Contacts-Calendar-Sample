@@ -80,15 +80,8 @@ namespace MeetingManager.ViewModels
         {
             using (new Loading(this))
             {
-                return (await GetTimeCandidates(meeting, "8:00:00", "11:00:00"))
-                    .Union(await GetTimeCandidates(meeting, "11:00:00", "15:00:00"))
-                    .Union(await GetTimeCandidates(meeting, "15:00:00", "18:00:00"));
+                return await OfficeService.FindMeetingTimes(meeting);
             }
-        }
-
-        private async Task<IEnumerable<MeetingTimeCandidate>> GetTimeCandidates(Meeting meeting, string startTime, string endTime)
-        {
-            return await OfficeService.GetMeetingTimeCandidates(meeting, startTime, endTime);
         }
     }
 }

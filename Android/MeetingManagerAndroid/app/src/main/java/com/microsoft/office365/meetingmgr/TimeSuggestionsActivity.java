@@ -51,7 +51,7 @@ public class TimeSuggestionsActivity extends BaseActivity {
 
             @Override
             public void onFinished(MeetingTimeCandidates list) {
-                new TimeslotAdapter(mlvSuggestions, list.value);
+                new TimeslotAdapter(mlvSuggestions, list.MeetingTimeSlots);
             }
         }).start();
     }

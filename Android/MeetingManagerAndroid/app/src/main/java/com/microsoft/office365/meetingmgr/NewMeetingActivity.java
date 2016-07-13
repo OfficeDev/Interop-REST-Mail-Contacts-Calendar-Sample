@@ -264,22 +264,13 @@ public class NewMeetingActivity extends BaseActivity {
         bindTimeFields();
     }
 
-    private void setTimeFromSlot(Calendar cal, MeetingTimeSlot.Time dateTime) {
-        DateFormat inTimeFormat = DateFmt.instance("hh:mm:ss.SSS");
-        DateFormat inDateFormat = DateFmt.instance("yyyy-MM-dd");
-
-        try {
-            Date time = inTimeFormat.parse(dateTime.Time);
-            Date date = inDateFormat.parse(dateTime.Date);
-
-            cal.setTime(time);
-            setDateComponents(cal, date);
-        } catch (ParseException e) {
-            ErrorLogger.log(e);
-        }
+    private static void setTimeFromSlot(Calendar cal, MeetingTimeSlot.Time dateTime) {
+        Date combined = combineDateAndTime(dateTime);
+        cal.setTime(combined);
+        setDateComponents(cal, combined);
     }
 
-    private void setDateComponents(Calendar cal, Date date) {
+    private static void setDateComponents(Calendar cal, Date date) {
         Calendar dateCal = Calendar.getInstance();
         dateCal.setTime(date);
 
@@ -297,7 +288,7 @@ public class NewMeetingActivity extends BaseActivity {
         bindTimeFields();
     }
 
-    private void copyCalendarDate(Calendar calSrc, Calendar calDst) {
+    private static void copyCalendarDate(Calendar calSrc, Calendar calDst) {
         calDst.set(calSrc.get(Calendar.YEAR),
                 calSrc.get(Calendar.MONTH),
                 calSrc.get(Calendar.DAY_OF_MONTH));
@@ -471,7 +462,7 @@ public class NewMeetingActivity extends BaseActivity {
     private MeetingTimeCandidate selectEarliest(MeetingTimeCandidates slots) {
         MeetingTimeCandidate earliest = null;
 
-        for (MeetingTimeCandidate c : slots.value) {
+        for (MeetingTimeCandidate c : slots.MeetingTimeSlots) {
             if (isSlotEarlier(c, earliest)) {
                 earliest = c;
             }
@@ -480,10 +471,11 @@ public class NewMeetingActivity extends BaseActivity {
         return earliest;
     }
 
-    private boolean isSlotEarlier(MeetingTimeCandidate c1, MeetingTimeCandidate c2) {
-        Date time1 = getDateTimeFromCandidate(c1);
+    private static boolean isSlotEarlier(MeetingTimeCandidate c1, MeetingTimeCandidate c2) {
+        Date time1 = combineDateAndTime(c1.MeetingTimeSlot.Start);
+        Date now = Calendar.getInstance().getTime();
 
-        if (time1.before(Calendar.getInstance().getTime())) {
+        if (time1.before(now)) {
             return false;
         }
 
@@ -491,30 +483,36 @@ public class NewMeetingActivity extends BaseActivity {
             return true;
         }
 
-        Date time2 = getDateTimeFromCandidate(c2);
+        Date time2 = combineDateAndTime(c2.MeetingTimeSlot.Start);
 
         return time1.before(time2);
     }
 
-    private Date getDateTimeFromCandidate(MeetingTimeCandidate c) {
+    private static Date combineDateAndTime(MeetingTimeSlot.Time dateTime) {
         DateFormat timeFmt = DateFmt.instance("HH:mm:ss");
+        DateFormat dateFmt = DateFmt.instance("yyyy-MM-dd");
+        Date timePart;
+        Date datePart;
 
         try {
-            Date start = timeFmt.parse(c.MeetingTimeSlot.Start.Time);
-            Calendar timeSlot = Calendar.getInstance();
-            timeSlot.setTime(start);
-
-            Calendar dateTimeSlot = Calendar.getInstance();
-            dateTimeSlot.set(Calendar.HOUR_OF_DAY, timeSlot.get(Calendar.HOUR_OF_DAY));
-            dateTimeSlot.set(Calendar.MINUTE, timeSlot.get(Calendar.MINUTE));
-
-            return dateTimeSlot.getTime();
+            timePart = timeFmt.parse(dateTime.Time);
+            datePart = dateFmt.parse(dateTime.Date);
 
         } catch (ParseException e) {
             ErrorLogger.log(e);
+            return Calendar.getInstance().getTime();
         }
 
-        return Calendar.getInstance().getTime();
+        Calendar time = Calendar.getInstance();
+        time.setTime(timePart);
+
+        Calendar combined = Calendar.getInstance();
+        combined.setTime(datePart);
+
+        combined.set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY));
+        combined.set(Calendar.MINUTE, time.get(Calendar.MINUTE));
+
+        return DateFmt.utcToLocal(combined.getTime());
     }
 
     public void onDoneButtonClick(View v) {

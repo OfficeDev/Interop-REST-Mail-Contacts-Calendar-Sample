@@ -30,14 +30,12 @@ public class TimeSuggestionsQuery {
     public MeetingTimeCandidates getTimeCandidates(HttpHelper hp) {
         List<MeetingTimeCandidate> candidates = new ArrayList<>();
 
-        candidates.addAll(getCandidates(hp, "8:00:00", "11:00:00"));
-        candidates.addAll(getCandidates(hp, "11:00:00", "15:00:00"));
-        candidates.addAll(getCandidates(hp, "15:00:00", "18:00:00"));
+        candidates.addAll(getCandidates(hp));
 
         return new MeetingTimeCandidates(candidates);
     }
 
-    private MeetingTimes buildRequest(String startTime, String endTime) {
+    private MeetingTimes buildRequest() {
         MeetingTimes times = new MeetingTimes();
         User user = Manager.Instance.getUser();     // app user/organizer
 
@@ -57,8 +55,8 @@ public class TimeSuggestionsQuery {
 
         String dateString = DateFmt.toApiDateString(date);
 
-        timeSlot.Start = new MeetingTimeSlot.Time(dateString, startTime, mMeeting.getStartTimeZone());
-        timeSlot.End = new MeetingTimeSlot.Time(dateString, endTime, mMeeting.getEndTimeZone());
+        timeSlot.Start = new MeetingTimeSlot.Time(dateString, "8:00:00", mMeeting.getStartTimeZone());
+        timeSlot.End = new MeetingTimeSlot.Time(dateString, "18:00:00", mMeeting.getEndTimeZone());
 
         times.TimeConstraint.Timeslots.add(timeSlot);
 
@@ -69,13 +67,13 @@ public class TimeSuggestionsQuery {
         return times;
     }
 
-    private List<MeetingTimeCandidate> getCandidates(HttpHelper hp, String startTime, String endTime) {
-        MeetingTimes times = buildRequest(startTime, endTime);
-        String uri = "https://outlook.office365.com/api/beta/me/findmeetingtimes";
+    private List<MeetingTimeCandidate> getCandidates(HttpHelper hp) {
+        MeetingTimes times = buildRequest();
+        String uri = "https://graph.microsoft.com/beta/me/FindMeetingTimes";
 
         MeetingTimeCandidates result = hp.postItem(uri, times, MeetingTimeCandidates.class);
 
-        return result.value;
+        return result.MeetingTimeSlots;
     }
 
 }

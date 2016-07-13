@@ -12,6 +12,7 @@ namespace MeetingManager.Models
         public TimeConstraint TimeConstraint { get; set; }
         public LocationConstraint LocationConstraint { get; set; }
         public string MeetingDuration { get; set; }
+        public int MaxCandidates { get; set; }
 
         public class Attendee
         {
@@ -26,22 +27,33 @@ namespace MeetingManager.Models
 
     public class LocationConstraint
     {
+        public bool IsRequired { get; set; }
         public List<Location> Locations { get; set; }
     }
 
-    public class MeetingTimeCandidates
+    public class MeetingTimeCandidatesResult
     {
-        public List<MeetingTimeCandidate> Value { get; set; }
+        public string EmptySuggestionsHint { get; set; }
+        public List<MeetingTimeCandidate> MeetingTimeSlots { get; set; }
     }
 
     public class MeetingTimeCandidate
     {
+        public List<AttendeeAvailability> AttendeeAvailability;
+        public string OrganizerAvailability { get; set; }
+        public double Confidence { get; set; }
         public MeetingTimeSlot MeetingTimeSlot { get; set; }
 
         [JsonIgnore]
         public string TimeSlot { get; set; }
         [JsonIgnore]
         public string TimeZone { get; set; }
+    }
+
+    public class AttendeeAvailability
+    {
+        public Attendee Attendee { get; set; }
+        public string Availability { get; set; }
     }
 
     public class MeetingTimeSlot

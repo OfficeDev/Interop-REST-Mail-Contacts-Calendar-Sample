@@ -10,11 +10,11 @@ import java.util.List;
  * Representation of meeting time candidate list
  */
 public class MeetingTimeCandidates {
-    public List<MeetingTimeCandidate> value;
+    public List<MeetingTimeCandidate> MeetingTimeSlots;
     private MeetingTimeCandidates() {}
 
     public MeetingTimeCandidates(List<MeetingTimeCandidate> list) {
-        value = list;
+        MeetingTimeSlots = list;
     }
 }
 

@@ -30,7 +30,6 @@ See LICENSE in the project root for license information. -->
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Column="0" Text="{Binding TimeSlot}"/>
-                    <TextBlock Grid.Column="1" Text="{Binding TimeZone}"/>
                 </Grid>
             </DataTemplate>
         </Grid.Resources>

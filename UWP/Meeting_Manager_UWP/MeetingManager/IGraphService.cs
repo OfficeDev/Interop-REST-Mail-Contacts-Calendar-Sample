@@ -23,7 +23,7 @@ namespace MeetingManager
         Task<int> GetContactsCount();
         Task<IEnumerable<Contact>> GetContacts(int pageIndex, int pageSize);
         Task<byte[]> GetContactPhoto(string contactId);
-        Task<IEnumerable<MeetingTimeCandidate>> GetMeetingTimeCandidates(Meeting meeting, string startTime, string endTime);
+        Task<IEnumerable<MeetingTimeCandidate>> FindMeetingTimes(Meeting meeting);
 
         IUserPager GetUserPager(int pageSize, string filter, bool getHumans);
     }

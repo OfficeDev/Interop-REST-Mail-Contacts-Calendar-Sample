@@ -71,8 +71,13 @@ namespace MeetingManager.ViewModels
                 var start = DateTime.Parse(x.MeetingTimeSlot.Start.Time);
                 var end = DateTime.Parse(x.MeetingTimeSlot.End.Time);
 
+                start = DateTime.SpecifyKind(start, DateTimeKind.Utc);
+                end = DateTime.SpecifyKind(end, DateTimeKind.Utc);
+
+                start = start.ToLocalTime();
+                end = end.ToLocalTime();
+
                 x.TimeSlot = string.Format("{0:hh:mm tt} - {1:hh:mm tt}", start, end);
-                x.TimeZone = x.MeetingTimeSlot.Start.TimeZone;
             }
         }
     }

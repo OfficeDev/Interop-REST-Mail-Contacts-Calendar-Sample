@@ -309,7 +309,7 @@ namespace MeetingManager
             return contacts.Count;
         }
 
-        public Task<IEnumerable<MeetingTimeCandidate>> GetMeetingTimeCandidates(Meeting meeting, string startTime, string endTime)
+        public Task<IEnumerable<MeetingTimeCandidate>> FindMeetingTimes(Meeting meeting)
         {
             throw new NotImplementedException();
         }

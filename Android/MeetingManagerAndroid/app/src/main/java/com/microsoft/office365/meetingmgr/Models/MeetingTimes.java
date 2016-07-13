@@ -15,6 +15,7 @@ public class MeetingTimes {
     public TimeConstraint TimeConstraint = new TimeConstraint();
     public LocationConstraint LocationConstraint = new LocationConstraint();
     public String MeetingDuration = "PT30M";
+    public int MaxCandidates = 20;
 
     public static class TimeConstraint {
         public List<MeetingTimeSlot> Timeslots = new ArrayList<>();

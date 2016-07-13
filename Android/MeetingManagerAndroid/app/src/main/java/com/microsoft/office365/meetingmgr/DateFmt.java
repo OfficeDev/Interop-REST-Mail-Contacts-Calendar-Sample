@@ -363,5 +363,12 @@ public class DateFmt {
             }
         }
         return monthItems;
-   }
+    }
+
+    public static Date utcToLocal(Date utcDate) {
+        Date timeStamp = new Date();
+        int offset = TimeZone.getDefault().getOffset(timeStamp.getTime());
+
+        return new Date(utcDate.getTime() + offset);
+    }
 }

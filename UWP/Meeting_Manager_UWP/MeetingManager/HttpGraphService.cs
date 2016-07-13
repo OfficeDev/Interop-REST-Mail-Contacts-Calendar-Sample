@@ -164,22 +164,22 @@ namespace MeetingManager
             }
         }
 
-        public async Task<IEnumerable<MeetingTimeCandidate>> GetMeetingTimeCandidates(Meeting meeting, string startTime, string endTime)
+        public async Task<IEnumerable<MeetingTimeCandidate>> FindMeetingTimes(Meeting meeting)
         {
-            var body = BuildRequestBody(meeting, startTime, endTime);
-            string uri = "https://graph.microsoft.com/beta/me/findmeetingtimesOld";
+            var body = BuildRequestBody(meeting);
+            string uri = "https://graph.microsoft.com/beta/me/findmeetingtimes";
 
-            var candidates = await GetHttpHelper().PostItemAsync<MeetingTimes, MeetingTimeCandidates>(uri, body);
+            var candidates = await GetHttpHelper().PostItemAsync<MeetingTimes, MeetingTimeCandidatesResult>(uri, body);
 
-            if (candidates == null || candidates.Value == null)
+            if (candidates == null || candidates.MeetingTimeSlots == null)
             {
                 return Enumerable.Empty<MeetingTimeCandidate>();
             }
 
-            return candidates.Value;
+            return candidates.MeetingTimeSlots;
         }
 
-        private MeetingTimes BuildRequestBody(Meeting meeting, string startTime, string endTime)
+        private MeetingTimes BuildRequestBody(Meeting meeting)
         {
             var result = new MeetingTimes
             {
@@ -191,8 +191,10 @@ namespace MeetingManager
                 },
                 LocationConstraint = new LocationConstraint()
                 {
+                    IsRequired = false,
                     Locations = new List<Location>()
-                }
+                },
+                MaxCandidates = 20,
             };
 
             foreach (var a in meeting.Attendees ?? Enumerable.Empty<Attendee>())
@@ -206,22 +208,28 @@ namespace MeetingManager
                 }
             }
 
-            var date = meeting.Start.ToLocalTime();
-            var dateString = date.DateToApiString();
+            var date = meeting.Start.DateTime;
+
+            // From 8AM to 6PM local time
+            var start = new DateTime(date.Year, date.Month, date.Day, 8, 0, 0, DateTimeKind.Local);
+            var end = new DateTime(date.Year, date.Month, date.Day, 18, 0, 0, DateTimeKind.Local);
+
+            start = start.ToUniversalTime();
+            end = end.ToUniversalTime();
 
             var timeSlot = new MeetingTimeSlot
             {
                 Start = new MeetingTimeSlot.TimeDescriptor
                 {
-                    Date = dateString,
-                    Time = startTime,
-                    TimeZone = TimeZoneInfo.Local.Id
+                    Date = start.DateToApiString(),
+                    Time = start.TimeOfDay.ToString(),
+                    TimeZone = "UTC"
                 },
                 End = new MeetingTimeSlot.TimeDescriptor
                 {
-                    Date = dateString,
-                    Time = endTime,
-                    TimeZone = TimeZoneInfo.Local.Id
+                    Date = end.DateToApiString(),
+                    Time = end.TimeOfDay.ToString(),
+                    TimeZone = "UTC"
                 }
             };
 

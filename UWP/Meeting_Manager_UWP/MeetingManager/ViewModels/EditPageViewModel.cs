@@ -453,19 +453,12 @@ namespace MeetingManager.ViewModels
 
             var slot = items.Select(x => TimeSlot.Parse(x))
                             .OrderBy(x => x.Start)
-                            .FirstOrDefault(x => x.Start > DateTime.Now);
+                            .FirstOrDefault(x => _meeting.Start.DateTime.Date + x.Start > DateTime.Now);
 
             if (slot != null)
             {
                 SetTimeSlot(slot);
             }
-        }
-
-        private MeetingTimeCandidate SelectEarliestSlot(IEnumerable<MeetingTimeCandidate> items)
-        {
-            var ordered = items.OrderBy(x => DateTime.Parse(x.MeetingTimeSlot.Start.Time));
-
-            return ordered.FirstOrDefault(x => DateTime.Parse(x.MeetingTimeSlot.Start.Time) > DateTime.Now);
         }
 
         private void MeetingTimeCandidateSelected(MeetingTimeCandidate meetingTimeCandidate)
@@ -479,8 +472,11 @@ namespace MeetingManager.ViewModels
 
         private void SetTimeSlot(TimeSlot timeSlot)
         {
-            StartTime = timeSlot.Start.TimeOfDay;
-            EndTime = timeSlot.End.TimeOfDay;
+            StartTime = timeSlot.Start;
+            EndTime = timeSlot.End;
+
+            OnPropertyChanged(() => StartTime);
+            OnPropertyChanged(() => EndTime);
         }
 
         private async void AddUser()
@@ -521,6 +517,29 @@ namespace MeetingManager.ViewModels
         private bool CanExecuteMeetingTimes()
         {
             return !IsAllDay && App.Me.UseHttp;
+        }
+        private class TimeSlot
+        {
+            public TimeSpan Start { get; set; }
+            public TimeSpan End { get; set; }
+
+            public static TimeSlot Parse(MeetingTimeCandidate mtc)
+            {
+                return new TimeSlot
+                {
+                    Start = ParseTimeSlot(mtc.MeetingTimeSlot.Start),
+                    End = ParseTimeSlot(mtc.MeetingTimeSlot.End),
+                };
+            }
+
+            private static TimeSpan ParseTimeSlot(MeetingTimeSlot.TimeDescriptor dateTime)
+            {
+                var time = DateTime.Parse(dateTime.Time);
+                time = DateTime.SpecifyKind(time, DateTimeKind.Utc);
+                time = time.ToLocalTime();
+
+                return time.TimeOfDay;
+            }
         }
     }
 }
