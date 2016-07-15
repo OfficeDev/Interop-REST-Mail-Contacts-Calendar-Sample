@@ -18,7 +18,7 @@ namespace MeetingManager.ViewModels
 
             _dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
 
-            GetEvent<ShowJsonEvent>().Subscribe(ShowJson);
+            UI.Subscribe<string>(ShowJson);
         }
 
         public string Text { get; private set; }

@@ -2,12 +2,10 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
-using Prism.Events;
 using Prism.Windows.Mvvm;
 using Prism.Windows.Navigation;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MeetingManager.ViewModels
@@ -30,12 +28,7 @@ namespace MeetingManager.ViewModels
         {
             base.OnNavigatedTo(e, viewModelState);
 
-            GetEvent<HttpEvent>().Publish(null);
-        }
-
-        protected static TEvent GetEvent<TEvent>() where TEvent : EventBase, new()
-        {
-            return UI.GetEvent<TEvent>();
+            UI.Publish<HttpEventData>(null);
         }
 
         protected async Task NavigateToEmail(Meeting meeting, string action, string comment = null)

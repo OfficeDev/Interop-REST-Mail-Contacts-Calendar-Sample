@@ -13,7 +13,7 @@ using Windows.UI.Xaml;
 
 namespace MeetingManager.ViewModels
 {
-    class RecurrenceDialogViewModel : ViewModel, ITransientViewModel
+    class RecurrenceDialogViewModel : DialogViewModel
     {
         private const string TypeDaily = "daily";
         private const string TypeWeekly = "weekly";
@@ -64,11 +64,6 @@ namespace MeetingManager.ViewModels
         {
             OData.First, OData.Second, OData.Third, OData.Fourth, OData.Last
         };
-
-        public RecurrenceDialogViewModel()
-        {
-            GetEvent<InitDialogEvent>().Subscribe(OnInitialize);
-        }
 
         public DelegateCommand SubmitCommand => new DelegateCommand(SubmitRecurrence);
 
@@ -336,11 +331,11 @@ namespace MeetingManager.ViewModels
             set { SetProperty(ref _yearlyVisibility, value); }
         }
 
-        private void OnInitialize(object parameter)
+        protected override void OnInitialize(InitDialog parameter)
         {
-            GetEvent<InitDialogEvent>().Unsubscribe(OnInitialize);
+            base.OnInitialize(parameter);
 
-            _recurrence = UI.Deserialize<Meeting.EventRecurrence>(parameter);
+            _recurrence = UI.Deserialize<Meeting.EventRecurrence>(parameter.Payload);
             PopulatePatternViews();
 
             switch (_recurrence.Range.Type.ToLower())
@@ -501,7 +496,7 @@ namespace MeetingManager.ViewModels
             _recurrence.Range.StartDate = StartDate.DateTime.DateToApiString();
             _recurrence.Range.EndDate = EndDate.DateTime.DateToApiString();
 
-            GetEvent<MeetingRecurrenceUpdatedEvent>().Publish(_recurrence);
+            UI.Publish(_recurrence);
         }
     }
 }

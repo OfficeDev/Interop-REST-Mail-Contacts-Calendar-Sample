@@ -30,6 +30,21 @@ namespace MeetingManager
             return App.Me.EventAggregator.GetEvent<TEvent>();
         }
 
+        internal static void Subscribe<T>(Action<T> action)
+        {
+            App.Me.EventAggregator.GetEvent<Prism.Events.PubSubEvent<T>>().Subscribe(action);
+        }
+
+        internal static void Unsubscribe<T>(Action<T> action)
+        {
+            App.Me.EventAggregator.GetEvent<Prism.Events.PubSubEvent<T>>().Unsubscribe(action);
+        }
+
+        internal static void Publish<T>(T data)
+        {
+            App.Me.EventAggregator.GetEvent<Prism.Events.PubSubEvent<T>>().Publish(data);
+        }
+
         internal static async Task<bool> YesNoDialog(string message)
         {
             var messageDialog = new MessageDialog(message);
@@ -79,7 +94,8 @@ namespace MeetingManager
             if (dialogType != null)
             {
                 var dlg = Activator.CreateInstance(dialogType) as ContentDialog;
-                GetEvent<InitDialogEvent>().Publish(UI.SerializeParameter(parameter));
+
+                Publish(new InitDialog { Payload = UI.SerializeParameter(parameter) });
                 await dlg.ShowAsync();
             }
             else 
@@ -93,7 +109,7 @@ namespace MeetingManager
             App.Me.NavigationService.Navigate(pageToken, SerializeParameter(parameter));
         }
 
-        private static object SerializeParameter(object parameter)
+        internal static object SerializeParameter(object parameter)
         {
             if (parameter != null)
             {

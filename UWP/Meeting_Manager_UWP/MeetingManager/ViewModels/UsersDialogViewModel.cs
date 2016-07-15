@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MeetingManager.ViewModels
 {
-    class UsersDialogViewModel : ViewModel, ITransientViewModel
+    class UsersDialogViewModel : DialogViewModel
     {
         private const int PageSize = 10;
         private ObservableCollection<User> _users;
@@ -18,11 +18,6 @@ namespace MeetingManager.ViewModels
         private User _selectedUser;
         private string _filter;
         private bool _getHumans;
-
-        public UsersDialogViewModel()
-        {
-            GetEvent<InitDialogEvent>().Subscribe(OnInitialize);
-        }
 
         public DelegateCommand FilterCommand => new DelegateCommand(FilterUsers);
         public DelegateCommand NextCommand => new DelegateCommand(NextPage);
@@ -68,11 +63,11 @@ namespace MeetingManager.ViewModels
 
         public bool HasSelected => SelectedUser != null;
 
-        private async void OnInitialize(object parameter)
+        protected override async void OnInitialize(InitDialog parameter)
         {
-            GetEvent<InitDialogEvent>().Unsubscribe(OnInitialize);
+            base.OnInitialize(parameter);
 
-            _getHumans = (bool) parameter;
+            _getHumans = (bool) parameter.Payload;
             OnPropertyChanged(() => Title);
 
             await GetFirstUsersPage();
@@ -122,11 +117,11 @@ namespace MeetingManager.ViewModels
         {
             if (_getHumans)
             {
-                GetEvent<UserSelectedEvent>().Publish(SelectedUser);
+                UI.Publish<User>(SelectedUser);
             }
             else
             {
-                GetEvent<RoomSelectedEvent>().Publish(SelectedUser);
+                UI.Publish<Room>(SelectedUser as Room);
             }
         }
     }

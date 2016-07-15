@@ -91,7 +91,7 @@ namespace MeetingManager
         protected override Task OnInitializeAsync(IActivatedEventArgs args)
         {
             EventAggregator = new EventAggregator();
-            _logger = new Logger(EventAggregator);
+            _logger = new Logger();
 
             AuthenticationService = new AuthenticationHelper(SessionStateService, _logger);
 

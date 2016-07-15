@@ -22,11 +22,11 @@ namespace MeetingManager.ViewModels
 
         public EditPageViewModel()
         {
-            GetEvent<UserSelectedEvent>().Subscribe(UserSelected);
-            GetEvent<RoomSelectedEvent>().Subscribe(RoomSelected);
-            GetEvent<MeetingTimeCandidateSelectedEvent>().Subscribe(MeetingTimeCandidateSelected);
-            GetEvent<ContactSelectedEvent>().Subscribe(ContactSelected);
-            GetEvent<MeetingRecurrenceUpdatedEvent>().Subscribe(RecurrenceUpdated);
+            UI.Subscribe<User>(UserSelected);
+            UI.Subscribe<Room>(RoomSelected);
+            UI.Subscribe<MeetingTimeCandidate>(MeetingTimeCandidateSelected);
+            UI.Subscribe<Contact>(ContactSelected);
+            UI.Subscribe<Meeting.EventRecurrence>(RecurrenceUpdated);
         }
 
         public DelegateCommand SaveCommand => new DelegateCommand(SaveMeetingAsync);
@@ -333,7 +333,7 @@ namespace MeetingManager.ViewModels
 
             if (newMeeting != null)
             {
-                GetEvent<MeetingUpdatedEvent>().Publish(newMeeting);
+                UI.Publish(newMeeting);
                 UI.GoBack();
             }
         }

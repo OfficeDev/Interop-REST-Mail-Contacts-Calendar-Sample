@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MeetingManager.ViewModels
 {
-    class ContactsDialogViewModel : ViewModel, ITransientViewModel
+    class ContactsDialogViewModel : DialogViewModel
     {
         private const int PageSize = 10;
 
@@ -22,11 +22,6 @@ namespace MeetingManager.ViewModels
         private bool _hasPrev;
         private int _curPageIndex;
         private int _contactsCount;
-
-        public ContactsDialogViewModel()
-        {
-            GetEvent<InitDialogEvent>().Subscribe(OnInitialize);
-        }
 
         public DelegateCommand NextCommand => new DelegateCommand(NextPage);
         public DelegateCommand PrevCommand => new DelegateCommand(PrevPage);
@@ -66,9 +61,9 @@ namespace MeetingManager.ViewModels
             private set { SetProperty(ref _hasPrev, value); }
         }
 
-        private async void OnInitialize(object parameter)
+        protected override async void OnInitialize(InitDialog parameter)
         {
-            GetEvent<InitDialogEvent>().Unsubscribe(OnInitialize);
+            base.OnInitialize(parameter);
 
             Contacts = null;
             _contactsCount = await OfficeService.GetContactsCount();
@@ -154,7 +149,7 @@ namespace MeetingManager.ViewModels
         {
             if (SelectedContact.EmailAddresses.Any())
             {
-                GetEvent<ContactSelectedEvent>().Publish(SelectedContact);
+               UI.Publish(SelectedContact);
             }
         }
     }

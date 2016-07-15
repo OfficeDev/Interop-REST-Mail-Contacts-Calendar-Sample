@@ -28,7 +28,7 @@ namespace MeetingManager.ViewModels
 
         public DetailsPageViewModel()
         {
-            GetEvent<MeetingUpdatedEvent>().Subscribe(OnMeetingUpdate);
+            UI.Subscribe<Meeting>(OnMeetingUpdate);
         }
 
         public DelegateCommand EditCommand => new DelegateCommand(EditMeeting);
@@ -245,13 +245,7 @@ namespace MeetingManager.ViewModels
 
         private async Task PromptAcceptOrDecline(string action)
         {
-            var dlg = new Views.AcceptDeclineDialog();
-
-            var parameter = UI.Serialize(Tuple.Create(action, Meeting.Id));
-
-            GetEvent<InitDialogEvent>().Publish(parameter);
-
-            await dlg.ShowAsync();
+            await UI.NavigateTo("AcceptDecline", Tuple.Create(action, Meeting.Id));
         }
     }
 }

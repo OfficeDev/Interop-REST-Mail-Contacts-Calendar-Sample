@@ -3,7 +3,8 @@
 
 namespace MeetingManager.Models
 {
-    class CreateMeetingEvent : Prism.Events.PubSubEvent<object>
+    class InitDialog
     {
+        public object Payload { get; set; }
     }
 }

@@ -62,7 +62,7 @@ namespace MeetingManager.ViewModels
         {
             App.Me.AuthenticationService.AuthorizationCode = authCode;
 
-            GetEvent<LoginEvent>().Publish(new LoginEventData
+            UI.Publish(new LoginEventData
             {
                 Url = LoginUrl,
                 AuthCode = authCode

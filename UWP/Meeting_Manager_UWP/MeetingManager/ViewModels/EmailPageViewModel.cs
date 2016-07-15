@@ -25,8 +25,8 @@ namespace MeetingManager.ViewModels
 
         public EmailPageViewModel()
         {
-            GetEvent<UserSelectedEvent>().Subscribe(UserSelected);
-            GetEvent<ContactSelectedEvent>().Subscribe(ContactSelected);
+            UI.Subscribe<User>(UserSelected);
+            UI.Subscribe<Contact>(ContactSelected);
         }
 
         public DelegateCommand SendCommand => new DelegateCommand(SendMail, CanExecuteSendMail);

@@ -19,4 +19,6 @@ namespace MeetingManager.Models
             return UserPrincipalName;
         }
     }
+
+    public class Room : User { }
 }

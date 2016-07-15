@@ -25,8 +25,8 @@ namespace MeetingManager.ViewModels
 
             _dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
 
-            GetEvent<LoginEvent>().Subscribe(LogLoginEvent);
-            GetEvent<HttpEvent>().Subscribe(LogHttpEvent);
+            UI.Subscribe<LoginEventData>(LogLoginEvent);
+            UI.Subscribe<HttpEventData>(LogHttpEvent);
 
             LogEntries = new ObservableCollection<EventData>();
 
@@ -136,11 +136,11 @@ namespace MeetingManager.ViewModels
 
             if (item.Data != null)
             {
-                GetEvent<ShowJsonEvent>().Publish(item.IsRequest ? item.Data.RequestBody : item.Data.ResponseBody);
+                UI.Publish(item.IsRequest ? item.Data.RequestBody : item.Data.ResponseBody);
             }
             else
             {
-                GetEvent<ShowJsonEvent>().Publish(item.Text);
+                UI.Publish(item.Text);
             }
         }
 

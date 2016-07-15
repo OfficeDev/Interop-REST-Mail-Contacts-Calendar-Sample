@@ -10,16 +10,11 @@ using Windows.UI.Xaml.Input;
 
 namespace MeetingManager.ViewModels
 {
-    class TimeSlotsDialogViewModel : ViewModel, ITransientViewModel
+    class TimeSlotsDialogViewModel : DialogViewModel
     {
         private MeetingTimeCandidate _selectedMeetingTimeCandidate;
         private ObservableCollection<MeetingTimeCandidate> _meetingTimeCandidates;
         private Meeting _meeting;
-
-        public TimeSlotsDialogViewModel()
-        {
-            GetEvent<InitDialogEvent>().Subscribe(OnInitialize);
-        }
 
         public DelegateCommand<DoubleTappedRoutedEventArgs> DoubleTappedCommand => new DelegateCommand<DoubleTappedRoutedEventArgs>(DoubleTapped);
         public DelegateCommand OkCommand => new DelegateCommand(OnOk);
@@ -42,11 +37,11 @@ namespace MeetingManager.ViewModels
 
         public bool HasSelected => SelectedMeetingTimeCandidate != null;
 
-        private async void OnInitialize(object parameter)
+        protected override async void OnInitialize(InitDialog parameter)
         {
-            GetEvent<InitDialogEvent>().Unsubscribe(OnInitialize);
+            base.OnInitialize(parameter);
 
-            _meeting = UI.Deserialize<Meeting>(parameter);
+            _meeting = UI.Deserialize<Meeting>(parameter.Payload);
 
             var items = await GetAllTimeCandidates(_meeting);
             SetTimeSlotProperties(items);
@@ -61,7 +56,7 @@ namespace MeetingManager.ViewModels
 
         private void OnOk()
         {
-            GetEvent<MeetingTimeCandidateSelectedEvent>().Publish(SelectedMeetingTimeCandidate);
+            UI.Publish(SelectedMeetingTimeCandidate);
         }
 
         private void SetTimeSlotProperties(IEnumerable<MeetingTimeCandidate> items)

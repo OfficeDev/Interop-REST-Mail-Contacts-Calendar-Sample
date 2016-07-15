@@ -7,15 +7,10 @@ using System;
 
 namespace MeetingManager.ViewModels
 {
-    class AcceptDeclineDialogViewModel : ViewModel, ITransientViewModel
+    class AcceptDeclineDialogViewModel : DialogViewModel
     {
         private string _action;
         private string _meetingId;
-
-        public AcceptDeclineDialogViewModel()
-        {
-            GetEvent<InitDialogEvent>().Subscribe(OnInitialize);
-        }
 
         public DelegateCommand SendCommand => new DelegateCommand(Send);
 
@@ -23,11 +18,11 @@ namespace MeetingManager.ViewModels
 
         public string Comment { get; set; }
 
-        private void OnInitialize(object parameter)
+        protected override void OnInitialize(InitDialog parameter)
         {
-            GetEvent<InitDialogEvent>().Unsubscribe(OnInitialize);
+            base.OnInitialize(parameter);
 
-            var payload = UI.Deserialize<Tuple<string, string>>(parameter);
+            var payload = UI.Deserialize<Tuple<string, string>>(parameter.Payload);
 
             _action = payload.Item1.ToLower();
             _meetingId = payload.Item2;
