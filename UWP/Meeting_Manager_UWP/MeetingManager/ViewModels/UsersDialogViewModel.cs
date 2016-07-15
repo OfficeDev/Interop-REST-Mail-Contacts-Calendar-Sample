@@ -117,11 +117,11 @@ namespace MeetingManager.ViewModels
         {
             if (_getHumans)
             {
-                UI.Publish<User>(SelectedUser);
+                UI.Publish(SelectedUser);
             }
             else
             {
-                UI.Publish<Room>(SelectedUser as Room);
+                UI.Publish(SelectedUser.ConvertObject<Room>());
             }
         }
     }

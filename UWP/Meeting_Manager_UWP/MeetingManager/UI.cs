@@ -1,4 +1,7 @@
-﻿using MeetingManager.Models;
+﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+//See LICENSE in the project root for license information.
+
+using MeetingManager.Models;
 using Newtonsoft.Json;
 using Prism.Events;
 using System;
@@ -109,7 +112,7 @@ namespace MeetingManager
             App.Me.NavigationService.Navigate(pageToken, SerializeParameter(parameter));
         }
 
-        internal static object SerializeParameter(object parameter)
+        private static object SerializeParameter(object parameter)
         {
             if (parameter != null)
             {
