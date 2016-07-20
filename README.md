@@ -60,7 +60,7 @@ Android | UWP
 
 1. No matter what you use to configure your app, you will need to have an Office 365 Developer account and register your app with it. To sign up for an Office 365 developer account:
 
-  * Visit [dev.office.com/devprogram](http://dev.office.com/devprogram) or go directly to the [profile creation page](https://profile.microsoft.com/RegSysProfileCenter/wizardnp.aspx?wizid=14b845d0-938c-45af-b061-f798fbb4d170&lcid=1033) and create a profile.
+  * [Join the Office 365 Developer Program and get a free 1 year subscription to Office 365](https://aka.ms/devprogramsignup).
 
   * Follow the link in the confirmation email and create an Office 365 developer account.
 
