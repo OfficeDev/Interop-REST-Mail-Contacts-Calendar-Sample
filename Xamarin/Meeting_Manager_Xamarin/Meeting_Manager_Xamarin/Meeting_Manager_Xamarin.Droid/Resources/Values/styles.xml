@@ -1,0 +1,18 @@
+﻿<resources>
+  <style name="AppTheme" parent="@style/android:Theme.Material.Light">
+    <item name="android:textAppearanceButton">@style/textAppearanceButton</item>
+    <item name="android:buttonStyle">@style/MyButton</item>
+  </style>
+
+  <style name="textAppearanceButton" parent="@android:style/TextAppearance.Material.Widget.Button">
+    <item name="android:textAllCaps">false</item>
+  </style>
+
+  <style name="MyButton" parent="android:style/Widget.Button">
+    <item name="android:minHeight">20dp</item>
+<!--    
+    <item name="android:minWidth">56dp</item>
+-->    
+  </style>
+
+</resources>

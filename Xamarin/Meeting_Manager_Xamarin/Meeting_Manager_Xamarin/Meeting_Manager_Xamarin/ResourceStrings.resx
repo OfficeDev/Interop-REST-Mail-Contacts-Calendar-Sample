@@ -1,0 +1,549 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AbsMonthlyPart" xml:space="preserve">
+    <value>day {0} of every {1} month(s)</value>
+  </data>
+  <data name="AbsYearlyPart" xml:space="preserve">
+    <value>every {0} year(s) on {1} {2}</value>
+  </data>
+  <data name="AcceptedResponse" xml:space="preserve">
+    <value>Accepted</value>
+  </data>
+  <data name="AcceptTitle" xml:space="preserve">
+    <value>Yes, I'll attend</value>
+  </data>
+  <data name="AllDayCaption" xml:space="preserve">
+    <value>All Day</value>
+  </data>
+  <data name="AllDayPart" xml:space="preserve">
+    <value>all day</value>
+  </data>
+  <data name="CancelInstance" xml:space="preserve">
+    <value>Do you really want to cancel the meeting '{0}'?"</value>
+  </data>
+  <data name="CancelOccurence" xml:space="preserve">
+    <value>Do you really want to cancel the meeting occurence '{0}'?</value>
+  </data>
+  <data name="CancelSeries" xml:space="preserve">
+    <value>Do you really want to cancel the meeting series '{0}'?</value>
+  </data>
+  <data name="CantReply" xml:space="preserve">
+    <value>No mails found to reply to.</value>
+  </data>
+  <data name="CreateMeetingTitle" xml:space="preserve">
+    <value>Create Meeting</value>
+  </data>
+  <data name="DailyPart" xml:space="preserve">
+    <value>every {0} day(s)</value>
+  </data>
+  <data name="DeclinedResponse" xml:space="preserve">
+    <value>Declined</value>
+  </data>
+  <data name="DeclineTitle" xml:space="preserve">
+    <value>No, I won't attend</value>
+  </data>
+  <data name="EffectivePart" xml:space="preserve">
+    <value> effective {0}</value>
+  </data>
+  <data name="EveryPart" xml:space="preserve">
+    <value>every</value>
+  </data>
+  <data name="First" xml:space="preserve">
+    <value>first</value>
+  </data>
+  <data name="Fourth" xml:space="preserve">
+    <value>fourth</value>
+  </data>
+  <data name="FromToPart" xml:space="preserve">
+    <value>from {0:h:mm tt} to {1:h:mm tt}</value>
+  </data>
+  <data name="Last" xml:space="preserve">
+    <value>last</value>
+  </data>
+  <data name="NoCaption" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="NoLocation" xml:space="preserve">
+    <value>Location not specified</value>
+  </data>
+  <data name="NoResponse" xml:space="preserve">
+    <value>No Response</value>
+  </data>
+  <data name="OccursPart" xml:space="preserve">
+    <value>Occurs </value>
+  </data>
+  <data name="OKCaption" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="OrganizerResponse" xml:space="preserve">
+    <value>Organizer</value>
+  </data>
+  <data name="RelMonthlyPart" xml:space="preserve">
+    <value>every {0} {1} of every {2} month(s)</value>
+  </data>
+  <data name="RelYearlyPart" xml:space="preserve">
+    <value>every {0} year(s) on the {1} {2} of {3}</value>
+  </data>
+  <data name="RunningLate" xml:space="preserve">
+    <value>I'm running late...</value>
+  </data>
+  <data name="SaveCaption" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value>second</value>
+  </data>
+  <data name="SelectPerson" xml:space="preserve">
+    <value>Select Attendee</value>
+  </data>
+  <data name="SelectRoom" xml:space="preserve">
+    <value>Select Room</value>
+  </data>
+  <data name="SendCaption" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="SendMailTitle" xml:space="preserve">
+    <value>Send Mail</value>
+  </data>
+  <data name="StartFormat" xml:space="preserve">
+    <value>{0:hh:mm tt}</value>
+  </data>
+  <data name="StatusNoResponse" xml:space="preserve">
+    <value>No response</value>
+  </data>
+  <data name="StatusOrganizer" xml:space="preserve">
+    <value>Organizer</value>
+  </data>
+  <data name="TentativeResponse" xml:space="preserve">
+    <value>Tentative</value>
+  </data>
+  <data name="TentativeTitle" xml:space="preserve">
+    <value>Yes, I might attend</value>
+  </data>
+  <data name="Third" xml:space="preserve">
+    <value>third</value>
+  </data>
+  <data name="UntilPart" xml:space="preserve">
+    <value> until {0}</value>
+  </data>
+  <data name="UpdateMeetingTitle" xml:space="preserve">
+    <value>Update Meeting</value>
+  </data>
+  <data name="WeeklyPartFirst" xml:space="preserve">
+    <value> {0}</value>
+  </data>
+  <data name="WeeklyPartLast" xml:space="preserve">
+    <value> and {0}</value>
+  </data>
+  <data name="WeeklyPartNext" xml:space="preserve">
+    <value>, {0}</value>
+  </data>
+  <data name="YesCaption" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="AcceptDeclineCaption" xml:space="preserve">
+    <value>Choose:</value>
+  </data>
+  <data name="AddressListOption" xml:space="preserve">
+    <value>Address List</value>
+  </data>
+  <data name="ASAPOption" xml:space="preserve">
+    <value>ASAP</value>
+  </data>
+  <data name="CancelMeetingCaption" xml:space="preserve">
+    <value>Cancel:</value>
+  </data>
+  <data name="ContactsOption" xml:space="preserve">
+    <value>Contacts</value>
+  </data>
+  <data name="EditResponseOption" xml:space="preserve">
+    <value>Edit response</value>
+  </data>
+  <data name="ForwardOption" xml:space="preserve">
+    <value>Forward</value>
+  </data>
+  <data name="ForwardTitle" xml:space="preserve">
+    <value>Forward</value>
+  </data>
+  <data name="InstanceOption" xml:space="preserve">
+    <value>Instance</value>
+  </data>
+  <data name="LateOption" xml:space="preserve">
+    <value>I'm running late...</value>
+  </data>
+  <data name="MailOperationCaption" xml:space="preserve">
+    <value>Select Operation:</value>
+  </data>
+  <data name="NoResponseOption" xml:space="preserve">
+    <value>Don't send response</value>
+  </data>
+  <data name="ReplyAllOption" xml:space="preserve">
+    <value>Reply All</value>
+  </data>
+  <data name="ReplyAllTitle" xml:space="preserve">
+    <value>Reply All</value>
+  </data>
+  <data name="ReplyOption" xml:space="preserve">
+    <value>Reply</value>
+  </data>
+  <data name="ReplyTitle" xml:space="preserve">
+    <value>Reply</value>
+  </data>
+  <data name="SelectSlotOption" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="SendResponseOption" xml:space="preserve">
+    <value>Send response now</value>
+  </data>
+  <data name="SeriesOption" xml:space="preserve">
+    <value>Series</value>
+  </data>
+  <data name="TimeSlotsCaption" xml:space="preserve">
+    <value>Time Slots:</value>
+  </data>
+  <data name="UserOrContactCaption" xml:space="preserve">
+    <value>Select from:</value>
+  </data>
+  <data name="ViewMeetingCaption" xml:space="preserve">
+    <value>View:</value>
+  </data>
+  <data name="AttachmentsTitle" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
+  <data name="AttendeesHeader" xml:space="preserve">
+    <value>Attendees</value>
+  </data>
+  <data name="AuthHttpOption" xml:space="preserve">
+    <value>Use Direct HTTP</value>
+  </data>
+  <data name="AuthMsalOption" xml:space="preserve">
+    <value>Use MSAL</value>
+  </data>
+  <data name="CancelOption" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ConnectCaption" xml:space="preserve">
+    <value>Connect to MS Graph</value>
+  </data>
+  <data name="DeleteOption" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="EnterComment" xml:space="preserve">
+    <value>Enter comment</value>
+  </data>
+  <data name="GraphHttpOption" xml:space="preserve">
+    <value>Use Direct HTTP</value>
+  </data>
+  <data name="GraphSdkOption" xml:space="preserve">
+    <value>Use Graph SDK</value>
+  </data>
+  <data name="NewCaption" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="OrganizerHeader" xml:space="preserve">
+    <value>Organizer</value>
+  </data>
+  <data name="RefreshCaption" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="SelectAuthService" xml:space="preserve">
+    <value>Select Auth Service implementation:</value>
+  </data>
+  <data name="SelectDate" xml:space="preserve">
+    <value>Select Date:</value>
+  </data>
+  <data name="SelectGraphService" xml:space="preserve">
+    <value>Select Graph Service implementation:</value>
+  </data>
+  <data name="StartHeader" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="SubjectHeader" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="ViewOption" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="AbsoluteDateOption" xml:space="preserve">
+    <value>Absolute dates</value>
+  </data>
+  <data name="AcceptCaption" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="AddAttendeeCaption" xml:space="preserve">
+    <value>+Attendee</value>
+  </data>
+  <data name="AddRecipientCaption" xml:space="preserve">
+    <value>+Recipient</value>
+  </data>
+  <data name="AlertTitle" xml:space="preserve">
+    <value>Alert</value>
+  </data>
+  <data name="AttachCaption" xml:space="preserve">
+    <value>Attach</value>
+  </data>
+  <data name="AttachmentsCaption" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
+  <data name="CommentPlaceholder" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="ContactsTitle" xml:space="preserve">
+    <value>Select Contact</value>
+  </data>
+  <data name="DailyOption" xml:space="preserve">
+    <value>Daily</value>
+  </data>
+  <data name="DaysCaption" xml:space="preserve">
+    <value>day(s)</value>
+  </data>
+  <data name="DeclineCaption" xml:space="preserve">
+    <value>Decline</value>
+  </data>
+  <data name="DetailsTitle" xml:space="preserve">
+    <value>Meeting Description</value>
+  </data>
+  <data name="EmailCaption" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EndAfterOption" xml:space="preserve">
+    <value>End after</value>
+  </data>
+  <data name="EndByOption" xml:space="preserve">
+    <value>End by</value>
+  </data>
+  <data name="EveryCaption" xml:space="preserve">
+    <value>Every</value>
+  </data>
+  <data name="FilesTitle" xml:space="preserve">
+    <value>Attach File</value>
+  </data>
+  <data name="FindRoomCaption" xml:space="preserve">
+    <value>FindRoom</value>
+  </data>
+  <data name="FridayCaption" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="FromCaption" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="MaximizeCaption" xml:space="preserve">
+    <value>Maximize</value>
+  </data>
+  <data name="MondayCaption" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="MonthlyOption" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="MonthsCaption" xml:space="preserve">
+    <value>month(s)</value>
+  </data>
+  <data name="NoEndOption" xml:space="preserve">
+    <value>No end date</value>
+  </data>
+  <data name="OccurencesCaption" xml:space="preserve">
+    <value>occurences</value>
+  </data>
+  <data name="OfEveryCaption" xml:space="preserve">
+    <value>of every</value>
+  </data>
+  <data name="OfMonthCaption" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="OnDayCaption" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="OnMonthCaption" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="OnTheOrdinalCaption" xml:space="preserve">
+    <value>On the</value>
+  </data>
+  <data name="OrganizerCaption" xml:space="preserve">
+    <value>Organizer:</value>
+  </data>
+  <data name="OriginalMessageCaption" xml:space="preserve">
+    <value>Original message</value>
+  </data>
+  <data name="RecurrenceCaption" xml:space="preserve">
+    <value>Recurrence</value>
+  </data>
+  <data name="RecurrenceTitle" xml:space="preserve">
+    <value>Recurrence</value>
+  </data>
+  <data name="RelativeDateOption" xml:space="preserve">
+    <value>Relative dates</value>
+  </data>
+  <data name="SaturdayCaption" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="ShowJsonCaption" xml:space="preserve">
+    <value>Show selection as JSON</value>
+  </data>
+  <data name="StartOnCaption" xml:space="preserve">
+    <value>Start on</value>
+  </data>
+  <data name="SubmitCaption" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="SundayCaption" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="TentativeCaption" xml:space="preserve">
+    <value>Tentative</value>
+  </data>
+  <data name="TheOrdinalCaption" xml:space="preserve">
+    <value>The</value>
+  </data>
+  <data name="ThursdayCaption" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="TimeSlotsBtnCaption" xml:space="preserve">
+    <value>Time Slots</value>
+  </data>
+  <data name="TimeSlotsTitle" xml:space="preserve">
+    <value>Select available time slot</value>
+  </data>
+  <data name="ToCaption" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="TuesdayCaption" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="UpCaption" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="WednesdayCaption" xml:space="preserve">
+    <value>Wednesday</value>
+  </data>
+  <data name="WeeklyOption" xml:space="preserve">
+    <value>Weekly</value>
+  </data>
+  <data name="WeeksCaption" xml:space="preserve">
+    <value>week(s) on</value>
+  </data>
+  <data name="YearlyOption" xml:space="preserve">
+    <value>Yearly</value>
+  </data>
+  <data name="YearsCaption" xml:space="preserve">
+    <value>year(s)</value>
+  </data>
+</root>

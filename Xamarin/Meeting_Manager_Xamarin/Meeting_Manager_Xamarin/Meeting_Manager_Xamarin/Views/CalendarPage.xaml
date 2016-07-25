@@ -1,0 +1,115 @@
+﻿<!-- Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+See LICENSE in the project root for license information. -->
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Meeting_Manager_Xamarin.ViewModels"
+             xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
+             x:Name="ThisPage"
+             Title="Calendar"
+             Style="{StaticResource Page}"
+             x:Class="Meeting_Manager_Xamarin.Views.CalendarPage">
+  
+  <Grid x:Name="MainGrid" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+
+    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+      <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+        
+      <StackLayout HorizontalOptions="FillAndExpand">
+        <ActivityIndicator IsRunning="{Binding IsLoading}" HorizontalOptions="FillAndExpand"
+                           IsVisible="{Binding IsLoading}"/>
+      </StackLayout>
+
+      <StackLayout Orientation="Horizontal">
+        <Button Text="{v:ResxString RefreshCaption}" Command="{Binding RefreshCommand}" Style="{StaticResource TopButton}"/>
+        <Button Text="{v:ResxString NewCaption}" Command="{Binding CreateCommand}" Style="{StaticResource TopButton}"/>
+      </StackLayout>
+    </StackLayout>
+
+      <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+        <Label Text="{v:ResxString SelectDate}" VerticalOptions="Center"/>
+        <DatePicker Date="{Binding SelectedDate, Mode=TwoWay}"
+            VerticalOptions="Center" Style="{StaticResource DatePicker}"
+         >          
+        </DatePicker>
+      </StackLayout>
+
+      <Frame Padding="2,2,2,2" Style="{StaticResource Frame}">
+        <Grid BackgroundColor="#f0f8ff" Padding="2">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>      
+      
+          <Grid>    
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="1*"/>
+              <ColumnDefinition Width="2*"/>
+              <ColumnDefinition Width="2*"/>
+              <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Text="{v:ResxString StartHeader}" FontAttributes="Bold"/>
+            <Label Grid.Column="1" Text="{v:ResxString SubjectHeader}" FontAttributes="Bold"/>
+            <Label Grid.Column="2" Text="{v:ResxString OrganizerHeader}" FontAttributes="Bold"/>
+            <Label Grid.Column="3" Text="{v:ResxString AttendeesHeader}" FontAttributes="Bold"/>
+          </Grid>
+
+          <ListView SelectedItem="{Binding SelectedMeeting}"
+                      ItemsSource="{Binding Meetings}"
+                      BackgroundColor="#f5f5f5"
+                      Grid.Row="1"
+                      HasUnevenRows="True"
+                    >
+
+              <ListView.ItemTemplate>
+                <DataTemplate>
+                  <v:CommandViewCell
+                      Command="{Binding BindingContext.ListTappedCommand, Source={v:ElementReference ThisPage}}">
+                    
+                    <Grid BackgroundColor="{Binding Index, Converter={StaticResource IndexToBackground}, ConverterParameter=#addbe8:#d3d3d3}">
+
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
+                      </Grid.ColumnDefinitions>
+
+                      <Label Grid.Column="0" Text="{Binding StartTime}"/>
+                      <Label Grid.Column="1" Text="{Binding Subject}"/>
+                      <Label Grid.Column="2" Text="{Binding OrganizerName}"/>                    
+                      <Label Grid.Column="3" Text="{Binding AttendeeList}"/>                  
+
+                    </Grid>
+
+                    <ViewCell.ContextActions>
+                      <MenuItem Text="{v:ResxString ViewOption}"
+                              Command="{Binding BindingContext.ViewCommand, Source={v:ElementReference ThisPage}}"
+                              CommandParameter="{Binding}"/>
+                      <MenuItem Text="{v:ResxString CancelOption}" IsDestructive="True"
+                              Command="{Binding BindingContext.CancelCommand, Source={v:ElementReference ThisPage}}"
+                              CommandParameter="{Binding}"/>
+                    </ViewCell.ContextActions>
+
+                  </v:CommandViewCell>
+                </DataTemplate>
+              </ListView.ItemTemplate>
+
+            </ListView>
+        </Grid>
+      </Frame>  
+    </StackLayout>
+
+    <Frame Grid.Row="1" Style="{StaticResource Frame}" Padding="2">
+      <v:LogWindowControl/>
+    </Frame>
+    
+  </Grid>
+</ContentPage>

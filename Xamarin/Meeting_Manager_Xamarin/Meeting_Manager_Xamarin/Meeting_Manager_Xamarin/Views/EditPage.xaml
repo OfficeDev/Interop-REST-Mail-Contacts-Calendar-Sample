@@ -1,0 +1,188 @@
+﻿<!-- Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+See LICENSE in the project root for license information. -->
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
+             x:Name="ThisPage"
+             Title="{Binding Title}"
+             Style="{StaticResource Page}"
+             x:Class="Meeting_Manager_Xamarin.Views.EditPage">
+
+  <Grid x:Name="MainGrid" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+
+    <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+
+      <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+      
+        <StackLayout HorizontalOptions="FillAndExpand">
+          <ActivityIndicator IsRunning="{Binding IsLoading}" HorizontalOptions="FillAndExpand"
+                             IsVisible="{Binding IsLoading}"/>
+        </StackLayout>
+      
+        <StackLayout Orientation="Horizontal">
+          <Button Text ="{v:ResxString AttachCaption}" Command="{Binding AttachCommand}" Style="{StaticResource TopButton}"/>
+          <Button Text ="{v:ResxString RecurrenceCaption}" Command="{Binding RecurrenceCommand}" Style="{StaticResource TopButton}"/>
+          <Button Text ="{v:ResxString EmailCaption}" Command="{Binding EmailCommand}" Style="{StaticResource TopButton}"
+                   IsEnabled="{Binding HasAttendees}"
+                   IsVisible="{Binding IsNewMeeting, Converter={StaticResource Negation}}"/>
+
+          <Button Text ="{Binding SaveCaption}" Command="{Binding SaveCommand}" Style="{StaticResource TopButton}"/>
+        </StackLayout>
+      </StackLayout>
+
+      <Grid Grid.Row="1">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+       </Grid.ColumnDefinitions>
+
+        <Entry Placeholder="Subject" Text="{Binding Meeting.Subject}"/>
+        <Button Grid.Column="1"
+            Text="{v:ResxString AttachmentsCaption}" Command="{Binding ShowAttachmentsCommand}" IsEnabled="{Binding HasAttachments}" VerticalOptions="Center"/>
+
+        <Entry Grid.Column="0" Grid.Row="1"
+               Text="{Binding LocationName, Mode=TwoWay}" Placeholder="Location" HorizontalOptions="FillAndExpand"/>
+        <Button Grid.Column="1" Grid.Row="1"
+              Text ="{v:ResxString FindRoomCaption}" Command="{Binding FindRoomCommand}" Style="{StaticResource CmdButton}"/>
+
+      </Grid>
+
+      <Grid Grid.Row="2" IsVisible="{Binding IsSerial, Converter={StaticResource Negation}}">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Column="0" Grid.Row="0" 
+              Text="{v:ResxString FromCaption}" VerticalOptions="Center"/>
+        <DatePicker Grid.Column="1" Grid.Row="0" Style="{StaticResource DatePicker}"
+                    Date="{Binding StartDate, Mode=TwoWay}"/>
+        <TimePicker Grid.Column="2" Grid.Row="0" Style="{StaticResource TimePicker}"
+                    Time="{Binding StartTime, Mode=TwoWay}" IsEnabled="{Binding IsAllDay, Converter={StaticResource Negation}}"/>
+      
+        <StackLayout Grid.Column="3" Grid.Row="1" Orientation="Horizontal">
+          <Label Text="{v:ResxString AllDayCaption}" VerticalOptions="Center"/>
+          <Switch IsToggled="{Binding IsAllDay, Mode=TwoWay}" VerticalOptions="Center"/>
+        </StackLayout>
+
+        <Label Grid.Column="0" Grid.Row="1" VerticalOptions="Center"
+                    Text="{v:ResxString ToCaption}" />
+        <DatePicker Grid.Column="1" Grid.Row="1" Style="{StaticResource DatePicker}"
+                    Date="{Binding EndDate, Mode=TwoWay}"/>
+        <TimePicker Grid.Column="2" Grid.Row="1" Style="{StaticResource TimePicker}"
+                    Time="{Binding EndTime, Mode=TwoWay}" IsEnabled="{Binding IsAllDay, Converter={StaticResource Negation}}"/>
+
+        <Button Grid.Column="3" Grid.Row="0" 
+                  Text ="{v:ResxString TimeSlotsBtnCaption}" Style="{StaticResource CmdButton}" HorizontalOptions="Fill" VerticalOptions="Center"
+                  Command="{Binding TimeSlotsCommand}"
+                />
+
+      </Grid>
+
+      <Grid Grid.Row="2" IsVisible="{Binding IsSerial}">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.ColumnSpan="3"
+               Text="{Binding RecurrenceDate}"/>
+
+        <Label Grid.Column="0" Grid.Row="1"
+                Text="{v:ResxString FromCaption}" VerticalOptions="Center"/>
+
+        <Label Grid.Column="1" Grid.Row="1"
+                  Text="{v:ResxString ToCaption}" VerticalOptions="Center"/>
+        
+        <TimePicker Grid.Column="0" Grid.Row="2" Style="{StaticResource TimePicker}"
+                      Time="{Binding StartTime, Mode=TwoWay}" IsEnabled="{Binding IsAllDay, Converter={StaticResource Negation}}"/>
+
+        <TimePicker Grid.Column="1" Grid.Row="2" Style="{StaticResource TimePicker}"
+                    Time="{Binding EndTime, Mode=TwoWay}" IsEnabled="{Binding IsAllDay, Converter={StaticResource Negation}}"/>
+
+        <StackLayout Grid.Column="2" Grid.Row="2" Orientation="Horizontal">
+          <Label Text="{v:ResxString AllDayCaption}" VerticalOptions="Center"/>
+          <Switch IsToggled="{Binding IsAllDay, Mode=TwoWay}" VerticalOptions="Center"/>
+        </StackLayout>
+
+      </Grid>
+      
+      <Editor Grid.Row="3" 
+              Text="{Binding Description, Mode=TwoWay}" IsVisible="{Binding IsContentText}"
+              BackgroundColor="#f0fff0"
+              />
+
+      <Frame Grid.Row="3" IsVisible="{Binding IsContentText, Converter={StaticResource Negation}}"
+             Style="{StaticResource StaticFrame}">
+        <WebView Source="{Binding HtmlSource}"/>
+      </Frame>
+
+      <Frame Grid.Row="4" Style="{StaticResource Frame}" Padding="0">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+        
+          <ListView Grid.Row="0" ItemsSource="{Binding Attendees}">
+
+          <ListView.ItemTemplate>
+            <DataTemplate>
+
+              <TextCell Text="{Binding Name}">
+                <TextCell.ContextActions>
+                  <MenuItem Text="Delete" IsDestructive="true"
+                          Command="{Binding BindingContext.DeleteAttendeeCommand, Source={v:ElementReference ThisPage}}"
+                          CommandParameter="{Binding}"/>
+                </TextCell.ContextActions>
+              </TextCell>
+
+            </DataTemplate>
+          </ListView.ItemTemplate>
+
+        </ListView>
+
+        <Button Grid.Row="1"
+                Text ="{v:ResxString AddAttendeeCaption}" Command="{Binding AddAttendeeCommand}"/>
+        </Grid>
+      </Frame>
+      
+    </Grid>
+
+    <Frame Grid.Row="1" Style="{StaticResource Frame}" Padding="2">
+      <v:LogWindowControl/>
+    </Frame>
+
+  </Grid> 
+</ContentPage>

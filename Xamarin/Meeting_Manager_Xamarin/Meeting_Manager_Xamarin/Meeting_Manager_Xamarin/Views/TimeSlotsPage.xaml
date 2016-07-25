@@ -1,0 +1,48 @@
+﻿<!-- Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+See LICENSE in the project root for license information. -->
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
+             Title="{v:ResxString TimeSlotsTitle}"
+             x:Name="ThisPage"
+             x:Class="Meeting_Manager_Xamarin.Views.TimeSlotsPage">
+
+  <Grid x:Name="MainGrid" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+
+    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+      <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+
+        <StackLayout HorizontalOptions="FillAndExpand">
+          <ActivityIndicator IsRunning="{Binding IsLoading}" HorizontalOptions="FillAndExpand"
+                             IsVisible="{Binding IsLoading}"/>
+        </StackLayout>
+
+      </StackLayout>
+
+        <ListView ItemsSource="{Binding Items}">
+
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <TextCell Text="{Binding TimeSlot}"
+                         Command="{Binding BindingContext.ItemTappedCommand, Source={v:ElementReference ThisPage}}"
+                         CommandParameter="{Binding}">
+
+              </TextCell>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+
+        </ListView>
+    </StackLayout>
+
+    <Frame Grid.Row="1" Style="{StaticResource Frame}" Padding="2">
+      <v:LogWindowControl/>
+    </Frame>
+
+  </Grid>
+</ContentPage>

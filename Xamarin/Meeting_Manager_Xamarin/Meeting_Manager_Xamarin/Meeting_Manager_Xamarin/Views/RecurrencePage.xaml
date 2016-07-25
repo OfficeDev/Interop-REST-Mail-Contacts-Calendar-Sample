@@ -1,0 +1,183 @@
+﻿<!-- Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+See LICENSE in the project root for license information. -->
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
+             Title="{v:ResxString RecurrenceTitle}"
+             Style="{StaticResource Page}"
+             x:Class="Meeting_Manager_Xamarin.Views.RecurrencePage">
+  
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <Style TargetType="Label">
+        <Setter Property="VerticalOptions" Value="Center"/>
+      </Style>
+    </ResourceDictionary>  
+  </ContentPage.Resources>
+  
+  <Grid>
+
+      <StackLayout HorizontalOptions="FillAndExpand">
+       
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+          <StackLayout HorizontalOptions="FillAndExpand">
+            <Picker x:Name="TypePicker" HorizontalOptions="FillAndExpand"
+                SelectedIndex="{Binding Type, Mode=TwoWay}"/>
+          </StackLayout>
+
+          <Button Text="{v:ResxString SubmitCaption}" Command="{Binding SubmitCommand}" Style="{StaticResource TopButton}"
+                  IsEnabled="{Binding CanSubmit}"/>
+
+        </StackLayout>
+
+        <Frame IsVisible="{Binding DailyIsVisible, Mode=TwoWay}" Style="{StaticResource Frame}">
+          <StackLayout>
+            <StackLayout Orientation="Horizontal">
+
+              <StackLayout Orientation="Horizontal">
+                <Label Text="{v:ResxString EveryCaption}"/>
+                <Entry Text="{Binding DailyInterval, Mode=TwoWay}"/>
+                <Label Text="{v:ResxString DaysCaption}"/>
+              </StackLayout>
+
+            </StackLayout>
+          </StackLayout>
+        </Frame>
+
+        <Frame IsVisible="{Binding WeeklyIsVisible}" Style="{StaticResource Frame}">
+          <StackLayout>
+            <StackLayout Orientation="Horizontal">
+              <Label Text="{v:ResxString EveryCaption}"/>
+              <Entry Text="{Binding WeeklyInterval, Mode=TwoWay}"/>
+              <Label Text="{v:ResxString WeeksCaption}"/>
+            </StackLayout>
+
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+              </Grid.RowDefinitions>
+
+              <StackLayout Orientation="Horizontal">
+                <Switch x:Name="SundayToggle" IsToggled="{Binding Sun_Toggle, Mode=TwoWay}"/>
+                <Label Text="{v:ResxString SundayCaption}" IsEnabled="{Binding IsToggled, Source={x:Reference SundayToggle}}"/>
+              </StackLayout>
+              <StackLayout Grid.Column="1" Orientation="Horizontal">
+                <Switch x:Name="MondayToggle" IsToggled="{Binding Mon_Toggle, Mode=TwoWay}"/>
+                <Label Text="{v:ResxString MondayCaption}" IsEnabled="{Binding IsToggled, Source={x:Reference MondayToggle}}"/>
+              </StackLayout>
+              <StackLayout Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                <Switch x:Name="TuesdayToggle" IsToggled="{Binding Tue_Toggle, Mode=TwoWay}"/>
+                <Label Text="{v:ResxString TuesdayCaption}" IsEnabled="{Binding IsToggled, Source={x:Reference TuesdayToggle}}"/>
+              </StackLayout>
+              <StackLayout Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                <Switch x:Name="WednesdayToggle" IsToggled="{Binding Wed_Toggle, Mode=TwoWay}"/>
+                <Label Text="{v:ResxString WednesdayCaption}" IsEnabled="{Binding IsToggled, Source={x:Reference WednesdayToggle}}"/>
+              </StackLayout>
+              <StackLayout Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                <Switch x:Name="ThursdayToggle" IsToggled="{Binding Thu_Toggle, Mode=TwoWay}"/>
+                <Label Text="{v:ResxString ThursdayCaption}" IsEnabled="{Binding IsToggled, Source={x:Reference ThursdayToggle}}"/>
+              </StackLayout>
+              <StackLayout Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                <Switch x:Name="FridayToggle" IsToggled="{Binding Fri_Toggle, Mode=TwoWay}"/>
+                <Label Text="{v:ResxString FridayCaption}" IsEnabled="{Binding IsToggled, Source={x:Reference FridayToggle}}"/>
+              </StackLayout>
+              <StackLayout Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
+                <Switch x:Name="SaturdayToggle" IsToggled="{Binding Sat_Toggle, Mode=TwoWay}"/>
+                <Label Text="{v:ResxString SaturdayCaption}" IsEnabled="{Binding IsToggled, Source={x:Reference SaturdayToggle}}"/>
+              </StackLayout>
+           
+            </Grid>
+            
+          </StackLayout>
+        </Frame>
+
+        <Frame IsVisible="{Binding MonthlyIsVisible}" Style="{StaticResource Frame}">
+          <StackLayout>
+
+            <Picker x:Name="DateModePicker" SelectedIndex="{Binding AbsoluteMonthly, Mode=TwoWay, Converter={StaticResource BoolToIndex}}"/>
+          
+            <StackLayout Orientation="Horizontal" IsVisible="{Binding AbsoluteMonthly}">
+              <Label Text="{v:ResxString OnDayCaption}"/>
+              <Entry Text="{Binding DayOfMonth, Mode=TwoWay}"/>
+              <Label Text="{v:ResxString OfEveryCaption}"/>
+              <Entry Text="{Binding MonthlyInterval, Mode=TwoWay}"/>
+              <Label Text="{v:ResxString MonthsCaption}"/>
+            </StackLayout>
+          
+            <StackLayout Orientation="Horizontal"
+                          IsVisible="{Binding AbsoluteMonthly, Converter={StaticResource Negation}}">
+
+              <Label Text="{v:ResxString TheOrdinalCaption}" VerticalOptions="Center"/>
+              <Picker x:Name="Ordinals" SelectedIndex="{Binding FirstLastIndex, Mode=TwoWay}"/>
+              <Picker x:Name="DayOfWeekNames" SelectedIndex="{Binding DayOfWeekIndex, Mode=TwoWay}"/>
+              
+              <Label Text="{v:ResxString OfEveryCaption}"/>
+              <Entry Text="{Binding MonthlyInterval, Mode=TwoWay}"/>
+              <Label Text="{v:ResxString MonthsCaption}"/>
+            </StackLayout>
+          </StackLayout>
+
+        </Frame>
+
+        <Frame IsVisible="{Binding YearlyIsVisible}" Style="{StaticResource Frame}">
+          <StackLayout>
+            <StackLayout Orientation="Horizontal">
+              <Label Text="{v:ResxString EveryCaption}"/>
+              <Entry Text="{Binding YearlyInterval, Mode=TwoWay}"/>
+              <Label Text="{v:ResxString YearsCaption}"/>
+            </StackLayout>
+
+            <Picker  x:Name="DateModePicker2" SelectedIndex="{Binding AbsoluteYearly, Mode=TwoWay, Converter={StaticResource BoolToIndex}}"/>
+
+            <StackLayout Orientation="Horizontal" IsVisible="{Binding AbsoluteYearly}">
+              <Label Text="{v:ResxString OnMonthCaption}"/>
+              <Picker x:Name="MonthNames" SelectedIndex="{Binding MonthIndex, Mode=TwoWay}"/>
+              <Entry Text="{Binding DayOfMonth, Mode=TwoWay}"/>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" IsVisible="{Binding AbsoluteYearly, Converter={StaticResource Negation}}">
+              <Label Text="{v:ResxString OnTheOrdinalCaption}"/>
+              <Picker x:Name="Ordinals2" SelectedIndex="{Binding FirstLastIndex, Mode=TwoWay}"/>
+              <Picker x:Name="DayOfWeekNames2" SelectedIndex="{Binding DayOfWeekIndex, Mode=TwoWay}"/>
+              <Label Text="{v:ResxString OfMonthCaption}"/>
+              <Picker x:Name="MonthNames2" SelectedIndex="{Binding MonthIndex, Mode=TwoWay}"/>
+            </StackLayout>
+          </StackLayout>
+
+        </Frame>
+
+        <Frame Style="{StaticResource Frame}">
+          <StackLayout>
+         
+            <StackLayout Orientation="Horizontal">
+              <Label Text="{v:ResxString StartOnCaption}"/>
+              <DatePicker Date="{Binding StartDate, Mode=TwoWay}" Style="{StaticResource DatePicker}"/>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal">
+              <Picker x:Name="EndOptions" SelectedIndex="{Binding SelectedEndOption, Mode=TwoWay}"/>
+
+              <StackLayout Orientation="Horizontal" IsVisible="{Binding IsNumbered}">
+                <Entry Text="{Binding OccurencesNumber, Mode=TwoWay}"/>
+                <Label Text="{v:ResxString OccurencesCaption}"/>
+              </StackLayout>
+
+              <StackLayout Orientation="Horizontal" IsVisible="{Binding IsEndBy}">
+                <DatePicker Date="{Binding EndDate, Mode=TwoWay}" Style="{StaticResource DatePicker}"/>
+              </StackLayout>
+            </StackLayout>
+
+          </StackLayout>
+        </Frame>
+
+      </StackLayout>   
+  </Grid>
+</ContentPage>

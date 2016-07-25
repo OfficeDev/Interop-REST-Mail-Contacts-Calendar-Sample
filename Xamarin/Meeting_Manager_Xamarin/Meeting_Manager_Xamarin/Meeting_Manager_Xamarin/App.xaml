@@ -1,0 +1,61 @@
+﻿<!-- Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+See LICENSE in the project root for license information. -->
+
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
+             xmlns:vm="clr-namespace:Meeting_Manager_Xamarin.ViewModels"
+             xmlns:cvt="clr-namespace:Meeting_Manager_Xamarin.Converters"
+             x:Class="Meeting_Manager_Xamarin.App">
+  
+  <Application.Resources>
+    <ResourceDictionary>
+      <cvt:Negation x:Key="Negation"/>
+      <cvt:BoolToIndex x:Key="BoolToIndex"/>
+      <cvt:IndexToBackground x:Key="IndexToBackground"/>
+      <cvt:BoolToBackground x:Key="BoolToBackground"/>
+      <cvt:DateFormat x:Key="DateFormat"/>
+
+      <OnPlatform x:TypeArguments="Font" Android="Default" x:Key="ButtonFontSize" />
+
+      <Color x:Key="LightGray">#d2d2d2</Color>
+
+      <Style x:Key="Page" TargetType="ContentPage">
+        <Setter Property="Padding">
+          <Setter.Value>
+            <v:OnPlatformEx x:TypeArguments="Thickness"
+                  Android="2"
+                  Windows="10"
+                  />
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style x:Key="Frame" TargetType="Frame">
+        <Setter Property="OutlineColor" Value="Accent"/>
+      </Style>
+
+      <Style x:Key="StaticFrame" TargetType="Frame">
+        <Setter Property="OutlineColor" Value="Gray"/>
+      </Style>
+
+      <Style x:Key="TimePicker" TargetType="TimePicker">
+        <Setter Property="BackgroundColor" Value="#00BCF2"/>
+      </Style>
+
+      <Style x:Key="DatePicker" TargetType="DatePicker">
+        <Setter Property="BackgroundColor" Value="#00BCF2"/>
+      </Style>
+
+      <Style x:Key="TopButton" TargetType="Button">
+        <Setter Property="Font" Value="{StaticResource ButtonFontSize}" />
+      </Style>
+
+      <Style x:Key="CmdButton" TargetType="Button">
+        <Setter Property="Font" Value="{StaticResource ButtonFontSize}" />
+      </Style>
+
+    </ResourceDictionary>
+  </Application.Resources>
+
+</Application>
