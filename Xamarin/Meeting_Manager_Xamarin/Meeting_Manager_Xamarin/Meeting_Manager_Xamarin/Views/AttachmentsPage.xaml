@@ -27,8 +27,7 @@ See LICENSE in the project root for license information. -->
 
       <Frame Style="{StaticResource Frame}" Padding="2">
         <ListView
-          ItemsSource="{Binding Items}"
-          SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+          ItemsSource="{Binding Items}"          
         >
 
           <ListView.ItemTemplate>

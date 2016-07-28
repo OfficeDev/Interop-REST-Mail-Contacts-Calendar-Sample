@@ -19,10 +19,9 @@ namespace Meeting_Manager_Xamarin.ViewModels
 
         private ObservableCollection<Attendee> _attendees;
         private string _dateTimeDescription;
-        private bool _isOrganizer;
 
         private Meeting _meeting;
-        private List<FileAttachment> _attachments;
+        private IEnumerable<FileAttachment> _attachments;
 
         public Command EditCommand => new Command(EditMeeting);
         public Command ReplyCommand => new Command(SendReply);
@@ -39,12 +38,6 @@ namespace Meeting_Manager_Xamarin.ViewModels
         {
             get { return _meeting; }
             private set { SetProperty(ref _meeting, value); }
-        }
-
-        public bool IsOrganizer
-        {
-            get { return _isOrganizer; }
-            private set { SetProperty(ref _isOrganizer, value); }
         }
 
         public string Location
@@ -96,8 +89,7 @@ namespace Meeting_Manager_Xamarin.ViewModels
 
                 using (new Loading(this))
                 {
-                    var list = await GraphService.GetEventAttachments(Meeting.Id, 0, 100);
-                    _attachments = new List<FileAttachment>(list);
+                    _attachments = await GraphService.GetEventAttachments(Meeting.Id, 0, 100);
                     OnPropertyChanged(() => HasAttachments);
                 }
             }
@@ -114,7 +106,6 @@ namespace Meeting_Manager_Xamarin.ViewModels
             DateTimeDescription = BuildDateTimeDescription(_meeting);
 
             Attendees = new ObservableCollection<Attendee>(_meeting.Attendees);
-            IsOrganizer = _meeting.IsOrganizer;
         }
 
         private string BuildDateTimeDescription(Meeting meeting)
@@ -299,7 +290,7 @@ namespace Meeting_Manager_Xamarin.ViewModels
 
         private async void ShowAttachments()
         {
-            await UI.NavigateTo("Attachments", Tuple.Create(_attachments, Meeting.Id));
+            await NavigateToAttachments(_attachments, Meeting);
         }
 
         private async Task PromptAcceptOrDecline(string action)

@@ -23,7 +23,7 @@ namespace Meeting_Manager_Xamarin.ViewModels
             Subscribe<Room>(RoomSelected);
             Subscribe<Contact>(ContactSelected);
             Subscribe<Meeting.EventRecurrence>(RecurrenceUpdated);
-            Subscribe<DriveItem>(FileSelected);
+            Subscribe<DriveItem>(AttachmentSelected);
             Subscribe<FileAttachment>(AttachmentDeleted);
             Subscribe<MeetingTimeCandidate>(TimeSlotSelected);
         }
@@ -263,8 +263,8 @@ namespace Meeting_Manager_Xamarin.ViewModels
 
                 using (new Loading(this))
                 {
-                    var list = await GraphService.GetEventAttachments(_meeting.Id, 0, 100);
-                    _attachments = new List<FileAttachment>(list);
+                    _attachments = (await GraphService.GetEventAttachments(_meeting.Id, 0, 100))
+                                    .ToList();
                     OnPropertyChanged(() => HasAttachments);
                 }
             }
@@ -415,7 +415,7 @@ namespace Meeting_Manager_Xamarin.ViewModels
             OnPropertyChanged(() => HasAttachments);
         }
 
-        private async void FileSelected(object sender, DriveItem driveItem)
+        private async void AttachmentSelected(object sender, DriveItem driveItem)
         {
             using (new Loading(this))
             {
@@ -562,7 +562,7 @@ namespace Meeting_Manager_Xamarin.ViewModels
 
         private async void ShowAttachments()
         {
-            await UI.NavigateTo("Attachments", Tuple.Create(_attachments, Meeting.Id));
+            await NavigateToAttachments(_attachments, Meeting);
         }
 
         private async void SendEmail()

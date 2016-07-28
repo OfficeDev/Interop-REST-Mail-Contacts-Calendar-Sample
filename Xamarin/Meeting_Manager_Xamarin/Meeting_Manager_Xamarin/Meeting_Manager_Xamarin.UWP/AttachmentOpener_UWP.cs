@@ -1,10 +1,9 @@
-﻿using Meeting_Manager_Xamarin.Models;
+﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+//See LICENSE in the project root for license information.
+
+using Meeting_Manager_Xamarin.Models;
 using Meeting_Manager_Xamarin.UWP;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Popups;
@@ -25,15 +24,7 @@ namespace Meeting_Manager_Xamarin.UWP
                 var newFile = await storageFolder.CreateFileAsync(attachment.Name, CreationCollisionOption.ReplaceExisting);
 
                 await FileIO.WriteBytesAsync(newFile, attachment.ContentBytes);
-#if false
-                var files = await storageFolder.GetFilesAsync();
 
-                foreach (var f in files)
-                {
-                    var x = f.DisplayName;
-                    Debug.WriteLine("file=" + x);
-                }
-#endif
                 if (!await Windows.System.Launcher.LaunchFileAsync(newFile))
                 {
                     await MessageDialog($"Couldn't start application for {attachment.Name}");

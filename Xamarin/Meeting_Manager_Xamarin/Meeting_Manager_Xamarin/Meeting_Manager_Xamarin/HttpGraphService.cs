@@ -364,9 +364,7 @@ namespace Meeting_Manager_Xamarin
         {
             string uri = EventsFolder + eventId + "/attachments";
 
-            var list = await GetHttpHelper().GetItemsAsync<FileAttachment>(uri);
-
-            return list;
+            return await GetHttpHelper().GetItemsAsync<FileAttachment>(uri);
         }
 
         public async Task DeleteEventAttachment(string eventId, string attachmentId)

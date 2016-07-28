@@ -12,7 +12,6 @@ namespace Meeting_Manager_Xamarin.Models
 
         public string Id { get; set; }
         public string Name { get; set; }
-        public Int32? Size { get; set; }
         public string ContentType { get; set; }
         public string ContentLocation { get; set; }
         public byte[] ContentBytes { get; set; }

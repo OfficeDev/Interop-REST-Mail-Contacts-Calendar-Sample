@@ -54,6 +54,11 @@ namespace Meeting_Manager_Xamarin.ViewModels
             await NavigateToEmail(meeting, OData.ReplyAll, GetString("RunningLate"));
         }
 
+        protected async Task NavigateToAttachments(IEnumerable<FileAttachment> attachments, Meeting meeting)
+        {
+            await UI.NavigateTo("Attachments", Tuple.Create(attachments, meeting.Id, meeting.IsOrganizer));
+        }
+
         protected static string GetString(string id)
         {
             return ResMan.GetString(id);

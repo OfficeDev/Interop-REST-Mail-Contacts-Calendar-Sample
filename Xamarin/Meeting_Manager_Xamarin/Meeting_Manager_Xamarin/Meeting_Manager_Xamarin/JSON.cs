@@ -9,17 +9,22 @@ namespace Meeting_Manager_Xamarin
     {
         internal static string Serialize(object obj)
         {
-            return JsonConvert.SerializeObject(obj, new JsonSerializerSettings { DateTimeZoneHandling = DateTimeZoneHandling.Utc });
+            return JsonConvert.SerializeObject(obj, Settings());
         }
 
         internal static string Serialize(object obj, Formatting format)
         {
-            return JsonConvert.SerializeObject(obj, format, new JsonSerializerSettings { DateTimeZoneHandling = DateTimeZoneHandling.Utc });
+            return JsonConvert.SerializeObject(obj, format, Settings());
         }
 
         internal static T Deserialize<T>(object parameter)
         {
-            return JsonConvert.DeserializeObject<T>((string)parameter, new JsonSerializerSettings { DateTimeZoneHandling = DateTimeZoneHandling.Utc });
+            return JsonConvert.DeserializeObject<T>((string)parameter, Settings());
+        }
+
+        private static JsonSerializerSettings Settings()
+        {
+            return new JsonSerializerSettings { DateTimeZoneHandling = DateTimeZoneHandling.Utc };
         }
     }
 }
