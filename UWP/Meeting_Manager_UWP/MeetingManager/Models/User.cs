@@ -18,6 +18,9 @@ namespace MeetingManager.Models
             }
             return UserPrincipalName;
         }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public string Name => $"{DisplayName} ({UserPrincipalName})";
     }
 
     public class Room : User { }

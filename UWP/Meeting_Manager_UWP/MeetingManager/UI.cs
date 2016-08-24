@@ -8,44 +8,34 @@ using System;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
+using Windows.Storage;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.Storage.Streams;
 
 namespace MeetingManager
 {
-    internal class UI
+    internal static class UI
     {
-        internal static string Serialize(object obj)
-        {
-            return JsonConvert.SerializeObject(obj);
-        }
-
-        internal static T Deserialize<T>(object parameter)
-        {
-            return JsonConvert.DeserializeObject<T>((string)parameter);
-        }
+        private static ContentDialog CurrentDialogInstance;
 
         internal static void GoBack()
         {
             App.Me.NavigationService.GoBack();
         }
 
-        internal static TEvent GetEvent<TEvent>() where TEvent : EventBase, new()
-        {
-            return App.Me.EventAggregator.GetEvent<TEvent>();
-        }
-
         internal static void Subscribe<T>(Action<T> action)
         {
-            App.Me.EventAggregator.GetEvent<Prism.Events.PubSubEvent<T>>().Subscribe(action);
+            App.Me.EventAggregator.GetEvent<PubSubEvent<T>>().Subscribe(action);
         }
 
         internal static void Unsubscribe<T>(Action<T> action)
         {
-            App.Me.EventAggregator.GetEvent<Prism.Events.PubSubEvent<T>>().Unsubscribe(action);
+            App.Me.EventAggregator.GetEvent<PubSubEvent<T>>().Unsubscribe(action);
         }
 
         internal static void Publish<T>(T data)
         {
-            App.Me.EventAggregator.GetEvent<Prism.Events.PubSubEvent<T>>().Publish(data);
+            App.Me.EventAggregator.GetEvent<PubSubEvent<T>>().Publish(data);
         }
 
         internal static async Task<bool> YesNoDialog(string message)
@@ -87,7 +77,7 @@ namespace MeetingManager
             await messageDialog.ShowAsync();
         }
 
-        internal static async Task NavigateTo(string pageToken, object parameter = null)
+        internal static async void NavigateTo(string pageToken, object parameter = null)
         {
             var viewNameSpace = App.Me.GetType().Namespace + ".Views";
             var dialogTypeName = viewNameSpace + "." + pageToken + "Dialog";
@@ -97,6 +87,7 @@ namespace MeetingManager
             if (dialogType != null)
             {
                 var dlg = Activator.CreateInstance(dialogType) as ContentDialog;
+                CurrentDialogInstance = dlg;
 
                 Publish(new InitDialog { Payload = UI.SerializeParameter(parameter) });
                 await dlg.ShowAsync();
@@ -104,6 +95,61 @@ namespace MeetingManager
             else 
             {
                 UI.NavigateToPage(pageToken, parameter);
+            }
+        }
+
+        internal static void CloseDialog()
+        {
+            CurrentDialogInstance?.Hide();
+            CurrentDialogInstance = null;
+        }
+
+        internal static async Task OpenAttachment(FileAttachment attachment)
+        {
+            var storageFolder = ApplicationData.Current.LocalFolder;
+
+            try
+            {
+                var newFile = await storageFolder.CreateFileAsync(attachment.Name, CreationCollisionOption.ReplaceExisting);
+
+                await FileIO.WriteBytesAsync(newFile, attachment.ContentBytes);
+
+                if (!await Windows.System.Launcher.LaunchFileAsync(newFile))
+                {
+                    await UI.MessageDialog($"Couldn't start application for {attachment.Name}");
+                }
+            }
+            catch (Exception ex)
+            {
+                await UI.MessageDialog($"Failure: {ex.Message}");
+            }
+        }
+
+        internal static async Task<BitmapImage> BytesToPhoto(byte[] data)
+        {
+            if (data == null) return null;
+
+            using (var ms = new InMemoryRandomAccessStream())
+            {
+                using (var writer = new DataWriter(ms.GetOutputStreamAt(0)))
+                {
+                    writer.WriteBytes(data);
+                    await writer.StoreAsync();
+                }
+
+                var image = new BitmapImage();
+
+                try
+                {
+                    await image.SetSourceAsync(ms);
+                    return image;
+                }
+                catch
+                {
+                    // in case we received invalid data
+                }
+
+                return null;
             }
         }
 

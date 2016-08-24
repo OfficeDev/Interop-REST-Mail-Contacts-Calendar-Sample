@@ -18,6 +18,7 @@ namespace MeetingManager.Models
         [JsonIgnore]
         public BitmapImage Photo { get; set; }
 
+        [JsonIgnore]
         public string Name => ToString();
 
         public event PropertyChangedEventHandler PropertyChanged;

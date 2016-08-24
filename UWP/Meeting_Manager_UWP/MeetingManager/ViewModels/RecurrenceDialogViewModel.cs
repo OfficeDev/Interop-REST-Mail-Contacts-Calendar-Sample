@@ -2,7 +2,6 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
-using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -65,9 +64,9 @@ namespace MeetingManager.ViewModels
             OData.First, OData.Second, OData.Third, OData.Fourth, OData.Last
         };
 
-        public DelegateCommand SubmitCommand => new DelegateCommand(SubmitRecurrence);
+        public Command SubmitCommand => new Command(SubmitRecurrence);
 
-        public DelegateCommand DayClickedCommand => new DelegateCommand(() => OnPropertyChanged(() => CanSubmit));
+        public Command DayClickedCommand => new Command(() => OnPropertyChanged(() => CanSubmit));
 
         public bool CanSubmit => (this.Type != TypeWeekly) || _weekDays.Where(x => x).Any();
 
@@ -331,11 +330,9 @@ namespace MeetingManager.ViewModels
             set { SetProperty(ref _yearlyVisibility, value); }
         }
 
-        protected override void OnInitialize(InitDialog parameter)
+        protected override void OnNavigatedTo(object parameter)
         {
-            base.OnInitialize(parameter);
-
-            _recurrence = UI.Deserialize<Meeting.EventRecurrence>(parameter.Payload);
+            _recurrence = JSON.Deserialize<Meeting.EventRecurrence>(parameter);
             PopulatePatternViews();
 
             switch (_recurrence.Range.Type.ToLower())
@@ -390,7 +387,6 @@ namespace MeetingManager.ViewModels
             _everyNDays = true;
             _absoluteMonthly = true;
             _absoluteYearly = true;
-
 
             switch (patternType.ToLower())
             {

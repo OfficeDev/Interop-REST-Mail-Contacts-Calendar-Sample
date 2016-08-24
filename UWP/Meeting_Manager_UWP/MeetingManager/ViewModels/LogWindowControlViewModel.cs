@@ -2,7 +2,6 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
-using Prism.Commands;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -10,11 +9,10 @@ using System.Linq;
 using System.Text;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Core;
-using Windows.UI.Xaml;
 
 namespace MeetingManager.ViewModels
 {
-    class LogWindowControlViewModel : ViewModel
+    class LogWindowControlViewModel : BaseViewModel
     {
         private CoreDispatcher _dispatcher;
         private static int _jsonWindowId;
@@ -30,13 +28,13 @@ namespace MeetingManager.ViewModels
 
             LogEntries = new ObservableCollection<EventData>();
 
-            IsMainWindow = _dispatcher.Equals((Application.Current as App).MainDispatcher);
+            IsMainWindow = _dispatcher.Equals(App.Me.MainDispatcher);
         }
 
-        public DelegateCommand ItemToggleCommand => new DelegateCommand(ToggleItem);
-        public DelegateCommand CopySelectedCommand => new DelegateCommand(CopySelectedItem);
-        public DelegateCommand CopyAllCommand => new DelegateCommand(CopyAllItems);
-        public DelegateCommand ShowJsonCommand => new DelegateCommand(ShowJson);
+        public Command ItemToggleCommand => new Command(ToggleItem);
+        public Command CopySelectedCommand => new Command(CopySelectedItem);
+        public Command CopyAllCommand => new Command(CopyAllItems);
+        public Command ShowJsonCommand => new Command(ShowJson);
 
         public ObservableCollection<EventData> LogEntries { get; }
         public EventData SelectedItem { get; set; }

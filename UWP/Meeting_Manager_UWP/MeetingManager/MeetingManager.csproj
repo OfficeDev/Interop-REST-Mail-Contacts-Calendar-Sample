@@ -101,11 +101,13 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AuthenticationHelper.cs" />
+    <Compile Include="AuthenticationHelperMSAL.cs" />
     <Compile Include="Converters\BoolToCollapsed.cs" />
     <Compile Include="Converters\BoolToVisible.cs" />
     <Compile Include="Converters\ColorParser.cs" />
     <Compile Include="Converters\IndexToBackground.cs" />
     <Compile Include="Converters\BoolToBackground.cs" />
+    <Compile Include="Converters\IntToBool.cs" />
     <Compile Include="Converters\Negation.cs" />
     <Compile Include="Converters\DateFormat.cs" />
     <Compile Include="DateTimeUtils.cs" />
@@ -115,9 +117,14 @@
     <Compile Include="HttpGraphService.cs" />
     <Compile Include="IAuthenticationService.cs" />
     <Compile Include="IGraphService.cs" />
+    <Compile Include="JSON.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="Models\Command.cs" />
+    <Compile Include="Models\DriveItem.cs" />
+    <Compile Include="Models\FileAttachment.cs" />
     <Compile Include="Models\HttpEventData.cs" />
     <Compile Include="Models\LoginEventData.cs" />
+    <Compile Include="Models\NavigationArgs.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Attendee.cs" />
     <Compile Include="Models\Contact.cs" />
@@ -137,6 +144,7 @@
     <Compile Include="UI.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ViewModels\AcceptDeclineDialogViewModel.cs" />
+    <Compile Include="ViewModels\AttachmentsDialogViewModel.cs" />
     <Compile Include="ViewModels\CalendarPageViewModel.cs" />
     <Compile Include="ViewModels\ConnectPageViewModel.cs" />
     <Compile Include="ViewModels\ContactsDialogViewModel.cs" />
@@ -145,6 +153,7 @@
     <Compile Include="ViewModels\EditPageViewModel.cs" />
     <Compile Include="ViewModels\EmailPageViewModel.cs" />
     <Compile Include="Models\InitDialog.cs" />
+    <Compile Include="ViewModels\FilesDialogViewModel.cs" />
     <Compile Include="ViewModels\ITransientViewModel.cs" />
     <Compile Include="ViewModels\JsonPageViewModel.cs" />
     <Compile Include="ViewModels\Loading.cs" />
@@ -153,15 +162,18 @@
     <Compile Include="ViewModels\RecurrenceDialogViewModel.cs" />
     <Compile Include="ViewModels\TimeSlotsDialogViewModel.cs" />
     <Compile Include="ViewModels\UsersDialogViewModel.cs" />
-    <Compile Include="ViewModels\ViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="Views\AcceptDeclineDialog.xaml.cs">
       <DependentUpon>AcceptDeclineDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AttachedProperties.cs" />
-    <Compile Include="Views\CalendarDatePicker.cs" />
+    <Compile Include="Views\AttachmentsDialog.xaml.cs">
+      <DependentUpon>AttachmentsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CalendarPage.xaml.cs">
       <DependentUpon>CalendarPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CalendarView.cs" />
     <Compile Include="Views\ConnectPage.xaml.cs">
       <DependentUpon>ConnectPage.xaml</DependentUpon>
     </Compile>
@@ -177,6 +189,9 @@
     <Compile Include="Views\EmailPage.xaml.cs">
       <DependentUpon>EmailPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\FilesDialog.xaml.cs">
+      <DependentUpon>FilesDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\JsonPage.xaml.cs">
       <DependentUpon>JsonPage.xaml</DependentUpon>
     </Compile>
@@ -189,6 +204,7 @@
     <Compile Include="Views\LogWindowControl.xaml.cs">
       <DependentUpon>LogWindowControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\WebNavigationBehavior.cs" />
     <Compile Include="Views\NavigationAwarePage.cs" />
     <Compile Include="Views\OpenMenuFlyoutAction.cs" />
     <Compile Include="Views\RecurrenceDialog.xaml.cs">
@@ -227,6 +243,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AttachmentsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CalendarPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -248,6 +268,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\EmailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FilesDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -281,11 +305,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
-      <Name>Behaviors SDK %28XAML%29</Name>
-    </SDKReference>
-  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

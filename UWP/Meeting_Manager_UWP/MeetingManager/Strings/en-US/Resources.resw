@@ -258,4 +258,34 @@
   <data name="StartFormat" xml:space="preserve">
     <value>{0:hh:mm tt}</value>
   </data>
+  <data name="EditResponseOption" xml:space="preserve">
+    <value>Edit response before sending</value>
+  </data>
+  <data name="ForwardOption" xml:space="preserve">
+    <value>Forward</value>
+  </data>
+  <data name="NoResponseOption" xml:space="preserve">
+    <value>Don't send response</value>
+  </data>
+  <data name="ReplyAllOption" xml:space="preserve">
+    <value>Reply All</value>
+  </data>
+  <data name="ReplyOption" xml:space="preserve">
+    <value>Reply</value>
+  </data>
+  <data name="SendResponseOption" xml:space="preserve">
+    <value>Send response now</value>
+  </data>
+  <data name="NoFreeSlots" xml:space="preserve">
+    <value>No free slots are found</value>
+  </data>
+  <data name="ForwardTitle" xml:space="preserve">
+    <value>Forward</value>
+  </data>
+  <data name="ReplyAllTitle" xml:space="preserve">
+    <value>Reply All</value>
+  </data>
+  <data name="ReplyTitle" xml:space="preserve">
+    <value>Reply</value>
+  </data>
 </root>

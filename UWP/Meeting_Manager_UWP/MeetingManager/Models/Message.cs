@@ -1,6 +1,7 @@
 ﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
 //See LICENSE in the project root for license information.
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -22,6 +23,9 @@ namespace MeetingManager.Models
         public class Recipient
         {
             public EmailAddress EmailAddress { get; set; }
+
+            [JsonIgnore]
+            public string Name => ToString();
 
             public override string ToString()
             {

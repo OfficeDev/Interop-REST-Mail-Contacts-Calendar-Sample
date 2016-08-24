@@ -35,11 +35,11 @@ See LICENSE in the project root for license information. -->
 
                     <FlyoutBase.AttachedFlyout>
                         <MenuFlyout>
-                            <MenuFlyoutItem Text="Delete" IsEnabled="{Binding IsOrganizer, Converter={StaticResource Negation}}" Command="{Binding DataContext.DeleteRecipientCommand, ElementName=ThisPage}" CommandParameter="{Binding}"/>
+                            <MenuFlyoutItem Text="Delete" Command="{Binding DataContext.DeleteRecipientCommand, ElementName=ThisPage}" CommandParameter="{Binding}"/>
                         </MenuFlyout>
                     </FlyoutBase.AttachedFlyout>
 
-                    <TextBlock Text="{Binding Path=EmailAddress}"/>
+                    <TextBlock Text="{Binding EmailAddress}"/>
                 </Grid>
             </DataTemplate>
         </Grid.Resources>
@@ -124,8 +124,8 @@ See LICENSE in the project root for license information. -->
                         HorizontalAlignment="Stretch" Margin="0,0,0,1">
                 <Button.Flyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Text="Add User" Command="{Binding AddUserRecipientCommand}"/>
-                        <MenuFlyoutItem Text="Add Contact" Command="{Binding AddContactRecipientCommand}"/>
+                        <MenuFlyoutItem Text="Add User" Command="{Binding AddUserCommand}"/>
+                        <MenuFlyoutItem Text="Add Contact" Command="{Binding AddContactCommand}"/>
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>

@@ -2,106 +2,84 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
-using Prism.Commands;
-using Prism.Windows.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 namespace MeetingManager.ViewModels
 {
-    public class CalendarPageViewModel : ViewModel
+    public class CalendarPageViewModel : BaseViewModel
     {
+        private DateTimeOffset _selectedDate = DateTimeOffset.Now.Date;
         private ObservableCollection<Meeting> _meetings;
-        private Meeting _selectedMeeting;
-        private DateTimeOffset _selectedDate;
 
         public CalendarPageViewModel()
         {
+            UI.Subscribe<Meeting>((meeting) => GetEventsForSelectedDate());
         }
 
-        public DelegateCommand RefreshCommand => new DelegateCommand(RefreshMeetings);
-        public DelegateCommand CreateCommand => new DelegateCommand(CreateMeeting);
-        public DelegateCommand<Meeting> CancelInstanceCommand => new DelegateCommand<Meeting>(CancelMeetingInstance);
-        public DelegateCommand<Meeting> ViewInstanceCommand => new DelegateCommand<Meeting>(ViewMeetingInstance);
-        public DelegateCommand<Meeting> CancelSeriesCommand => new DelegateCommand<Meeting>(CancelMeetingSeries);
-        public DelegateCommand<Meeting> ViewSeriesCommand => new DelegateCommand<Meeting>(ViewMeetingSeries);
-        public DelegateCommand<Meeting> LateCommand => new DelegateCommand<Meeting>(SendLate);
-        public DelegateCommand<CalendarViewSelectedDatesChangedEventArgs> DatesChangedCommand =>
-                                                new DelegateCommand<CalendarViewSelectedDatesChangedEventArgs>(SelectedDatesChanged);
-        public DelegateCommand DoubleTappedCommand => new DelegateCommand(DoubleTapped);
+        public Command RefreshCommand => new Command(GetEventsForSelectedDate);
+        public Command CreateCommand => new Command(() => UI.NavigateTo("Edit"));
+        public Command<Meeting> CancelInstanceCommand => new Command<Meeting>(CancelMeetingInstance);
+        public Command<Meeting> ViewInstanceCommand => new Command<Meeting>((meeting) => NavigateToEditOrDetails(meeting));
+        public Command<Meeting> CancelSeriesCommand => new Command<Meeting>(CancelMeetingSeries);
+        public Command<Meeting> ViewSeriesCommand => new Command<Meeting>(ViewMeetingSeries);
+        public Command<Meeting> LateCommand => new Command<Meeting>((meeting) => SendRunningLate(meeting));
+        public Command SelectItemCommand => new Command(async () => NavigateToEditOrDetails(await GetMeeting()));
 
         public ObservableCollection<Meeting> Meetings
         {
             get { return _meetings; }
-            private set { SetProperty(ref _meetings, value); }
-        }
-
-        public Meeting SelectedMeeting
-        {
-            get { return _selectedMeeting; }
-            set { SetProperty(ref _selectedMeeting, value); }
+            private set { SetCollectionProperty(ref _meetings, value); }
         }
 
         public DateTimeOffset SelectedDate
         {
             get { return _selectedDate; }
-            private set { SetProperty(ref _selectedDate, value); }
-        }
-
-        public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
-        {
-            base.OnNavigatedTo(e, viewModelState);
-
-            if (e.NavigationMode == NavigationMode.New)
+            set
             {
-                SelectedDate = DateTimeOffset.Now.Date;
+                SetProperty(ref _selectedDate, value);
+                GetEventsForSelectedDate();
             }
-
-            await GetEventsForSelectedDate();
         }
 
-        private async void RefreshMeetings()
+        public Meeting SelectedMeeting { get; set; }
+
+        protected override void OnNavigatedTo(object parameter)
         {
-            await GetEventsForSelectedDate();
+            GetEventsForSelectedDate();
         }
 
         private async void CancelMeetingInstance(Meeting meeting)
         {
-            if (await ConfirmCancellation(meeting))
+            if (await ConfirmCancellation(meeting, isInstance: true))
             {
-                await CancelMeeting(meeting.Id);
+                CancelMeeting(meeting.Id);
             }
         }
 
         private async void CancelMeetingSeries(Meeting meeting)
         {
-            if (await ConfirmCancellation(meeting))
+            if (await ConfirmCancellation(meeting, isInstance: false))
             {
                 if (meeting.SeriesMasterId != null)
                 {
                     meeting = await GetEventById(meeting.SeriesMasterId);
                 }
 
-                await CancelMeeting(meeting.Id);
+                CancelMeeting(meeting.Id);
             }
         }
 
-        private async Task<bool> ConfirmCancellation(Meeting meeting)
+        private async Task<bool> ConfirmCancellation(Meeting meeting, bool isInstance)
         {
             string format;
 
             if (meeting.IsSerial)
             {
-                format = GetString("CancelSeries");
-            }
-            else if (meeting.Type.EqualsCaseInsensitive(OData.Occurrence))
-            {
-                format = GetString("CancelOccurence");
+                format = GetString(isInstance ? "CancelOccurence" : "CancelSeries");
             }
             else
             {
@@ -111,27 +89,22 @@ namespace MeetingManager.ViewModels
             return await UI.YesNoDialog(string.Format(format, meeting.Subject));
         }
 
-        private async Task CancelMeeting(string id)
+        private async void CancelMeeting(string id)
         {
-            await OfficeService.CancelEvent(id);
-            await GetEventsForSelectedDate();
+            await GraphService.CancelEvent(id);
+
+            int pos = Meetings.IndexOf(x => x.Id == id);
+            Meetings.RemoveAt(pos);
+
+            // Make sure we have correct indexes
+            GetEventsForSelectedDate(); 
         }
 
-        private async void CreateMeeting()
-        {
-            await UI.NavigateTo("Edit");
-        }
-
-        private void ViewMeetingInstance(Meeting meeting)
-        {
-            NavigateToEditOrDetails(meeting);
-        }
-
-        private async void NavigateToEditOrDetails(Meeting meeting)
+        private void NavigateToEditOrDetails(Meeting meeting)
         {
             if (meeting != null)
             {
-                await UI.NavigateTo(meeting.IsOrganizer ? "Edit" : "Details", meeting);
+                UI.NavigateTo(meeting.IsOrganizer ? "Edit" : "Details", meeting);
             }
         }
 
@@ -145,16 +118,11 @@ namespace MeetingManager.ViewModels
             NavigateToEditOrDetails(meeting);
         }
 
-        private async void DoubleTapped()
-        {
-            NavigateToEditOrDetails(await GetMeeting());
-        }
-
         private async Task<Meeting> GetMeeting()
         {
             var meeting = SelectedMeeting;
 
-            if (meeting != null && meeting.SeriesMasterId != null)
+            if (meeting?.SeriesMasterId != null)
             {
                 meeting = await GetEventById(meeting.SeriesMasterId);
             }
@@ -162,51 +130,37 @@ namespace MeetingManager.ViewModels
             return meeting;
         }
 
-        private async void SelectedDatesChanged(CalendarViewSelectedDatesChangedEventArgs args)
-        {
-            var added = args.AddedDates;
-
-            if (added.Count > 0)
-            {
-                SelectedDate = added[0].Date;
-                await GetEventsForSelectedDate();
-            }
-        }
-
-        private async void SendLate(Meeting meeting)
-        {
-            await SendRunningLate(meeting);
-        }
-
         private async Task<Meeting> GetEventById(string eventId)
         {
             using (new Loading(this))
             {
-                return await OfficeService.GetEvent(eventId);
+                return await GraphService.GetEvent(eventId);
             }
         }
 
-        private async Task GetEventsForSelectedDate()
+        private async void GetEventsForSelectedDate()
         {
+            IEnumerable<Meeting> events;
+
             using (new Loading(this))
             {
-                var events = await OfficeService.GetCalendarEvents(
+                events = await GraphService.GetCalendarEvents(
                             SelectedDate - TimeSpan.FromDays(1),
                             SelectedDate + TimeSpan.FromDays(2));
-
-                var selectedDateEvents = events
-                    .Where(x =>
-                        x.IsAllDay ?
-                        x.Start.DateTime.Date.CompareTo(SelectedDate.Date) <= 0 && x.End.DateTime.Date.CompareTo(SelectedDate.Date) > 0 :
-                        x.Start.DateTime.ToLocalTime().Date.CompareTo(SelectedDate.Date) == 0)
-                    .ToList();
-
-                // We use Index property just for visualization
-                int index = 0;
-                selectedDateEvents.ForEach(ev => ev.Index = index++);
-
-                Meetings = new ObservableCollection<Meeting>(selectedDateEvents);
             }
+
+            var selectedDateEvents = events
+                .Where(x =>
+                    x.IsAllDay ?
+                    x.Start.DateTime.Date.CompareTo(SelectedDate.Date) <= 0 && x.End.DateTime.Date.CompareTo(SelectedDate.Date) > 0 :
+                    x.Start.DateTime.ToLocalTime().Date.CompareTo(SelectedDate.Date) == 0)
+                .ToList();
+
+            // We use Index property just for visualization
+            int index = 0;
+            selectedDateEvents.ForEach(ev => ev.Index = index++);
+
+            Meetings = new ObservableCollection<Meeting>(selectedDateEvents);
         }
     }
 }

@@ -43,7 +43,13 @@ namespace MeetingManager.Models
         }
 
         [JsonIgnore]
-        public bool IsOrganizer { get; set; }
+        public string Name => ToString();
+
+        [JsonIgnore]
+        public bool IsOrganizer => EmailAddress.Address.EqualsCaseInsensitive(OrganizerAddress);
+
+        [JsonIgnore]
+        public string OrganizerAddress { get; set; }
 
         public override string ToString()
         {

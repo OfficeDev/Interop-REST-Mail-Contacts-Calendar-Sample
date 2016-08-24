@@ -33,13 +33,13 @@ See LICENSE in the project root for license information. -->
             <DataTemplate x:Key="AttendeeTemplate">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Column="0" Text="{Binding Path=EmailAddress}" TextWrapping="Wrap"/>
-<!--
                     <TextBlock Grid.Column="1" Text="{Binding Path=ResponseStatus}"/>
--->
+
                 </Grid>
             </DataTemplate>
         </Grid.Resources>
@@ -53,9 +53,9 @@ See LICENSE in the project root for license information. -->
             </Grid.ColumnDefinitions>
             <ProgressBar IsIndeterminate="True"
                 Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisible}}"/>
-            <StackPanel Grid.Column="1" Orientation="Horizontal">
 
-                <Button Content="Email" Style="{StaticResource TopButton}" IsEnabled="{Binding HasAttendees}">
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Content="Email" Style="{StaticResource TopButton}">
                     <Button.Flyout>
                         <MenuFlyout>
                             <MenuFlyoutItem Text="Reply" Command="{Binding ReplyCommand}"/>
@@ -65,7 +65,7 @@ See LICENSE in the project root for license information. -->
                     </Button.Flyout>
                 </Button>
                 <Button Content="I'm running late" Style="{StaticResource TopButton}" Command="{Binding LateCommand}"/>
-                <Button Content="Accept" Style="{StaticResource TopButton}" Visibility="{Binding IsOrganizer, Converter={StaticResource BoolToCollapsed}}">
+                <Button Content="Accept" Style="{StaticResource TopButton}">
                     <Button.Flyout>
                         <MenuFlyout>
                             <MenuFlyoutItem Text="Edit response before sending" Command="{Binding AcceptCommand}" CommandParameter="edit"/>
@@ -74,7 +74,7 @@ See LICENSE in the project root for license information. -->
                         </MenuFlyout>
                     </Button.Flyout>
                 </Button>
-                <Button Content="Decline" Style="{StaticResource TopButton}" Visibility="{Binding IsOrganizer, Converter={StaticResource BoolToCollapsed}}">
+                <Button Content="Decline" Style="{StaticResource TopButton}">
                     <Button.Flyout>
                         <MenuFlyout>
                             <MenuFlyoutItem Text="Edit response before sending" Command="{Binding DeclineCommand}" CommandParameter="edit"/>
@@ -84,7 +84,7 @@ See LICENSE in the project root for license information. -->
                     </Button.Flyout>
                 </Button>
 
-                <Button Content="Tentative" Style="{StaticResource TopButton}" Visibility="{Binding IsOrganizer, Converter={StaticResource BoolToCollapsed}}">
+                <Button Content="Tentative" Style="{StaticResource TopButton}">
                     <Button.Flyout>
                         <MenuFlyout>
                             <MenuFlyoutItem Text="Edit response before sending" Command="{Binding TentativeCommand}" CommandParameter="edit"/>
@@ -101,17 +101,29 @@ See LICENSE in the project root for license information. -->
 
                 <TextBlock Text="Details" Style="{StaticResource SubTitle}"/>
 
+            </StackPanel>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+ 
                 <Border Style="{StaticResource StaticText}">
                     <TextBlock Text="{Binding Meeting.Subject}" Style="{StaticResource StaticTextBlock}"
                         FontSize="24"
                         />
                 </Border>
-            </StackPanel>
+
+                <Button Grid.Column="1" Content="Attachments" Style="{StaticResource CommandButton}" Command="{Binding ShowAttachmentsCommand}"
+                         IsEnabled="{Binding HasAttachments}"
+                         Margin="10,0,0,0"/>
+            </Grid>
 
             <StackPanel Style="{StaticResource ProfilePanel}" Margin="0,25,0,0">
                 <Border Style="{StaticResource StaticText}">
                     <TextBlock Text="{Binding Location}" Style="{StaticResource StaticTextBlock}"
-                    FontSize="18.667"/>
+                        FontSize="18.667"/>
                 </Border>
             </StackPanel>
 
@@ -130,10 +142,10 @@ See LICENSE in the project root for license information. -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="1" Visibility="{Binding IsContentText, Converter={StaticResource BoolToVisible}}">
+            <Border Grid.Row="1" Visibility="{Binding Meeting.IsContentText, Converter={StaticResource BoolToVisible}}">
                 <TextBox Text="{Binding Meeting.Body.Content, Mode=TwoWay}" PlaceholderText="Description"/>
             </Border>
-            <Border Grid.Row="1" Style="{StaticResource StaticText}" Visibility="{Binding IsContentText, Converter={StaticResource BoolToCollapsed}}"
+            <Border Grid.Row="1" Style="{StaticResource StaticText}" Visibility="{Binding Meeting.IsContentText, Converter={StaticResource BoolToCollapsed}}"
                     BorderBrush="Gray" BorderThickness="2"
                     >
                 <WebView local:AttachedProperties.Html="{Binding Meeting.Body.Content}"

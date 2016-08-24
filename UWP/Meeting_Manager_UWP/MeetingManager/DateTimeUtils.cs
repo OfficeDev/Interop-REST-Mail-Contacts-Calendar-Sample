@@ -225,16 +225,13 @@ namespace MeetingManager
 
         public static DateTime ToLocalTime(this ZonedDateTime dateTime)
         {
-            var tzSource = TimeZoneInfo.FindSystemTimeZoneById(dateTime.TimeZone);
-
-            return TimeZoneInfo.ConvertTime(dateTime.DateTime, tzSource, TimeZoneInfo.Local);
+            // We assume that ZonedDateTime is always in UTC
+            return TimeZoneInfo.ConvertTime(dateTime.DateTime, TimeZoneInfo.Utc, TimeZoneInfo.Local);
         }
 
-        public static DateTime FromLocalTime(this ZonedDateTime dateTime, DateTime localDateTime)
+        public static DateTime ToUtcTime(this DateTime localDateTime)
         {
-            var tzDestination = TimeZoneInfo.FindSystemTimeZoneById(dateTime.TimeZone);
-
-            return TimeZoneInfo.ConvertTime(localDateTime, TimeZoneInfo.Local, tzDestination);
+            return TimeZoneInfo.ConvertTime(localDateTime, TimeZoneInfo.Local, TimeZoneInfo.Utc);
         }
     }
 }

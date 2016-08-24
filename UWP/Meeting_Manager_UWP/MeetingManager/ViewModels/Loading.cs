@@ -7,9 +7,9 @@ namespace MeetingManager.ViewModels
 {
     public class Loading : IDisposable
     {
-        private readonly ViewModel _vm;
+        private readonly BaseViewModel _vm;
 
-        public Loading(ViewModel vm)
+        public Loading(BaseViewModel vm)
         {
             _vm = vm;
             vm.IsLoading = true;

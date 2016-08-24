@@ -2,34 +2,24 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
-using Prism.Commands;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace MeetingManager.ViewModels
 {
     class UsersDialogViewModel : DialogViewModel
     {
         private const int PageSize = 10;
-        private ObservableCollection<User> _users;
         private IUserPager _userPager;
-        private bool _hasNext;
-        private bool _hasPrev;
         private User _selectedUser;
-        private string _filter;
         private bool _getHumans;
 
-        public DelegateCommand FilterCommand => new DelegateCommand(FilterUsers);
-        public DelegateCommand NextCommand => new DelegateCommand(NextPage);
-        public DelegateCommand PrevCommand => new DelegateCommand(PrevPage);
-        public DelegateCommand DoubleTappedCommand => new DelegateCommand(DoubleTapped);
-        public DelegateCommand OkCommand => new DelegateCommand(OnOk);
+        public Command FilterCommand => new Command(() => GetFirstUsersPage());
+        public Command NextCommand => new Command(() => GetNextUsersPage(true));
+        public Command PrevCommand => new Command(() => GetNextUsersPage(false));
+        public Command ItemSelectedCommand => new Command(ItemSelected);
+        public Command OkCommand => new Command(OnOk);
 
-        public ObservableCollection<User> Users
-        {
-            get { return _users; }
-            private set { SetProperty(ref _users, value); }
-        }
+        public ObservableCollection<User> Users { get; private set; }
 
         public User SelectedUser
         {
@@ -43,59 +33,30 @@ namespace MeetingManager.ViewModels
 
         public string Title => GetString(_getHumans ? "SelectPerson" : "SelectRoom");
 
-        public string Filter
-        {
-            get { return _filter; }
-            set { SetProperty(ref _filter, value); }
-        }
+        public string Filter { get; set; }
 
-        public bool HasNext
-        {
-            get { return _hasNext; }
-            private set { SetProperty(ref _hasNext, value); }
-        }
+        public bool HasNext { get; private set; }
 
-        public bool HasPrev
-        {
-            get { return _hasPrev; }
-            private set { SetProperty(ref _hasPrev, value); }
-        }
+        public bool HasPrev { get; private set; }
 
         public bool HasSelected => SelectedUser != null;
 
-        protected override async void OnInitialize(InitDialog parameter)
+        protected override void OnNavigatedTo(object parameter)
         {
-            base.OnInitialize(parameter);
-
-            _getHumans = (bool) parameter.Payload;
+            _getHumans = (bool)parameter;
             OnPropertyChanged(() => Title);
 
-            await GetFirstUsersPage();
+            GetFirstUsersPage();
         }
 
-        private async Task GetFirstUsersPage()
+        private void GetFirstUsersPage()
         {
-            _userPager = OfficeService.GetUserPager(PageSize, Filter, _getHumans);
+            _userPager = GraphService.GetUserPager(PageSize, Filter, _getHumans);
 
-            await GetNextUsersPage(true);
+            GetNextUsersPage(true);
         }
 
-        private async void FilterUsers()
-        {
-            await GetFirstUsersPage();
-        }
-
-        private async void NextPage()
-        {
-            await GetNextUsersPage(true);
-        }
-
-        private async void PrevPage()
-        {
-            await GetNextUsersPage(false);
-        }
-
-        private async Task GetNextUsersPage(bool next)
+        private async void GetNextUsersPage(bool next)
         {
             using (new Loading(this))
             {
@@ -105,12 +66,16 @@ namespace MeetingManager.ViewModels
 
             HasNext = _userPager.HasNextPage;
             HasPrev = _userPager.HasPrevPage;
+
+            OnPropertyChanged(() => Users);
+            OnPropertyChanged(() => HasNext);
+            OnPropertyChanged(() => HasPrev);
         }
 
-
-        private void DoubleTapped()
+        private void ItemSelected()
         {
             OnOk();
+            GoBack();
         }
 
         private void OnOk()

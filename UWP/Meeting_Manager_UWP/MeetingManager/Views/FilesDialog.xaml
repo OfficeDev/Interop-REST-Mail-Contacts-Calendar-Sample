@@ -1,0 +1,81 @@
+﻿<ContentDialog
+    x:Class="MeetingManager.Views.FilesDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MeetingManager.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:prism="using:Prism.Windows.Mvvm"
+    prism:ViewModelLocator.AutoWireViewModel="True"    
+    mc:Ignorable="d"
+    Title="Select file to attach"
+    PrimaryButtonText="OK"
+    SecondaryButtonText="Cancel"
+    PrimaryButtonCommand="{Binding OkCommand}"
+    IsPrimaryButtonEnabled="{Binding HasFileSelected}"
+    x:Name="ThisPage"
+    >
+
+    <Grid Style="{StaticResource DialogGrid}">
+        <Grid.Resources>
+            <DataTemplate x:Key="ItemTemplate">
+
+                <Grid VerticalAlignment="Stretch" Background="{Binding Index, Converter={StaticResource IndexToBackground}, ConverterParameter=Beige:LightGray}">
+
+                    <i:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="RightTapped">
+                            <local:OpenMenuFlyoutAction/>
+                        </core:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <FlyoutBase.AttachedFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="View" Command="{Binding DataContext.ViewCommand, ElementName=ThisPage}" CommandParameter="{Binding}"/>
+                            <MenuFlyoutItem Text="Delete" Command="{Binding DataContext.DeleteCommand, ElementName=ThisPage}" CommandParameter="{Binding}"/>
+                        </MenuFlyout>
+                    </FlyoutBase.AttachedFlyout>
+
+                    <TextBlock Grid.Column="0" Padding="5,0,0,0" Text="{Binding Name}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
+
+        <ProgressRing IsActive="{Binding IsLoading}"
+                      Width="100"
+                      Height="100"/>
+
+        <StackPanel>
+            <Button Content="Up" Command="{Binding UpCommand}" HorizontalAlignment="Right" 
+                        IsEnabled="{Binding IsRootFolder, Converter={StaticResource Negation}}"
+                        Margin="0,0,0,10"
+                        />
+
+            <Border BorderBrush="Gray" BorderThickness="2" MinWidth="400">
+                <ListView
+                    MinHeight="500" MaxHeight="500"
+                    ItemTemplate="{StaticResource ItemTemplate}"
+                    ItemsSource="{Binding Items}"
+                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                    x:Name="ThisList"
+                    >
+
+                    <i:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="DoubleTapped">
+                            <core:InvokeCommandAction Command="{Binding ItemSelectedCommand}"
+                                CommandParameter="{Binding SelectedItem, ElementName=ThisList}"/>
+                        </core:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+
+                </ListView>
+            </Border>
+
+        </StackPanel>
+    </Grid>
+
+</ContentDialog>

@@ -2,28 +2,21 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
-using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Windows.UI.Xaml.Input;
 
 namespace MeetingManager.ViewModels
 {
     class TimeSlotsDialogViewModel : DialogViewModel
     {
         private MeetingTimeCandidate _selectedMeetingTimeCandidate;
-        private ObservableCollection<MeetingTimeCandidate> _meetingTimeCandidates;
         private Meeting _meeting;
 
-        public DelegateCommand<DoubleTappedRoutedEventArgs> DoubleTappedCommand => new DelegateCommand<DoubleTappedRoutedEventArgs>(DoubleTapped);
-        public DelegateCommand OkCommand => new DelegateCommand(OnOk);
+        public Command<MeetingTimeCandidate> ItemSelectedCommand => new Command<MeetingTimeCandidate>(ItemSelected);
+        public Command OkCommand => new Command(OnOk);
 
-        public ObservableCollection<MeetingTimeCandidate> MeetingTimeCandidates
-        {
-            get { return _meetingTimeCandidates; }
-            private set { SetProperty(ref _meetingTimeCandidates, value); }
-        }
+        public ObservableCollection<MeetingTimeCandidate> Items { get; set; }
 
         public MeetingTimeCandidate SelectedMeetingTimeCandidate
         {
@@ -37,21 +30,21 @@ namespace MeetingManager.ViewModels
 
         public bool HasSelected => SelectedMeetingTimeCandidate != null;
 
-        protected override async void OnInitialize(InitDialog parameter)
+        protected override async void OnNavigatedTo(object parameter)
         {
-            base.OnInitialize(parameter);
-
-            _meeting = UI.Deserialize<Meeting>(parameter.Payload);
+            _meeting = JSON.Deserialize<Meeting>(parameter);
 
             var items = await GetAllTimeCandidates(_meeting);
             SetTimeSlotProperties(items);
 
-            MeetingTimeCandidates = new ObservableCollection<MeetingTimeCandidate>(items);
+            Items = new ObservableCollection<MeetingTimeCandidate>(items);
+            OnPropertyChanged(() => Items);
         }
 
-        private void DoubleTapped(DoubleTappedRoutedEventArgs args)
+        private void ItemSelected(MeetingTimeCandidate item)
         {
             OnOk();
+            GoBack();
         }
 
         private void OnOk()

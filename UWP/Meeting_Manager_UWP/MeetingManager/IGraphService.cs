@@ -17,12 +17,18 @@ namespace MeetingManager
         Task<Meeting> UpdateEvent(Meeting meeting);
         Task CancelEvent(string eventId);
         Task<EventMessage> CreateInvitationResponse(Meeting meeting, string action);
-        Task<bool> UpdateAndSendMessage(Message message, string comment, IEnumerable<Message.Recipient> recipients);
+        Task<bool> UpdateAndSendMessage(Message message);
         Task DeleteDraftMessage(string messageid);
         Task AcceptOrDecline(string eventId, string action, string comment, bool sendResponse=true);
         Task<int> GetContactsCount();
         Task<IEnumerable<Contact>> GetContacts(int pageIndex, int pageSize);
         Task<byte[]> GetContactPhoto(string contactId);
+        Task<IEnumerable<DriveItem>> GetDriveItems(string folderId, int pageIndex, int pageSize);
+        Task<byte[]> GetDriveItemContent(string id);
+        Task DeleteDriveItem(string id);
+        Task<FileAttachment> AddEventAttachment(string eventId, FileAttachment attachment);
+        Task<IEnumerable<FileAttachment>> GetEventAttachments(string eventId, int pageIndex, int pageSize);
+        Task DeleteEventAttachment(string eventId, string attachmentId);
         Task<IEnumerable<MeetingTimeCandidate>> FindMeetingTimes(Meeting meeting);
 
         IUserPager GetUserPager(int pageSize, string filter, bool getHumans);

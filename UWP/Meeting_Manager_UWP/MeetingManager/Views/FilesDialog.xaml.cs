@@ -5,9 +5,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace MeetingManager.Views
 {
-    public sealed partial class UsersDialog : ContentDialog
+    public sealed partial class FilesDialog : ContentDialog
     {
-        public UsersDialog()
+        public FilesDialog()
         {
             this.InitializeComponent();
         }

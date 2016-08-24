@@ -1,13 +1,14 @@
 ﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
 //See LICENSE in the project root for license information.
 
+using MeetingManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using MeetingManager.Models;
-using Windows.Web.Http;
 
 namespace MeetingManager
 {
@@ -82,15 +83,8 @@ namespace MeetingManager
             await GetHttpHelper().DeleteItemAsync(uri);
         }
 
-        public async Task<bool> UpdateAndSendMessage(Message message, string comment, IEnumerable<Message.Recipient> recipients)
+        public async Task<bool> UpdateAndSendMessage(Message message)
         {
-            message.Body.Content = comment + message.Body.Content;
-
-            if (recipients != null)
-            {
-                message.ToRecipients = new List<Message.Recipient>(recipients);
-            }
-
             string uri = MessagesFolder + message.Id;
             var helper = GetHttpHelper();
 
@@ -287,11 +281,10 @@ namespace MeetingManager
 
             var invites = await GetHttpHelper().GetItemsAsync<EventMessage>(uri);
 
-            var orderedInvites = invites.OrderBy(x => x.CreatedDateTime);
+            // Put most recent invite on top
+            var orderedInvites = invites.OrderByDescending(x => x.CreatedDateTime);
 
-            var invite = orderedInvites.FirstOrDefault(x => x.Type.EqualsCaseInsensitive("#microsoft.graph.eventMessage"));
-
-            return invite;
+            return orderedInvites.FirstOrDefault(x => x.Type.EqualsCaseInsensitive("#microsoft.graph.eventMessage"));
         }
 
         private string BuildInvitationsUri(Meeting meeting)
@@ -326,6 +319,53 @@ namespace MeetingManager
             return new HttpUserPager(pageSize, filter, getHumans, GetHttpHelper());
         }
 
+        public async Task<IEnumerable<DriveItem>> GetDriveItems(string folderId, int pageIndex, int pageSize)
+        {
+            if (string.IsNullOrEmpty(folderId))
+            {
+                return await GetHttpHelper().GetItemsAsync<DriveItem>("drive/root/children");
+            }
+            else
+            {
+                return await GetHttpHelper().GetItemsAsync<DriveItem>($"drive/items/{folderId}/children");
+            }
+        }
+
+        public async Task<byte[]> GetDriveItemContent(string id)
+        {
+            string uri = "drive/items/" + id + "/content";
+
+            return await GetHttpHelper().GetItemAsync<byte[]>(uri);
+        }
+
+        public async Task DeleteDriveItem(string id)
+        {
+            string uri = "drive/items/" + id;
+
+            await GetHttpHelper().DeleteItemAsync(uri);
+        }
+
+        public async Task<FileAttachment> AddEventAttachment(string eventId, FileAttachment attachment)
+        {
+            string uri = EventsFolder + eventId + "/attachments";
+
+            return await GetHttpHelper().PostItemAsync<FileAttachment>(uri, attachment);
+        }
+
+        public async Task<IEnumerable<FileAttachment>> GetEventAttachments(string eventId, int pageIndex, int pageSize)
+        {
+            string uri = EventsFolder + eventId + "/attachments";
+
+            return await GetHttpHelper().GetItemsAsync<FileAttachment>(uri);
+        }
+
+        public async Task DeleteEventAttachment(string eventId, string attachmentId)
+        {
+            string uri = EventsFolder + eventId + "/attachments/" + attachmentId;
+
+            await GetHttpHelper().DeleteItemAsync(uri);
+        }
+
         private class HttpUserPager : IUserPager
         {
             private readonly int _pageSize;
@@ -350,7 +390,7 @@ namespace MeetingManager
 
             public bool HasNextPage => _nextPageUri != null;
 
-            public bool HasPrevPage => _curPage > 0;
+            public bool HasPrevPage => _curPage > 0 && _getHumans && string.IsNullOrEmpty(_filter);
 
             public async Task<IEnumerable<User>> GetNextPage(bool next)
             {
@@ -368,7 +408,7 @@ namespace MeetingManager
 
                 var list = await _httpHelper.GetItemAsync<HttpHelper.ODataList<User>>(_nextPageUri);
 
-                var items = list.value;
+                var items = list?.value;
 
                 if (next)
                 {
@@ -379,7 +419,7 @@ namespace MeetingManager
                     --_curPage;
                 }
 
-                _nextPageUri = GetNextPageUri(_nextPageUri, list.NextLink);
+                _nextPageUri = GetNextPageUri(_nextPageUri, list?.NextLink);
 
                 if (_nextPageUri != null && _nextPageUri.Contains("$skiptoken"))
                 {
@@ -405,7 +445,7 @@ namespace MeetingManager
                 string nextUri = Utils.StripToken(currentUri, "&$skiptoken");
                 nextUri = Utils.StripToken(nextUri, "&previous-page");
 
-                if (nextUri.Last() != '&')
+                if (nextUri[nextUri.Length - 1] != '&')
                 {
                     nextUri += '&';
                 }

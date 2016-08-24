@@ -2,12 +2,11 @@
 //See LICENSE in the project root for license information.
 
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Windows.UI.Popups;
-using Windows.Web.Http;
-using Windows.Web.Http.Headers;
+
 
 namespace MeetingManager
 {
@@ -32,25 +31,38 @@ namespace MeetingManager
 
         protected override async Task<TResult> DoHttpAsync<TBody, TResult>(HttpMethod method, string uri, TBody body)
         {
-            var response = await CreateAndExecuteRequestAsync(method, uri, body);
+            var request = base.CreateRequest(method, uri, body);
+            await SetHeaders(request);
 
-            return await base.GetResultAsync<TResult>(response);
-        }
-
-        protected async override void LogResponse(HttpResponseMessage response)
-        {
-            var request = response.RequestMessage;
-
-            var method = request.Method.Method;
-            var uri = request.RequestUri.ToString();
-            string requestBody = string.Empty;
-
+            var requestBody = string.Empty;
             if (request.Content != null)
             {
                 requestBody = await request.Content.ReadAsStringAsync();
             }
 
-            var statusCode = $"{(int) response.StatusCode} ({response.StatusCode.ToString()})";
+            var response = await base.ExecuteRequestAsync(request);
+
+            TResult result = default(TResult);
+            if (response.IsSuccessStatusCode)
+            {
+                result = await Deserialize<TResult>(response);
+            }
+            else
+            {
+                HandleFailure(await GetErrorMessage(response), response);
+            }
+
+            LogResponse(request, requestBody, response);
+
+            return result;
+        }
+
+        private async void LogResponse(HttpRequestMessage request, string requestBody, HttpResponseMessage response)
+        {
+            var method = request.Method.Method;
+            var uri = request.RequestUri.ToString();
+
+            var statusCode = $"{(int)response.StatusCode} ({response.StatusCode.ToString()})";
             string responseBody = string.Empty;
 
             var mediaType = response.Content?.Headers?.ContentType.MediaType;
@@ -64,21 +76,14 @@ namespace MeetingManager
                         statusCode, responseBody, response.Headers.ToString());
         }
 
-        private async Task<HttpResponseMessage> CreateAndExecuteRequestAsync<TBody>(
-            HttpMethod method, string uri, TBody body)
-        {
-            var request = base.CreateRequest(method, uri, body);
-            await SetHeaders(request);
-
-            return await base.ExecuteRequestAsync(request);
-        }
-
         private async Task SetHeaders(HttpRequestMessage request)
         {
-            if (!string.IsNullOrEmpty(_authService.UserId))
+            if (!string.IsNullOrEmpty(App.Me.UserId))
             {
-                request.Headers.Add("AnchorMailbox", _authService.UserId);
+                request.Headers.Add("AnchorMailbox", App.Me.UserId);
             }
+
+            request.Headers.CacheControl = new CacheControlHeaderValue { NoCache = true };
 
             await SetAuthorizationHeaderAsync(request);
         }
@@ -95,17 +100,13 @@ namespace MeetingManager
             return BaseGraphUri + uri;
         }
 
-        protected async override void HandleFailure(string errorMessage, HttpResponseMessage response)
+        protected virtual async void HandleFailure(string errorMessage, HttpResponseMessage response)
         {
-            LogResponse(response);
-
             var message = string.IsNullOrEmpty(errorMessage) ?
                     string.Format("Failed with {0}", response.StatusCode) :
                     errorMessage;
 
-            var messageDialog = new MessageDialog(message);
-
-            await messageDialog.ShowAsync();
+            await UI.MessageDialog(message);
         }
 
         private async Task SetAuthorizationHeaderAsync(HttpRequestMessage request)
@@ -119,7 +120,7 @@ namespace MeetingManager
 
                 if (!string.IsNullOrEmpty(token))
                 {
-                    request.Headers.Authorization = new HttpCredentialsHeaderValue("Bearer", token);
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 }
             }
         }

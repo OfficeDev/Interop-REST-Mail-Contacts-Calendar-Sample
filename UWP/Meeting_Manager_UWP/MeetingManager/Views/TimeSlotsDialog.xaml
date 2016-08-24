@@ -41,13 +41,12 @@ See LICENSE in the project root for license information. -->
         <Border BorderBrush="Gray" BorderThickness="2" MinWidth="400">
             <ListView
                     MinHeight="600" MaxHeight="600"
-                    DoubleTapped="ListView_DoubleTapped"
                     ItemTemplate="{StaticResource TimeSlotTemplate}"
-                    ItemsSource="{Binding MeetingTimeCandidates}"
+                    ItemsSource="{Binding Items}"
                     SelectedItem="{Binding SelectedMeetingTimeCandidate, Mode=TwoWay}">
                 <i:Interaction.Behaviors>
                     <core:EventTriggerBehavior EventName="DoubleTapped">
-                        <core:InvokeCommandAction Command="{Binding DoubleTappedCommand}" />
+                        <core:InvokeCommandAction Command="{Binding ItemSelectedCommand}"/>
                     </core:EventTriggerBehavior>
                 </i:Interaction.Behaviors>
             </ListView>

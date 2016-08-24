@@ -2,7 +2,6 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
-using Prism.Commands;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,22 +16,15 @@ namespace MeetingManager.ViewModels
         private const int PageSize = 10;
 
         private Contact _selectedContact;
-        private ObservableCollection<Contact> _contacts;
-        private bool _hasNext;
-        private bool _hasPrev;
         private int _curPageIndex;
         private int _contactsCount;
 
-        public DelegateCommand NextCommand => new DelegateCommand(NextPage);
-        public DelegateCommand PrevCommand => new DelegateCommand(PrevPage);
-        public DelegateCommand PickCommand => new DelegateCommand(ItemPicked);
-        public DelegateCommand OkCommand => new DelegateCommand(OnOk);
+        public Command NextCommand => new Command(NextPage);
+        public Command PrevCommand => new Command(PrevPage);
+        public Command ItemSelectedCommand => new Command(ItemSelected);
+        public Command OkCommand => new Command(OnOk);
 
-        public ObservableCollection<Contact> Contacts
-        {
-            get { return _contacts; }
-            private set { SetProperty(ref _contacts, value); }
-        }
+        public ObservableCollection<Contact> Contacts { get; private set; }
 
         public Contact SelectedContact
         {
@@ -44,29 +36,19 @@ namespace MeetingManager.ViewModels
             }
         }
 
-        public bool HasSelected
-        {
-            get { return SelectedContact != null; }
-        }
+        public bool HasSelected => SelectedContact != null;
 
-        public bool HasNext
-        {
-            get { return _hasNext; }
-            private set { SetProperty(ref _hasNext, value); }
-        }
+        public bool HasNext { get; private set; }
 
-        public bool HasPrev
-        {
-            get { return _hasPrev; }
-            private set { SetProperty(ref _hasPrev, value); }
-        }
+        public bool HasPrev { get; private set; }
 
-        protected override async void OnInitialize(InitDialog parameter)
+        protected override async void OnNavigatedTo(object parameter)
         {
-            base.OnInitialize(parameter);
+            using (new Loading(this))
+            {
+                _contactsCount = await GraphService.GetContactsCount();
+            }
 
-            Contacts = null;
-            _contactsCount = await OfficeService.GetContactsCount();
             await GetFirstPage();
         }
 
@@ -91,8 +73,9 @@ namespace MeetingManager.ViewModels
         {
             using (new Loading(this))
             {
-                var items = await OfficeService.GetContacts(_curPageIndex, PageSize);
+                var items = await GraphService.GetContacts(_curPageIndex, PageSize);
                 Contacts = new ObservableCollection<Contact>(items);
+                OnPropertyChanged(() => Contacts);
 
                 var tasks = Contacts.Select(x => SetContactPhoto(x));
                 await Task.WhenAll(tasks);
@@ -100,56 +83,35 @@ namespace MeetingManager.ViewModels
 
             HasPrev = _curPageIndex > 0;
             HasNext = PageSize * (_curPageIndex + 1) < _contactsCount;
-            IsLoading = false;
+
+            OnPropertyChanged(() => HasPrev);
+            OnPropertyChanged(() => HasNext);
         }
 
         private async Task SetContactPhoto(Contact contact)
         {
-            var photoData = await OfficeService.GetContactPhoto(contact.Id);
+            var photoData = await GraphService.GetContactPhoto(contact.Id);
 
-            if (photoData != null)
+            var photo = await UI.BytesToPhoto(photoData);
+
+            if (photo != null)
             {
-                contact.Photo = await GetImage(photoData);
+                contact.Photo = photo;
                 contact.NotifyPropertyChanged("Photo");
             }
         }
 
-        private async Task<BitmapImage> GetImage(byte[] data)
-        {
-            using (var ms = new InMemoryRandomAccessStream())
-            {
-                using (var writer = new DataWriter(ms.GetOutputStreamAt(0)))
-                {
-                    writer.WriteBytes(data);
-                    await writer.StoreAsync();
-                }
-
-                var image = new BitmapImage();
-
-                try
-                {
-                    await image.SetSourceAsync(ms);
-                    return image;
-                }
-                catch
-                {
-                    // in case we received invalid data
-                }
-
-                return null;
-            }
-        }
-
-        private void ItemPicked()
+        private void ItemSelected()
         {
             OnOk();
+            GoBack();
         }
 
         private void OnOk()
         {
             if (SelectedContact.EmailAddresses.Any())
             {
-               UI.Publish(SelectedContact);
+                UI.Publish(SelectedContact);
             }
         }
     }

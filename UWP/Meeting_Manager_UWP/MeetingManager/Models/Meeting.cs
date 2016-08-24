@@ -37,10 +37,7 @@ namespace MeetingManager.Models
         public string OriginalEndTimeZone { get; set; }
 
         [JsonIgnore]
-        public string Description => Body.Content;
-
-        [JsonIgnore]
-        public string AttendeeList => string.Join("; ", Attendees);
+        public string AttendeeList => string.Join(";\n", Attendees);
 
         [JsonIgnore]
         public bool IsContentText => Body.ContentType.EqualsCaseInsensitive("Text");

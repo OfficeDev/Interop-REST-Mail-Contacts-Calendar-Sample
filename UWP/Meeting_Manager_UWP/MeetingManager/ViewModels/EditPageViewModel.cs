@@ -2,55 +2,50 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
-using Prism.Commands;
 using Prism.Windows.AppModel;
-using Prism.Windows.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
-using Windows.UI.Xaml.Navigation;
 
 namespace MeetingManager.ViewModels
 {
-    class EditPageViewModel : ViewModel
+    class EditPageViewModel : BaseViewModel
     {
-        private Meeting _meeting;
         private ObservableCollection<Attendee> _attendees;
-        private string _recurrenceDate;
+        private List<FileAttachment> _attachments;
 
         public EditPageViewModel()
         {
             UI.Subscribe<User>(UserSelected);
-            UI.Subscribe<Room>(RoomSelected);
-            UI.Subscribe<MeetingTimeCandidate>(MeetingTimeCandidateSelected);
+            UI.Subscribe<Room>((room) => LocationName = room.ToString());
             UI.Subscribe<Contact>(ContactSelected);
             UI.Subscribe<Meeting.EventRecurrence>(RecurrenceUpdated);
+            UI.Subscribe<DriveItem>(AttachmentSelected);
+            UI.Subscribe<FileAttachment>(AttachmentDeleted);
+            UI.Subscribe<MeetingTimeCandidate>(TimeSlotSelected);
         }
 
-        public DelegateCommand SaveCommand => new DelegateCommand(SaveMeetingAsync);
-        public DelegateCommand RecurrenceCommand => new DelegateCommand(SetRecurrence);
-        public DelegateCommand AddUserCommand => new DelegateCommand(AddUser);
-        public DelegateCommand AddContactCommand => new DelegateCommand(AddContact);
-        public DelegateCommand FindRoomCommand => new DelegateCommand(FindRoom);
-        public DelegateCommand GetSuggestedTimeCommand => new DelegateCommand(GetSuggestedTime, CanExecuteMeetingTimes);
-        public DelegateCommand ASAPCommand => new DelegateCommand(ASAPMeeting, CanExecuteMeetingTimes);
-        public DelegateCommand<Attendee> DeleteAttendeeCommand => new DelegateCommand<Attendee>(DeleteAttendee);
-        public DelegateCommand ReplyAllCommand => new DelegateCommand(SendReplyAll);
-        public DelegateCommand ForwardCommand => new DelegateCommand(SendForward);
-        public DelegateCommand LateCommand => new DelegateCommand(SendLate);
+        public Command SaveCommand => new Command(SaveMeetingAsync);
+        public Command AttachCommand => new Command(() => UI.NavigateTo("Files"));
+        public Command RecurrenceCommand => new Command(SetRecurrence);
+        public Command AddUserCommand => new Command(() => NavigateToUsers(true));
+        public Command AddContactCommand => new Command(() => NavigateToContacts());
+        public Command FindRoomCommand => new Command(() => NavigateToUsers(false));
+        public Command GetSuggestedTimeCommand => new Command(GetSuggestedTime, CanExecuteMeetingTimes);
+        public Command ASAPCommand => new Command(ASAPMeeting, CanExecuteMeetingTimes);
+        public Command<Attendee> DeleteAttendeeCommand => new Command<Attendee>(DeleteAttendee);
+        public Command ReplyAllCommand => new Command(() => NavigateToEmail(OData.ReplyAll));
+        public Command ForwardCommand => new Command(() => NavigateToEmail(OData.Forward));
+        public Command LateCommand => new Command(() => SendRunningLate(Meeting));
+        public Command ShowAttachmentsCommand => new Command(() => NavigateToAttachments(_attachments, Meeting));
 
         [RestorableState]
-        public Meeting Meeting
-        {
-            get { return _meeting; }
-            private set { SetProperty(ref _meeting, value); }
-        }
+        public Meeting Meeting { get; private set; }
 
         public string Title => GetString(IsNewMeeting ? "CreateMeetingTitle" : "UpdateMeetingTitle");
 
-        public bool IsContentText => Meeting.IsContentText;
+        public bool HasAttachments => _attachments?.Any() == true;
 
         public bool IsNewMeeting => string.IsNullOrEmpty(Meeting.Id);
 
@@ -58,24 +53,24 @@ namespace MeetingManager.ViewModels
         {
             get
             {
-                if (IsAllDay)
-                {
-                    return _meeting.Start.DateTime;
-                }
-                else
-                {
-                    return _meeting.Start.ToLocalTime();
-                }
+                return IsAllDay ? Meeting.Start.DateTime : Meeting.Start.ToLocalTime();
             }
 
             set
             {
-                SetTime(_meeting.Start, value);
+                SetTime(Meeting.Start, value);
 
-                if (_meeting.End.DateTime.CompareTo(_meeting.Start.DateTime) < 0)
+                if (!AreDatesValid())
                 {
-                    _meeting.End.DateTime = _meeting.Start.DateTime + TimeSpan.FromMinutes(30);
-                    OnPropertyChanged(() => EndTime);
+                    if (IsAllDay)
+                    {
+                        Meeting.End.DateTime = Meeting.Start.DateTime + TimeSpan.FromDays(1);
+                    }
+                    else
+                    {
+                        Meeting.End.DateTime = Meeting.Start.DateTime + TimeSpan.FromMinutes(30);
+                        OnPropertyChanged(() => EndTime);
+                    }
                     OnPropertyChanged(() => EndDate);
                 }
             }
@@ -85,27 +80,32 @@ namespace MeetingManager.ViewModels
         {
             get
             {
-                if (IsAllDay)
-                {
-                    return _meeting.End.DateTime;
-                }
-                else
-                {
-                    return _meeting.End.ToLocalTime();
-                }
+                return IsAllDay ? Meeting.End.DateTime : Meeting.End.ToLocalTime();
             }
 
             set
             {
-                SetTime(_meeting.End, value);
+                SetTime(Meeting.End, value);
 
-                if (_meeting.Start.DateTime.CompareTo(_meeting.End.DateTime) > 0)
+                if (!AreDatesValid())
                 {
-                    _meeting.Start.DateTime = _meeting.End.DateTime - TimeSpan.FromMinutes(30);
-                    OnPropertyChanged(() => StartTime);
+                    if (IsAllDay)
+                    {
+                        Meeting.Start.DateTime = Meeting.End.DateTime - TimeSpan.FromDays(1);
+                    }
+                    else
+                    {
+                        Meeting.Start.DateTime = Meeting.End.DateTime - TimeSpan.FromMinutes(30);
+                        OnPropertyChanged(() => StartTime);
+                    }
                     OnPropertyChanged(() => StartDate);
                 }
             }
+        }
+
+        private bool AreDatesValid()
+        {
+            return Meeting.Start.DateTime.CompareTo(Meeting.End.DateTime) < 0;
         }
 
         private void SetTime(ZonedDateTime current, DateTimeOffset value)
@@ -116,10 +116,10 @@ namespace MeetingManager.ViewModels
             }
             else
             {
-                var local = _meeting.Start.ToLocalTime();
+                var local = current.ToLocalTime();
                 var newTime = value.Date + local.TimeOfDay;
 
-                current.DateTime = current.FromLocalTime(newTime);
+                current.DateTime = newTime.ToUtcTime();
             }
         }
 
@@ -138,30 +138,40 @@ namespace MeetingManager.ViewModels
 
         public TimeSpan StartTime
         {
-            get { return GetTimeSpan(_meeting.Start); }
+            get
+            {
+                return GetTimeSpan(Meeting.Start);
+            }
+
             set
             {
-                SetTimeSpan(_meeting.Start, value);
-
-                if (EndTime.CompareTo(value) < 0)
+                if (!IsAllDay)
                 {
-                    EndTime = value + TimeSpan.FromMinutes(30);
-                    OnPropertyChanged(() => EndTime);
+                    SetTimeSpan(Meeting.Start, value);
+
+                    if (EndTime.CompareTo(value) < 0)
+                    {
+                        EndTime = value + TimeSpan.FromMinutes(30);
+                        OnPropertyChanged(() => EndTime);
+                    }
                 }
             }
         }
 
         public TimeSpan EndTime
         {
-            get { return GetTimeSpan(_meeting.End); }
+            get { return GetTimeSpan(Meeting.End); }
             set
             {
-                SetTimeSpan(_meeting.End, value);
-
-                if (StartTime.CompareTo(value) > 0)
+                if (!IsAllDay)
                 {
-                    StartTime = value - TimeSpan.FromMinutes(30);
-                    OnPropertyChanged(() => StartTime);
+                    SetTimeSpan(Meeting.End, value);
+
+                    if (StartTime.CompareTo(value) > 0)
+                    {
+                        StartTime = value - TimeSpan.FromMinutes(30);
+                        OnPropertyChanged(() => StartTime);
+                    }
                 }
             }
         }
@@ -169,20 +179,10 @@ namespace MeetingManager.ViewModels
         public ObservableCollection<Attendee> Attendees
         {
             get { return _attendees; }
-            private set { SetProperty(ref _attendees, value); }
+            private set { SetCollectionProperty(ref _attendees, value); }
         }
 
-        public string RecurrenceDate
-        {
-            get { return _recurrenceDate; }
-            private set { SetProperty(ref _recurrenceDate, value); }
-        }
-
-        public string Description
-        {
-            get { return _meeting.Body.Content; }
-            set { _meeting.Body.Content = value; }
-        }
+        public string RecurrenceDate { get; private set; }
 
         public bool IsAllDay
         {
@@ -199,17 +199,19 @@ namespace MeetingManager.ViewModels
                 }
 
                 Meeting.IsAllDay = value;
-                OnPropertyChanged();
+                OnPropertyChanged();    // trigger IsEnabled
+                OnPropertyChanged(() => StartDate);
+                OnPropertyChanged(() => EndDate);
                 OnPropertyChanged(() => StartTime);
                 OnPropertyChanged(() => EndTime);
             }
         }
 
-        public bool IsSerial => _meeting.Recurrence != null; 
+        public bool IsSerial => Meeting.Recurrence != null;
 
         public string SaveCaption => GetString(HasAttendees ? "SendCaption" : "SaveCaption");
 
-        public bool HasAttendees => _meeting.Attendees.Any();
+        public bool HasAttendees => Meeting.Attendees.Any();
 
         private TimeSpan GetTimeSpan(ZonedDateTime dateTime)
         {
@@ -229,45 +231,55 @@ namespace MeetingManager.ViewModels
             var localDateTime = dateTime.ToLocalTime();
             localDateTime = localDateTime.Date + timeSpan;
 
-            dateTime.DateTime = dateTime.FromLocalTime(localDateTime);
+            dateTime.DateTime = localDateTime.ToUtcTime();
         }
 
-        public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
+        protected override async void OnNavigatedTo(object parameter)
         {
-            base.OnNavigatedTo(e, viewModelState);
-
-            if (e.NavigationMode == NavigationMode.New)
+            if (parameter != null)
             {
-                if (e.Parameter != null)
+                Meeting = JSON.Deserialize<Meeting>(parameter);
+
+                using (new Loading(this))
                 {
-                    _meeting = UI.Deserialize<Meeting>(e.Parameter);
-                }
-                else
-                {
-                    _meeting = CreateNewMeeting();
+                    _attachments = (await GraphService.GetEventAttachments(Meeting.Id, 0, 100))
+                                    .ToList();
+                    OnPropertyChanged(() => HasAttachments);
                 }
             }
+            else
+            {
+                Meeting = CreateNewMeeting();
+                _attachments = new List<FileAttachment>();
+            }
 
+            BuildRecurrentDate();
+            PopulateAttendees();
+
+            OnPropertyChanged(() => Meeting);
+        }
+
+        private void BuildRecurrentDate()
+        {
             if (IsSerial)
             {
-                RecurrenceDate = DateTimeUtils.BuildRecurrentDate(_meeting.Recurrence);
+                RecurrenceDate = DateTimeUtils.BuildRecurrentDate(Meeting.Recurrence);
+                OnPropertyChanged(() => RecurrenceDate);
             }
-
-            PopulateAttendees();
         }
 
         private void PopulateAttendees()
         {
-            Attendees = new ObservableCollection<Attendee>(_meeting.Attendees);
+            Attendees = new ObservableCollection<Attendee>(Meeting.Attendees);
+            Attendees.ForEach(a => a.OrganizerAddress = Meeting.Organizer?.EmailAddress.Address);
 
-            if (_meeting.Organizer != null)
-            {
-                foreach (var a in _meeting.Attendees)
-                {
-                    a.IsOrganizer = a.EmailAddress.Address.EqualsCaseInsensitive(_meeting.Organizer.EmailAddress.Address);
-                }
-            }
+            OnPropertyChanged(() => Attendees);
 
+            UpdateAttendeesRelatedProperties();
+        }
+
+        private void UpdateAttendeesRelatedProperties()
+        {
             OnPropertyChanged(() => SaveCaption);
             OnPropertyChanged(() => HasAttendees);
         }
@@ -284,8 +296,6 @@ namespace MeetingManager.ViewModels
                 },
                 Attendees = new List<Attendee>(),
                 Location = new Location(),
-                OriginalStartTimeZone = TimeZoneInfo.Local.Id,
-                OriginalEndTimeZone = TimeZoneInfo.Local.Id
             };
 
             SetDefaultTimes(meeting);
@@ -296,9 +306,9 @@ namespace MeetingManager.ViewModels
         private DateTime GetDefaultStartTime()
         {
             // Use the start of the next hour as the default start time
-            var dt = DateTime.Now + TimeSpan.FromMinutes(60);
+            var dt = DateTime.UtcNow + TimeSpan.FromMinutes(60);
 
-            return new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, (dt.Minute / 60) * 60, 0);
+            return new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, (dt.Minute / 60) * 60, 0, DateTimeKind.Utc);
         }
 
         private void SetDefaultTimes(Meeting meeting)
@@ -306,19 +316,19 @@ namespace MeetingManager.ViewModels
             meeting.Start = new ZonedDateTime
             {
                 DateTime = GetDefaultStartTime(),
-                TimeZone = TimeZoneInfo.Local.Id
+                TimeZone = "UTC"
             };
 
             meeting.End = new ZonedDateTime
             {
                 DateTime = GetDefaultStartTime() + TimeSpan.FromMinutes(30),
-                TimeZone = TimeZoneInfo.Local.Id
+                TimeZone = "UTC"
             };
         }
 
         private async void SaveMeetingAsync()
         {
-            if (_meeting.IsAllDay)
+            if (Meeting.IsAllDay)
             {
                 EnsureAllDay();
             }
@@ -326,28 +336,34 @@ namespace MeetingManager.ViewModels
             Meeting newMeeting;
             using (new Loading(this))
             {
-                newMeeting = await (string.IsNullOrEmpty(_meeting.Id) ?
-                                        OfficeService.CreateEvent(_meeting) :
-                                        OfficeService.UpdateEvent(_meeting));
+                newMeeting = await (string.IsNullOrEmpty(Meeting.Id) ?
+                                        GraphService.CreateEvent(Meeting) :
+                                        GraphService.UpdateEvent(Meeting));
             }
 
             if (newMeeting != null)
             {
+                foreach (var att in _attachments.Where(x => string.IsNullOrEmpty(x.Id)))
+                {
+                    using (new Loading(this))
+                    {
+                        await GraphService.AddEventAttachment(newMeeting.Id, att);
+                    }
+                }
+
                 UI.Publish(newMeeting);
-                UI.GoBack();
+                GoBack();
             }
         }
 
         private void EnsureAllDay()
         {
-            var length = (_meeting.End.DateTime - _meeting.Start.DateTime).TotalDays;
+            var length = (Meeting.End.DateTime - Meeting.Start.DateTime).TotalDays;
             length = Math.Max(length, 1);
             // Set time to midnight (12:00 AM)
-            _meeting.Start.DateTime = _meeting.Start.DateTime.Date;
+            Meeting.Start.DateTime = Meeting.Start.DateTime.Date;
             // Set the whole day duration
-            _meeting.End.DateTime = _meeting.Start.DateTime + TimeSpan.FromDays((int) length);
-            // It should be midnight in local time zone
-            _meeting.Start.TimeZone = _meeting.End.TimeZone = TimeZoneInfo.Local.Id;
+            Meeting.End.DateTime = Meeting.Start.DateTime + TimeSpan.FromDays((int)length);
         }
 
         private void UserSelected(User user)
@@ -374,30 +390,55 @@ namespace MeetingManager.ViewModels
             AddAttendee(attendee);
         }
 
+        private void AttachmentDeleted(FileAttachment item)
+        {
+            var removed = _attachments.FirstOrDefault(x => x.Name == item.Name);
+            _attachments.Remove(removed);
+
+            OnPropertyChanged(() => HasAttachments);
+        }
+
+        private async void AttachmentSelected(DriveItem driveItem)
+        {
+            using (new Loading(this))
+            {
+                var data = await GraphService.GetDriveItemContent(driveItem.Id);
+
+                if (data != null)
+                {
+                    _attachments.Add(new FileAttachment
+                    {
+                        Name = driveItem.Name,
+                        ContentBytes = data,
+                    });
+
+                    OnPropertyChanged(() => HasAttachments);
+                }
+            }
+        }
+
         private void AddAttendee(Attendee attendee)
         {
-            if (_meeting.Attendees.Find(x => x.EmailAddress.IsEqualTo(attendee.EmailAddress)) == null)
+            if (Meeting.Attendees.Find(x => x.EmailAddress.IsEqualTo(attendee.EmailAddress)) == null)
             {
-                _meeting.Attendees.Add(attendee);
+                Meeting.Attendees.Add(attendee);
             }
 
             PopulateAttendees();
         }
 
-        private void RoomSelected(User user)
-        {
-            LocationName = user.ToString();
-        }
-
         private void DeleteAttendee(Attendee attendee)
         {
-            int pos = _meeting.Attendees.IndexOf(x => x.EmailAddress.IsEqualTo(attendee.EmailAddress));
-            _meeting.Attendees.RemoveAt(pos);
+            if (attendee.IsOrganizer) return;
+
+            int pos = Meeting.Attendees.IndexOf(x => x.EmailAddress.IsEqualTo(attendee.EmailAddress));
+
+            Meeting.Attendees.RemoveAt(pos);
 
             PopulateAttendees();
         }
 
-        private async void SetRecurrence()
+        private void SetRecurrence()
         {
             var recurrence = Meeting.Recurrence ?? CreateDefaultRecurrence();
 
@@ -406,7 +447,7 @@ namespace MeetingManager.ViewModels
                 recurrence.Range.EndDate = new DateTime(DateTime.Now.Year, 12, 31).ToString();
             }
 
-            await UI.NavigateTo("Recurrence", recurrence);
+            UI.NavigateTo("Recurrence", recurrence);
         }
 
         private Meeting.EventRecurrence CreateDefaultRecurrence()
@@ -433,35 +474,36 @@ namespace MeetingManager.ViewModels
 
         private void RecurrenceUpdated(Meeting.EventRecurrence recurrence)
         {
-            _meeting.Recurrence = recurrence;
+            Meeting.Recurrence = recurrence;
             OnPropertyChanged(() => IsSerial);
 
-            if (IsSerial)
-            {
-                RecurrenceDate = DateTimeUtils.BuildRecurrentDate(_meeting.Recurrence);
-            }
+            BuildRecurrentDate();
         }
 
-        private async void GetSuggestedTime()
+        private void GetSuggestedTime()
         {
-            await UI.NavigateTo("TimeSlots", Meeting);
+            UI.NavigateTo("TimeSlots", Meeting);
         }
 
         private async void ASAPMeeting()
         {
-            var items = await GetAllTimeCandidates(_meeting);
+            var items = await GetAllTimeCandidates(Meeting);
 
             var slot = items.Select(x => TimeSlot.Parse(x))
                             .OrderBy(x => x.Start)
-                            .FirstOrDefault(x => _meeting.Start.DateTime.Date + x.Start > DateTime.Now);
+                            .FirstOrDefault(x => Meeting.Start.DateTime.Date + x.Start > DateTime.Now);
 
-            if (slot != null)
+            if (slot == null)
+            {
+                await UI.MessageDialog(GetString("NoFreeSlots"));
+            }
+            else
             {
                 SetTimeSlot(slot);
             }
         }
 
-        private void MeetingTimeCandidateSelected(MeetingTimeCandidate meetingTimeCandidate)
+        private void TimeSlotSelected(MeetingTimeCandidate meetingTimeCandidate)
         {
             if (meetingTimeCandidate != null)
             {
@@ -479,45 +521,16 @@ namespace MeetingManager.ViewModels
             OnPropertyChanged(() => EndTime);
         }
 
-        private async void AddUser()
+        private void NavigateToEmail(string action)
         {
-            await NavigateToUsers(true);
-        }
-
-        private async void FindRoom()
-        {
-            await NavigateToUsers(false);
-        }
-
-        private async void AddContact()
-        {
-            await NavigateToContacts();
-        }
-
-        private async void SendReplyAll()
-        {
-            await NavigateToEmail(OData.ReplyAll);
-        }
-
-        private async void SendForward()
-        {
-            await NavigateToEmail(OData.Forward);
-        }
-
-        private async void SendLate()
-        {
-            await SendRunningLate(Meeting);
-        }
-
-        private async Task NavigateToEmail(string action, string comment = null)
-        {
-            await base.NavigateToEmail(Meeting, action, comment);
+            NavigateToEmail(Meeting, action, comment: null);
         }
 
         private bool CanExecuteMeetingTimes()
         {
             return !IsAllDay && App.Me.UseHttp;
         }
+
         private class TimeSlot
         {
             public TimeSpan Start { get; set; }

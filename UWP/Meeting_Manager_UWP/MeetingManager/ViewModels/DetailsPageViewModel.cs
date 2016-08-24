@@ -2,95 +2,65 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
-using Prism.Commands;
 using Prism.Windows.AppModel;
-using Prism.Windows.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
-using Windows.UI.Xaml.Navigation;
 
 namespace MeetingManager.ViewModels
 {
-    class DetailsPageViewModel : ViewModel
+    class DetailsPageViewModel : BaseViewModel
     {
         private const string KindEdit = "edit";
         private const string KindSend = "send";
         private const string KindSilent = "silent";
 
-        private ObservableCollection<Attendee> _attendees;
-        private string _dateTimeDescription;
-        private bool _isOrganizer;
+        private IEnumerable<FileAttachment> _attachments;
 
-        private Meeting _meeting;
+        public Command ReplyCommand => new Command(() => NavigateToEmail(OData.Reply));
+        public Command ReplyAllCommand => new Command(() => NavigateToEmail(OData.ReplyAll));
+        public Command ForwardCommand => new Command(() => NavigateToEmail(OData.Forward));
+        public Command LateCommand => new Command(() => SendRunningLate(Meeting));
+        public Command<string> AcceptCommand => new Command<string>((kind) => AcceptOrDecline(OData.Accept, kind));
+        public Command<string> DeclineCommand => new Command<string>((kind) => AcceptOrDecline(OData.Decline, kind));
+        public Command<string> TentativeCommand => new Command<string>((kind) => AcceptOrDecline(OData.TentativelyAccept, kind));
 
-        public DetailsPageViewModel()
-        {
-            UI.Subscribe<Meeting>(OnMeetingUpdate);
-        }
-
-        public DelegateCommand EditCommand => new DelegateCommand(EditMeeting);
-        public DelegateCommand ReplyCommand => new DelegateCommand(SendReply);
-        public DelegateCommand ReplyAllCommand => new DelegateCommand(SendReplyAll);
-        public DelegateCommand ForwardCommand => new DelegateCommand(SendForward);
-        public DelegateCommand LateCommand => new DelegateCommand(SendLate);
-        public DelegateCommand<string> AcceptCommand => new DelegateCommand<string>(AcceptMeeting);
-        public DelegateCommand<string> DeclineCommand => new DelegateCommand<string>(DeclineMeeting);
-        public DelegateCommand<string> TentativeCommand => new DelegateCommand<string>(TentativeMeeting);
+        public Command ShowAttachmentsCommand => new Command(() => NavigateToAttachments(_attachments, Meeting));
 
         [RestorableState]
-        public Meeting Meeting
-        {
-            get { return _meeting; }
-            private set { SetProperty(ref _meeting, value); }
-        }
-
-        public bool IsOrganizer
-        {
-            get { return _isOrganizer; }
-            private set { SetProperty(ref _isOrganizer, value); }
-        }
+        public Meeting Meeting { get; private set; }
 
         public string Location
         {
             get
             {
-                var location = _meeting.Location.DisplayName;
+                var location = Meeting.Location.DisplayName;
 
                 return string.IsNullOrEmpty(location) ? GetString("NoLocation") : location;
             }
         }
 
-        public string DateTimeDescription
+        public string DateTimeDescription { get; private set; }
+
+        public ObservableCollection<Attendee> Attendees { get; private set; }
+
+        public string Organizer => Meeting.OrganizerName;
+
+        public bool HasAttachments => _attachments?.Any() == true;
+
+        protected override async void OnNavigatedTo(object parameter)
         {
-            get { return _dateTimeDescription; }
-            private set { SetProperty(ref _dateTimeDescription, value); }
-        }
-
-        public ObservableCollection<Attendee> Attendees
-        {
-            get { return _attendees; }
-            private set { SetProperty(ref _attendees, value); }
-        }
-
-        public bool IsContentText { get; set; }
-
-        public string Organizer => _meeting.OrganizerName;
-
-        public bool HasAttendees => Attendees.Any();
-
-        public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
-        {
-            if (e.NavigationMode != NavigationMode.Back)
+            if (parameter != null)
             {
-                base.OnNavigatedTo(e, viewModelState);
-            }
+                Meeting = JSON.Deserialize<Meeting>(parameter);
+                OnPropertyChanged(() => Meeting);
 
-            if (e.NavigationMode == NavigationMode.New)
-            {
-                Meeting = UI.Deserialize<Meeting>(e.Parameter);
+                using (new Loading(this))
+                {
+                    _attachments = await GraphService.GetEventAttachments(Meeting.Id, 0, 100);
+                    OnPropertyChanged(() => HasAttachments);
+                }
             }
 
             Populate();
@@ -98,12 +68,13 @@ namespace MeetingManager.ViewModels
 
         private void Populate()
         {
-            IsContentText = _meeting.IsContentText;
+            DateTimeDescription = BuildDateTimeDescription(Meeting);
 
-            DateTimeDescription = BuildDateTimeDescription(_meeting);
+            Attendees = new ObservableCollection<Attendee>(Meeting.Attendees);
+            Attendees.ForEach(a => a.OrganizerAddress = Meeting.Organizer?.EmailAddress.Address);
 
-            Attendees = new ObservableCollection<Attendee>(_meeting.Attendees);
-            IsOrganizer = _meeting.IsOrganizer;
+            OnPropertyChanged(() => Attendees);
+            OnPropertyChanged(() => DateTimeDescription);
         }
 
         private string BuildDateTimeDescription(Meeting meeting)
@@ -139,65 +110,9 @@ namespace MeetingManager.ViewModels
             return $"{date} {time}";
         }
 
-        private async void EditMeeting()
+        private void NavigateToEmail(string action)
         {
-            await UI.NavigateTo("Edit", _meeting);
-        }
-
-        private async void SendReply()
-        {
-            await NavigateToEmail(OData.Reply);
-        }
-
-        private async void SendReplyAll()
-        {
-            await NavigateToEmail(OData.ReplyAll);
-        }
-
-        private async void SendForward()
-        {
-            await NavigateToEmail(OData.Forward);
-        }
-
-        private async Task NavigateToEmail(string action, string comment=null)
-        {
-            await base.NavigateToEmail(Meeting, action, comment);
-        }
-
-        private async void SendLate()
-        {
-            await SendRunningLate(Meeting);
-        }
-
-        private void AcceptMeeting(string kind)
-        {
-            VerifyKind(kind);
-            AcceptOrDecline(OData.Accept, kind);
-        }
-
-        private void VerifyKind(string kind)
-        {
-            switch (kind.ToLower())
-            {
-                case KindEdit:
-                case KindSend:
-                case KindSilent:
-                    return;
-                default:
-                    throw new ArgumentException("Invalid kind: " + kind);
-            }
-        }
-
-        private void DeclineMeeting(string kind)
-        {
-            VerifyKind(kind);
-            AcceptOrDecline(OData.Decline, kind);
-        }
-
-        private void TentativeMeeting(string kind)
-        {
-            VerifyKind(kind);
-            AcceptOrDecline(OData.TentativelyAccept, kind);
+            NavigateToEmail(Meeting, action, comment: null);
         }
 
         private void AcceptOrDecline(string action, string kind)
@@ -213,39 +128,38 @@ namespace MeetingManager.ViewModels
                 case KindSilent:
                     SilentlyAcceptOrDecline(action);
                     break;
+                default:
+                    throw new ArgumentException("Invalid kind: " + kind);
             }
         }
 
-        private async void EditAndSendAcceptOrDecline(string action)
+        private void EditAndSendAcceptOrDecline(string action)
         {
-            await PromptAcceptOrDecline(action);
+            PromptAcceptOrDecline(action);
         }
 
-        private async void SendAcceptOrDecline(string action)
+        private void SendAcceptOrDecline(string action)
         {
-            await AcceptOrDeclineAndBack(action, string.Empty, sendResponse: true);
+            AcceptOrDeclineAndBack(action, string.Empty, sendResponse: true);
         }
 
-        private async void SilentlyAcceptOrDecline(string action)
+        private void SilentlyAcceptOrDecline(string action)
         {
-            await AcceptOrDeclineAndBack(action, null, sendResponse: false);
+            AcceptOrDeclineAndBack(action, null, sendResponse: false);
         }
 
-        private void OnMeetingUpdate(Meeting meeting)
+        private async void AcceptOrDeclineAndBack(string action, string comment, bool sendResponse)
         {
-            Meeting = meeting;
-            Populate();
+            using (new Loading(this))
+            {
+                await GraphService.AcceptOrDecline(Meeting.Id, action, comment, sendResponse);
+            }
+            GoBack();
         }
 
-        private async Task AcceptOrDeclineAndBack(string action, string comment, bool sendResponse)
+        private void PromptAcceptOrDecline(string action)
         {
-            await OfficeService.AcceptOrDecline(Meeting.Id, action, comment, sendResponse);
-            UI.GoBack();
-        }
-
-        private async Task PromptAcceptOrDecline(string action)
-        {
-            await UI.NavigateTo("AcceptDecline", Tuple.Create(action, Meeting.Id));
+            UI.NavigateTo("AcceptDecline", Tuple.Create(action, Meeting.Id));
         }
     }
 }

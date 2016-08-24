@@ -1,29 +1,25 @@
 ﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
 //See LICENSE in the project root for license information.
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Net;
-using Prism.Windows.AppModel;
-using System;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace MeetingManager
 {
-    class AuthenticationHelper : IAuthenticationService
+    sealed class AuthenticationHelper : IAuthenticationService
     {
         private readonly IDictionary<string, AccessTokenResponse> _tokenResponses = new Dictionary<string, AccessTokenResponse>();
 
-        private readonly ISessionStateService _sessionStateService;
         private readonly Logger _logger;
+        private readonly string _authCode;
 
-        private const string AuthCodeKey = "AuthCode";
-        private const string UserIdKey = "UserId";
-
-        public AuthenticationHelper(ISessionStateService sessionStateService, Logger logger)
+        public AuthenticationHelper(Logger logger, string authCode)
         {
-            _sessionStateService = sessionStateService;
             _logger = logger;
+            _authCode = authCode;
         }
 
         public string RedirectUri => App.Current.Resources["ida:RedirectUri"].ToString();
@@ -31,55 +27,6 @@ namespace MeetingManager
         private string ClientID => App.Current.Resources["ida:ClientID"].ToString();
 
         private string AADInstance => App.Current.Resources["ida:AADInstance"].ToString();
-
-        public string UserId
-        {
-            get
-            {
-                if (_sessionStateService.SessionState.ContainsKey(UserIdKey))
-                {
-                    return _sessionStateService.SessionState[UserIdKey].ToString();
-                }
-                return null;
-            }
-
-            set
-            {
-                _sessionStateService.SessionState[UserIdKey] = value;
-            }
-        }
-
-        public string AuthorizationCode
-        {
-            get
-            {
-                if (_sessionStateService.SessionState.ContainsKey(AuthCodeKey))
-                {
-                    return _sessionStateService.SessionState[AuthCodeKey].ToString();
-                }
-                return null;
-            }
-
-            set
-            {
-                _sessionStateService.SessionState[AuthCodeKey] = value;
-            }
-        }
-
-        public string LoginUrl
-        {
-            get
-            {
-                return $"{AuthorityOAuth2 + "authorize"}?" +
-                        "response_type=code" +
-                        $"&client_id={ClientID}" +
-                        $"&redirect_uri={RedirectUri}";
-            }
-        }
-
-        private string AuthorityOAuth2 => AADInstance + "common/oauth2/";
-
-        private string TokenUri => AuthorityOAuth2 + "token";
 
         public async Task<string> GetTokenAsync(string resourceId)
         {
@@ -106,7 +53,7 @@ namespace MeetingManager
         private async Task<AccessTokenResponse> QueryAccessToken(string resourceId)
         {
             var body = "grant_type=authorization_code" +
-                        $"&code={AuthorizationCode}" +
+                        $"&code={_authCode}" +
                         $"&redirect_uri={WebUtility.UrlEncode(RedirectUri)}" +
                         GraphId(resourceId);
 
@@ -130,7 +77,8 @@ namespace MeetingManager
 
         private async Task<AccessTokenResponse> DoTokenHttp(string body)
         {
-            var atr = await new HttpHelper(this, _logger).PostItemAsync<string, AccessTokenResponse>(TokenUri, body);
+            var tokenUri = AADInstance + "common/oauth2/token";
+            var atr = await new HttpHelper(this, _logger).PostItemAsync<string, AccessTokenResponse>(tokenUri, body);
 
             if (atr != null)
             {

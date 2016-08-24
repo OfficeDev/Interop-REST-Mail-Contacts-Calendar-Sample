@@ -2,7 +2,6 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
-using Prism.Commands;
 using System;
 
 namespace MeetingManager.ViewModels
@@ -12,17 +11,15 @@ namespace MeetingManager.ViewModels
         private string _action;
         private string _meetingId;
 
-        public DelegateCommand SendCommand => new DelegateCommand(Send);
+        public Command SendCommand => new Command(Send);
 
-        public string Title { get; set; }
+        public string Title { get; private set; }
 
         public string Comment { get; set; }
 
-        protected override void OnInitialize(InitDialog parameter)
+        protected override void OnNavigatedTo(object parameter)
         {
-            base.OnInitialize(parameter);
-
-            var payload = UI.Deserialize<Tuple<string, string>>(parameter.Payload);
+            var payload = JSON.Deserialize<Tuple<string, string>>(parameter);
 
             _action = payload.Item1.ToLower();
             _meetingId = payload.Item2;
@@ -45,7 +42,10 @@ namespace MeetingManager.ViewModels
 
         private async void Send()
         {
-            await OfficeService.AcceptOrDecline(_meetingId, _action, Comment);
+            using (new Loading(this))
+            {
+                await GraphService.AcceptOrDecline(_meetingId, _action, Comment);
+            }
         }
     }
 }

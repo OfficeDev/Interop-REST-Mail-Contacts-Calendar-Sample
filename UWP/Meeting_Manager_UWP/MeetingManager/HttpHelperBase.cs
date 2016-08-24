@@ -1,19 +1,18 @@
 ﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
 //See LICENSE in the project root for license information.
 
-using Newtonsoft.Json;
 using System;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
-using Windows.Web.Http;
-using Windows.Web.Http.Filters;
-using Windows.Web.Http.Headers;
 
 namespace MeetingManager
 {
     class HttpHelperBase
     {
+        private HttpClient _httpClient = GetHttpClient();
+
         internal async Task<T> GetItemAsync<T>(string uri)
         {
             return await DoHttpAsync<EmptyBody, T>(HttpMethod.Get, uri, null);
@@ -46,7 +45,7 @@ namespace MeetingManager
 
         internal async Task<T> PatchItemAsync<T>(string uri, T item)
         {
-            return await DoHttpAsync<T, T>(HttpMethod.Patch, uri, item);
+            return await DoHttpAsync<T, T>(new HttpMethod("PATCH"), uri, item);
         }
 
         protected virtual async Task<TResult> DoHttpAsync<TBody, TResult>(HttpMethod method, string uri, TBody body)
@@ -64,18 +63,14 @@ namespace MeetingManager
                 return await Deserialize<TResult>(response);
             }
 
-            HandleFailure(await GetErrorMessage(response), response);
             return default(TResult);
         }
 
-        private async Task<TResult> Deserialize<TResult>(HttpResponseMessage response)
+        protected async Task<TResult> Deserialize<TResult>(HttpResponseMessage response)
         {
             if (typeof(TResult) == typeof(byte[]))
             {
-                var buf = await response.Content.ReadAsBufferAsync();
-
-                var bytes = buf.ToArray();
-                LogResponse(response);
+                var bytes = await response.Content.ReadAsByteArrayAsync();
 
                 var result = Convert.ChangeType(bytes, typeof(TResult));
                 return (TResult)result;
@@ -83,19 +78,18 @@ namespace MeetingManager
             else   // assume string payload
             {
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-                LogResponse(response);
 
-                return JsonConvert.DeserializeObject<TResult>(jsonResponse);
+                return JSON.Deserialize<TResult>(jsonResponse);
             }
         }
 
-        private async Task<string> GetErrorMessage(HttpResponseMessage response)
+        protected async Task<string> GetErrorMessage(HttpResponseMessage response)
         {
             string jsonResponse = await response.Content.ReadAsStringAsync();
 
             try
             {
-                var errorDetail = string.IsNullOrEmpty(jsonResponse) ? null : JsonConvert.DeserializeObject<ODataError>(jsonResponse);
+                var errorDetail = string.IsNullOrEmpty(jsonResponse) ? null : JSON.Deserialize<ODataError>(jsonResponse);
 
                 if (errorDetail != null)
                 {
@@ -118,15 +112,12 @@ namespace MeetingManager
             {
                 if (body is string)
                 {
-                    request.Content = new HttpStringContent(body as string, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/x-www-form-urlencoded");
+                    request.Content = new StringContent(body as string, UnicodeEncoding.UTF8, "application/x-www-form-urlencoded");
                 }
                 else
                 {
-                    string serializedBody = JsonConvert.SerializeObject(body,
-                                    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-                    request.Content = new HttpStringContent(serializedBody, Windows.Storage.Streams.UnicodeEncoding.Utf8);
-                    request.Content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/json");
+                    var bodyJson = JSON.Serialize(body);
+                    request.Content = new StringContent(bodyJson, UnicodeEncoding.UTF8, "application/json");
                 }
             }
             return request;
@@ -134,18 +125,18 @@ namespace MeetingManager
 
         protected async Task<HttpResponseMessage> ExecuteRequestAsync(HttpRequestMessage request)
         {
-            using (HttpClient client = GetHttpClient())
+            try
             {
-                return await client.SendRequestAsync(request);
+                return await _httpClient.SendAsync(request);
             }
-        }
-
-        protected virtual void LogResponse(HttpResponseMessage response)
-        {
-        }
-
-        protected virtual void HandleFailure(string errorMessage, HttpResponseMessage response)
-        {
+            catch (Exception ex)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Content = new StringContent(ex.Message)
+                };
+            }
         }
 
         protected virtual string BuildUri(string uri)
@@ -156,15 +147,11 @@ namespace MeetingManager
             return uri;
         }
 
-        private HttpClient GetHttpClient()
+        private static HttpClient GetHttpClient()
         {
-            var rootFilter = new HttpBaseProtocolFilter();
-            rootFilter.CacheControl.ReadBehavior = HttpCacheReadBehavior.MostRecent;
-            rootFilter.CacheControl.WriteBehavior = HttpCacheWriteBehavior.NoCache;
-
-            return new HttpClient(rootFilter);
+            return new HttpClient();
         }
-   
+
         private class ODataError
         {
             public class Error

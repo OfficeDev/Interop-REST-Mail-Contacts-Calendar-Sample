@@ -1,4 +1,7 @@
-﻿using System;
+﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+//See LICENSE in the project root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,8 +30,7 @@ namespace MeetingManager
 
             public LogHttpProvider(Logger logger)
             {
-                var clientHandler = new HttpClientHandler { AllowAutoRedirect = false };
-                _httpClient = new HttpClient(clientHandler, /* disposeHandler */ true);
+                _httpClient = new HttpClient();
                 _logger = logger;
 
                 this.Serializer = new Serializer();
@@ -38,16 +40,12 @@ namespace MeetingManager
 
             public void Dispose()
             {
-                if (_httpClient != null)
-                {
-                    _httpClient.Dispose();
-                }
+                _httpClient?.Dispose();
             }
 
             public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
             {
                 var response = await _httpClient.SendAsync(request);
-
                 LogResponse(response);
                 
                 return response;
@@ -187,15 +185,8 @@ namespace MeetingManager
             await _graphClient.Me.MailFolders.Drafts.Messages[messageid].Request().DeleteAsync();
         }
 
-        public async Task<bool> UpdateAndSendMessage(MMM.Message message, string comment, IEnumerable<MMM.Message.Recipient> recipients)
+        public async Task<bool> UpdateAndSendMessage(MMM.Message message)
         {
-            message.Body.Content = comment + message.Body.Content;
-
-            if (recipients != null)
-            {
-                message.ToRecipients = new List<MMM.Message.Recipient>(recipients);
-            }
-
             var newMessage = message.ConvertObject<Microsoft.Graph.Message>();
 
             if (await _graphClient.Me.Messages[message.Id].Request().UpdateAsync(newMessage) == null)
@@ -303,20 +294,88 @@ namespace MeetingManager
 
         public async Task<int> GetContactsCount()
         {
-            var contacts = await _graphClient.Me.Contacts.Request().GetAsync();
+            var contacts = await _graphClient.Me.Contacts.Request().Top(100).GetAsync();
 
             // Assumption: there is just one page of contacts
             return contacts.Count;
         }
 
-        public Task<IEnumerable<MeetingTimeCandidate>> FindMeetingTimes(Meeting meeting)
-        {
-            throw new NotImplementedException();
-        }
-
         public IUserPager GetUserPager(int pageSize, string filter, bool getHumans)
         {
             return new SDKUserPager(pageSize, filter, getHumans, _graphClient);
+        }
+
+        public async Task<IEnumerable<MMM.DriveItem>> GetDriveItems(string folderId, int pageIndex, int pageSize)
+        {
+            IDriveItemChildrenCollectionPage items;
+            var builder = _graphClient.Me.Drive;
+
+            if (string.IsNullOrEmpty(folderId))
+            {
+                items = await builder.Root.Children.Request().GetAsync();
+            }
+            else
+            {
+                items = await builder.Items[folderId].Children.Request().GetAsync();
+            }
+
+            return items.Select(i => i.ConvertObject<MMM.DriveItem>());
+        }
+
+        public async Task<byte[]> GetDriveItemContent(string id)
+        {
+            var itemStream = await _graphClient.Me.Drive.Items[id].Content.Request().GetAsync();
+
+            byte[] itemBytes;
+
+            if (itemStream is MemoryStream)
+            {
+                itemBytes = (itemStream as MemoryStream).ToArray();
+            }
+            else
+            {
+                using (var ms = new MemoryStream())
+                {
+                    itemStream.CopyTo(ms);
+                    itemBytes = ms.ToArray();
+                }
+            }
+
+            return itemBytes;
+        }
+
+        public async Task<IEnumerable<MMM.FileAttachment>> GetEventAttachments(string eventId, int pageIndex, int pageSize)
+        {
+            var items = await _graphClient.Me.Events[eventId].Attachments.Request()
+                                .Top(pageSize)
+                                .Skip(pageSize * pageIndex)
+                                .GetAsync();
+
+            return items.Select(i => i.ConvertObject<MMM.FileAttachment>());
+        }
+
+        public async Task<MMM.FileAttachment> AddEventAttachment(string eventId, MMM.FileAttachment fileAttachment)
+        {
+            var attachment = fileAttachment.ConvertObject<Attachment>();
+
+            var item = await _graphClient.Me.Events[eventId].Attachments.Request().AddAsync(attachment);
+
+            return attachment.ConvertObject<MMM.FileAttachment>();
+        }
+
+        public async Task DeleteEventAttachment(string eventId, string attachmentId)
+        {
+            await _graphClient.Me.Events[eventId].Attachments[attachmentId].Request().DeleteAsync();
+        }
+
+        public async Task DeleteDriveItem(string id)
+        {
+            await _graphClient.Me.Drive.Items[id].Request().DeleteAsync();
+        }
+
+        public Task<IEnumerable<MeetingTimeCandidate>> FindMeetingTimes(Meeting meeting)
+        {
+            throw new NotImplementedException();
         }
 
         private class SDKUserPager : IUserPager

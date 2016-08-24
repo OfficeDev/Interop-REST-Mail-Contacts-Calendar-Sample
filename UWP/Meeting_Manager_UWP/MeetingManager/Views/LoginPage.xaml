@@ -23,11 +23,9 @@ See LICENSE in the project root for license information. -->
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <WebView Width="600" Height="600" x:Name="loginWebView" Source="{Binding LoginUrl}">
+        <WebView Source="{Binding LoginUrl}">
             <interactivity:Interaction.Behaviors>
-                <core:EventTriggerBehavior EventName="NavigationStarting">
-                    <core:InvokeCommandAction Command="{Binding NavigationStartingCommand}" />
-                </core:EventTriggerBehavior>
+                <local:WebNavigationBehavior Command="{Binding NavigationCommand}"/>
             </interactivity:Interaction.Behaviors>
         </WebView>
 

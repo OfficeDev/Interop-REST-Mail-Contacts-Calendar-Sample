@@ -31,8 +31,21 @@ See LICENSE in the project root for license information. -->
                     />
 
             <StackPanel Margin="0,20,0,0" HorizontalAlignment="Center">
-                <RadioButton Content="Use direct HTTP" IsChecked="{Binding UseHttp, Mode=TwoWay}"/>
-                <RadioButton Content="Use Graph SDK" IsChecked="{Binding UseSDK, Mode=TwoWay}"/>
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Select Graph Service Type" FontWeight="Bold"/>
+                        <RadioButton GroupName="graph" Content="Use direct HTTP" IsChecked="{Binding UseHttp, Mode=TwoWay}"/>
+                        <RadioButton GroupName="graph" Content="Use Graph SDK" IsChecked="{Binding UseHttp, Mode=TwoWay, Converter={StaticResource Negation}}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Select Authentication Service Type" FontWeight="Bold"/>
+                        <RadioButton GroupName="auth" Content="Use direct HTTP" IsChecked="{Binding UseMSAL, Mode=TwoWay, Converter={StaticResource Negation}}"/>
+                        <RadioButton GroupName="auth" Content="Use MSAL" IsChecked="{Binding UseMSAL, Mode=TwoWay}"/>
+                    </StackPanel>
+                </Border>
             </StackPanel>
 
         </StackPanel>

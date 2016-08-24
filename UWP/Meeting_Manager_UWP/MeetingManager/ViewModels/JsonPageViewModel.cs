@@ -1,14 +1,13 @@
 ﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
 //See LICENSE in the project root for license information.
 
-using MeetingManager.Models;
 using Newtonsoft.Json;
 using System;
 using Windows.UI.Core;
 
 namespace MeetingManager.ViewModels
 {
-    class JsonPageViewModel : ViewModel
+    class JsonPageViewModel : BaseViewModel
     {
         private CoreDispatcher _dispatcher;
 
@@ -38,8 +37,8 @@ namespace MeetingManager.ViewModels
         {
             try
             {
-                var instance = JsonConvert.DeserializeObject(text);
-                return JsonConvert.SerializeObject(instance, Formatting.Indented);
+                var instance = JSON.Deserialize<object>(text);
+                return JSON.Serialize(instance, Formatting.Indented);
             }
             catch
             {

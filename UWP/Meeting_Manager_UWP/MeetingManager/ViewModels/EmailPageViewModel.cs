@@ -2,26 +2,16 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
-using Prism.Commands;
-using Prism.Windows.AppModel;
-using Prism.Windows.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml.Navigation;
 
 namespace MeetingManager.ViewModels
 {
-    class EmailPageViewModel : ViewModel
+    class EmailPageViewModel : BaseViewModel
     {
-        private EventMessage _message;
-        private string _action;
-        private string _comment;
         private bool _mailHasBeenSent;
-        private ObservableCollection<Message.Recipient> _recipients;
 
         public EmailPageViewModel()
         {
@@ -29,93 +19,92 @@ namespace MeetingManager.ViewModels
             UI.Subscribe<Contact>(ContactSelected);
         }
 
-        public DelegateCommand SendCommand => new DelegateCommand(SendMail, CanExecuteSendMail);
-        public DelegateCommand AddUserRecipientCommand => new DelegateCommand(AddUserRecipient);
-        public DelegateCommand AddContactRecipientCommand => new DelegateCommand(AddContactRecipient);
-        public DelegateCommand<Message.Recipient> DeleteRecipientCommand => new DelegateCommand<Message.Recipient>(DeleteRecipient);
+        public Command SendCommand => new Command(SendMail, () => Recipients.Any());
+        public Command AddUserCommand => new Command(() => NavigateToUsers(true));
+        public Command AddContactCommand => new Command(() => NavigateToContacts());
+        public Command<Message.Recipient> DeleteRecipientCommand => new Command<Message.Recipient>(DeleteRecipient);
 
-        [RestorableState]
-        public EventMessage Message
+        public EventMessage Message { get; private set; }
+
+        public string Title { get; private set; }
+
+        public string Comment { get; set; }
+
+        public ObservableCollection<Message.Recipient> Recipients { get; private set; }
+
+        public bool IsContentText { get; private set; }
+
+        protected override void OnNavigatedTo(object parameter)
         {
-            get { return _message; }
-            private set { SetProperty(ref _message, value); }
+            var tuple = JSON.Deserialize<Tuple<EventMessage, string, string>>(parameter);
+
+            Message = tuple.Item1;
+            var action = tuple.Item2.ToLower();
+            Comment = tuple.Item3;
+
+            _mailHasBeenSent = false;
+
+            IsContentText = Message.Body.ContentType.EqualsCaseInsensitive("text");
+
+            SetTitle(action);
+            Recipients = new ObservableCollection<Message.Recipient>(Message.ToRecipients);
+
+            OnPropertyChanged(() => Message);
+            OnPropertyChanged(() => Recipients);
         }
 
-        public string Title => GetString("SendMailTitle");
-
-        public string Comment
+        protected override async void OnNavigatingFrom()
         {
-            get { return _comment; }
-            set { SetProperty(ref _comment, value); }
-        }
-
-        public ObservableCollection<Message.Recipient> Recipients
-        {
-            get { return _recipients; }
-            private set { SetProperty(ref _recipients, value); }
-        }
-
-        public bool IsContentText { get; set; }
-
-        public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
-        {
-            base.OnNavigatedTo(e, viewModelState);
-
-            if (e.NavigationMode == NavigationMode.New)
+            if (!_mailHasBeenSent)
             {
-                var tuple = UI.Deserialize<Tuple<EventMessage, string, string>>(e.Parameter);
-
-                Message = tuple.Item1;
-                _action = tuple.Item2.ToLower();
-                Comment = tuple.Item3;
-
-                _mailHasBeenSent = false;
-
-                IsContentText = Message.Body.ContentType.EqualsCaseInsensitive("text");
-
-                PopulateRecipients();
-             }
-        }
-
-        public override async void OnNavigatingFrom(NavigatingFromEventArgs e, Dictionary<string, object> viewModelState, bool suspending)
-        {
-            if (e.NavigationMode == NavigationMode.Back && !_mailHasBeenSent)
-            {
-                await OfficeService.DeleteDraftMessage(Message.Id);
+                using (new Loading(this))
+                {
+                    await GraphService.DeleteDraftMessage(Message.Id);
+                }
             }
         }
 
-        private void PopulateRecipients()
+        private void SetTitle(string action)
         {
-            Recipients = new ObservableCollection<Message.Recipient>(Message.ToRecipients);
+            switch (action)
+            {
+                case OData.Reply:
+                    Title = GetString("ReplyTitle");
+                    break;
+                case OData.ReplyAll:
+                    Title = GetString("ReplyAllTitle");
+                    break;
+                case OData.Forward:
+                    Title = GetString("ForwardTitle");
+                    break;
+            }
+            OnPropertyChanged(() => Title);
         }
 
         private async void SendMail()
         {
+            Message.Body.Content = Comment + Message.Body.Content;
+
+            if (Recipients != null)
+            {
+                Message.ToRecipients = new List<Message.Recipient>(Recipients);
+            }
+
             using (new Loading(this))
             {
-                _mailHasBeenSent = await OfficeService.UpdateAndSendMessage(Message, Comment, Recipients);
+                _mailHasBeenSent = await GraphService.UpdateAndSendMessage(Message);
             }
-            UI.GoBack();
-        }
-
-        private async void AddUserRecipient()
-        {
-            await NavigateToUsers(true);
-        }
-
-        private async void AddContactRecipient()
-        {
-            await NavigateToContacts();
+            GoBack();
         }
 
         private void DeleteRecipient(Message.Recipient recipient)
         {
+            if (recipient == null) return;
+
             int pos = Recipients.IndexOf(x => x.EmailAddress.IsEqualTo(recipient.EmailAddress));
             Recipients.RemoveAt(pos);
-            SendCommand.RaiseCanExecuteChanged();
+            OnPropertyChanged(() => SendCommand);
         }
-
 
         private void UserSelected(User user)
         {
@@ -133,26 +122,19 @@ namespace MeetingManager.ViewModels
 
         private void ContactSelected(Contact contact)
         {
-            var recipient = new Message.Recipient
+            AddRecipient(new Message.Recipient
             {
                 EmailAddress = contact.EmailAddresses[0]
-            };
-
-            AddRecipient(recipient);
+            });
         }
 
         private void AddRecipient(Message.Recipient recipient)
         {
-            if (Recipients.FirstOrDefault(x => x.EmailAddress.IsEqualTo(recipient.EmailAddress)) == null)
+            if (!Recipients.Any(x => x.EmailAddress.IsEqualTo(recipient.EmailAddress)))
             {
                 Recipients.Add(recipient);
-                SendCommand.RaiseCanExecuteChanged();
+                OnPropertyChanged(() => SendCommand);
             }
-        }
-
-        private bool CanExecuteSendMail()
-        {
-            return Recipients.Any();
         }
     }
 }

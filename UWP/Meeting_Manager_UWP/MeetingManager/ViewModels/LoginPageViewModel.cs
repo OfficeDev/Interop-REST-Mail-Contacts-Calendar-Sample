@@ -2,76 +2,61 @@
 //See LICENSE in the project root for license information.
 
 using MeetingManager.Models;
-using Prism.Commands;
-using Prism.Windows.Navigation;
-using System.Collections.Generic;
-using Windows.UI.Xaml.Controls;
 
 namespace MeetingManager.ViewModels
 {
-    class LoginPageViewModel : ViewModel
+    class LoginPageViewModel : BaseViewModel
     {
-        private string _loginUrl;
+        private string RedirectUri => App.Current.Resources["ida:RedirectUri"].ToString();
+        private string ClientID => App.Current.Resources["ida:ClientID"].ToString();
+        private string AADInstance => App.Current.Resources["ida:AADInstance"].ToString();
 
-        public LoginPageViewModel()
+        protected override void OnNavigatedTo(object parameter)
         {
+            LoginUrl = $"{AADInstance + "common/oauth2/authorize"}?" +
+                                    "response_type=code" +
+                                    "&prompt=login" +
+                                    $"&client_id={ClientID}" +
+                                    $"&redirect_uri={RedirectUri}";
+            OnPropertyChanged(() => LoginUrl);
         }
 
-        public override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
-        {
-            base.OnNavigatedTo(e, viewModelState);
+        public Command<NavigationArgs> NavigationCommand => new Command<NavigationArgs>(NavigationStarting);
 
-            LoginUrl = App.Me.AuthenticationService.LoginUrl;
-        }
+        public string LoginUrl { get; private set; }
 
-        public DelegateCommand<WebViewNavigationStartingEventArgs> NavigationStartingCommand =>
-                            new DelegateCommand<WebViewNavigationStartingEventArgs>(NavigationStarting);
-
-        public string LoginUrl
-        {
-            get { return _loginUrl; }
-            private set { SetProperty(ref _loginUrl, value); }
-        }
-
-        private void NavigationStarting(WebViewNavigationStartingEventArgs args)
+        private void NavigationStarting(NavigationArgs args)
         {
             string authCode = string.Empty;
-            string argsUri = args.Uri.AbsoluteUri;
 
-            if (argsUri.IndexOfCaseInsensitive(App.Me.AuthenticationService.RedirectUri) == 0)
+            if (args.Uri.IndexOfCaseInsensitive(RedirectUri) == 0)
             {
                 string codeKey = "code=";
-                int codeStartIndex = argsUri.IndexOfCaseInsensitive(codeKey);
+                int codeStartIndex = args.Uri.IndexOfCaseInsensitive(codeKey);
 
                 if (codeStartIndex > 0)
                 {
-                    args.Cancel = true;
-
                     codeStartIndex += codeKey.Length;
-                    var segments = argsUri.Substring(codeStartIndex).Split('&');
+                    var segments = args.Uri.Substring(codeStartIndex).Split('&');
                     authCode = segments[0];
 
                     IsLoading = false;
+                    args.Cancel = true;
 
                     InitializeApp(authCode);
                 }
             }
         }
 
-        private async void InitializeApp(string authCode)
+        private void InitializeApp(string authCode)
         {
-            App.Me.AuthenticationService.AuthorizationCode = authCode;
-
             UI.Publish(new LoginEventData
             {
                 Url = LoginUrl,
                 AuthCode = authCode
             });
 
-            var user = await OfficeService.GetUser();
-            App.Me.AuthenticationService.UserId = user.UserPrincipalName;
-
-            await UI.NavigateTo("Calendar");
+            App.Me.InitializeApp(authCode);
         }
     }
 }

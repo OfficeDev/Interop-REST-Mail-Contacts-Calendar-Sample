@@ -5,16 +5,27 @@ using MeetingManager.Models;
 
 namespace MeetingManager.ViewModels
 {
-    class DialogViewModel : ViewModel, ITransientViewModel
+    abstract class DialogViewModel : BaseViewModel, ITransientViewModel
     {
         public DialogViewModel()
         {
             UI.Subscribe<InitDialog>(OnInitialize);
         }
 
-        protected virtual void OnInitialize(InitDialog parameter)
+        private void OnInitialize(InitDialog parameter)
         {
             UI.Unsubscribe<InitDialog>(OnInitialize);
+
+            OnNavigatedTo(parameter.Payload);
+        }
+
+        protected override void OnNavigatedTo(object data)
+        {
+        }
+
+        protected override void GoBack()
+        {
+            UI.CloseDialog();
         }
     }
 }

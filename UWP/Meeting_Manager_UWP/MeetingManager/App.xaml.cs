@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
-using System.Diagnostics;
 using MeetingManager.Models;
 using MeetingManager.ViewModels;
 using Windows.UI.Core;
@@ -24,27 +23,17 @@ namespace MeetingManager
     /// </summary>
     sealed partial class App : PrismUnityApplication
     {
-        private bool inExceptionHandler = false;
+        private const string AuthCodeKey = "AuthCode";
+        private const string UserIdKey = "UserId";
 
         private IDictionary<Type, object> _vmCache = new Dictionary<Type, object>();
 
-        public App()
-        {
-            UnhandledException += OnUnhandledException;
-        }
-
         private Logger _logger;
-        private CoreDispatcher _mainDispatcher;
 
-        public CoreDispatcher MainDispatcher
-        {
-            get
-            {
-                return _mainDispatcher;
-            }
-        }
+        public CoreDispatcher MainDispatcher => Window.Current.Dispatcher;
 
         internal bool UseHttp { get; set; }
+        internal bool UseMSAL { get; set; }
 
         internal IEventAggregator EventAggregator { get; private set; }
 
@@ -52,21 +41,41 @@ namespace MeetingManager
 
         internal static App Me => Application.Current as App;
 
+        internal IGraphService GraphService { get; private set; }
+
         internal IAuthenticationService AuthenticationService { get; private set; }
 
-        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+        internal string UserId
         {
-            if (!inExceptionHandler)
+            get
             {
-                inExceptionHandler = true;
+                if (SessionStateService.SessionState.ContainsKey(UserIdKey))
+                {
+                    return SessionStateService.SessionState[UserIdKey].ToString();
+                }
+                return null;
+            }
 
-                StackTrace stackTrace = new StackTrace(args.Exception, true);
-                string stackTraceString = args.Exception.StackTrace == null ? stackTrace.ToString() : args.Exception.StackTrace;
+            set
+            {
+                SessionStateService.SessionState[UserIdKey] = value;
+            }
+        }
 
-                string errText = string.Format("An unhandled exception occurred: {0}\r\nStack Trace: {1}", args.Message, stackTraceString);
+        private string AuthorizationCode
+        {
+            get
+            {
+                if (SessionStateService.SessionState.ContainsKey(AuthCodeKey))
+                {
+                    return SessionStateService.SessionState[AuthCodeKey].ToString();
+                }
+                return null;
+            }
 
-                Debug.WriteLine(errText);
-                args.Handled = true;
+            set
+            {
+                SessionStateService.SessionState[AuthCodeKey] = value;
             }
         }
 
@@ -83,7 +92,6 @@ namespace MeetingManager
             NavigationService.Navigate("Connect", null);
 
             Window.Current.Activate();
-            _mainDispatcher = Window.Current.Dispatcher;
 
             return Task.FromResult<object>(null);
         }
@@ -92,8 +100,6 @@ namespace MeetingManager
         {
             EventAggregator = new EventAggregator();
             _logger = new Logger();
-
-            AuthenticationService = new AuthenticationHelper(SessionStateService, _logger);
 
             ViewModelLocationProvider.SetDefaultViewModelFactory(CachingFactory);
 
@@ -110,16 +116,28 @@ namespace MeetingManager
             return _vmCache[type];
         }
 
-        internal IGraphService GetGraphService()
+        internal async void InitializeApp(string authCode)
         {
-            if (UseHttp)
+            AuthorizationCode = authCode;
+
+            CreateServices();
+
+            var user = await GraphService.GetUser();
+
+            if (user != null)
             {
-                return new HttpGraphService(AuthenticationService, _logger);
+                App.Me.UserId = user.UserPrincipalName;
+                UI.NavigateTo("Calendar");
             }
-            else
-            {
-                return new SDKGraphService(AuthenticationService, _logger);
-            }
+        }
+
+        private void CreateServices()
+        {
+            AuthenticationService = UseMSAL ? new AuthenticationHelperMSAL() as IAuthenticationService
+                                            : new AuthenticationHelper(_logger, AuthorizationCode);
+
+            GraphService = UseHttp ? new HttpGraphService(AuthenticationService, _logger) as IGraphService
+                           : new SDKGraphService(AuthenticationService, _logger);
         }
     }
 }

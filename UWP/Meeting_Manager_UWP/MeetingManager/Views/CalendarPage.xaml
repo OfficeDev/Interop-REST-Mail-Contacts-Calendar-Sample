@@ -12,6 +12,7 @@ See LICENSE in the project root for license information. -->
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:prism="using:Prism.Windows.Mvvm"
     prism:ViewModelLocator.AutoWireViewModel="True"    
+    xmlns:v="using:MeetingManager.Views"
     Style="{StaticResource Page}"
     mc:Ignorable="d"
     x:Name="ThisPage"
@@ -38,7 +39,7 @@ See LICENSE in the project root for license information. -->
 
                 <Grid VerticalAlignment="Stretch" Background="{Binding Index, Converter={StaticResource IndexToBackground}, ConverterParameter=Beige:LightGray}">
 
-                       <i:Interaction.Behaviors>
+                        <i:Interaction.Behaviors>
                             <core:EventTriggerBehavior EventName="RightTapped">
                                 <local:OpenMenuFlyoutAction/>
                             </core:EventTriggerBehavior>
@@ -60,7 +61,6 @@ See LICENSE in the project root for license information. -->
                                     <MenuFlyoutSubItem.Items>
                                         <MenuFlyoutItem Text="Cancel" IsEnabled="{Binding IsOrganizer}" Command="{Binding DataContext.CancelInstanceCommand, ElementName=ThisPage}" CommandParameter="{Binding}"/>
                                         <MenuFlyoutItem Text="View" Command="{Binding DataContext.ViewInstanceCommand, ElementName=ThisPage}" CommandParameter="{Binding}"/>
-                                        <MenuFlyoutItem Text="Rinning late..." Visibility="{Binding IsOrganizer, Converter={StaticResource BoolToVisible}}" Command="{Binding DataContext.LateCommand, ElementName=ThisPage}" CommandParameter="{Binding}"/>
                                     </MenuFlyoutSubItem.Items>
                                 </MenuFlyoutSubItem>
                                 <MenuFlyoutSubItem Text="Series" Visibility="{Binding IsSerial, Converter={StaticResource BoolToVisible}}">
@@ -117,16 +117,8 @@ See LICENSE in the project root for license information. -->
                     FontWeight="Bold"
                     />
 
-       <StackPanel  Grid.Row="3" Background="AliceBlue">
-
-            <CalendarView>
-                <i:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="SelectedDatesChanged">
-                        <core:InvokeCommandAction Command="{Binding DatesChangedCommand}"/>
-                    </core:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-            </CalendarView>
-
+        <StackPanel  Grid.Row="3" Background="AliceBlue">
+            <local:CalendarView SelectedDate="{Binding SelectedDate, Mode=TwoWay}"/>
         </StackPanel>
 
         <Grid Grid.Row="3" Grid.Column="1" Margin="10,0,0,0" HorizontalAlignment="Stretch" Background="White">
@@ -166,7 +158,7 @@ See LICENSE in the project root for license information. -->
 
                 <i:Interaction.Behaviors>
                     <core:EventTriggerBehavior EventName="Tapped">
-                        <core:InvokeCommandAction Command="{Binding DoubleTappedCommand}" />
+                        <core:InvokeCommandAction Command="{Binding SelectItemCommand}" />
                     </core:EventTriggerBehavior>
                 </i:Interaction.Behaviors>
             </ListView>
