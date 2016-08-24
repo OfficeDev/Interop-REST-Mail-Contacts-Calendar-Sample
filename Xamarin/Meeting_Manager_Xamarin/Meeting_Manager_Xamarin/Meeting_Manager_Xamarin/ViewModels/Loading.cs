@@ -12,7 +12,7 @@ namespace Meeting_Manager_Xamarin.ViewModels
         public Loading(BaseViewModel vm)
         {
             _vm = vm;
-            _vm.IsLoading = true;
+            vm.IsLoading = true;
         }
 
         public void Dispose()

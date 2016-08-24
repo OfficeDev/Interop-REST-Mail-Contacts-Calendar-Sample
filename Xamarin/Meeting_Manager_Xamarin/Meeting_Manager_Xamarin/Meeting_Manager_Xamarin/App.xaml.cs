@@ -5,9 +5,7 @@ using Meeting_Manager_Xamarin.ViewModels;
 using Meeting_Manager_Xamarin.Views;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -16,27 +14,17 @@ namespace Meeting_Manager_Xamarin
 {
     public partial class App : Application
     {
-        internal string ClientId => UseMSAL ? 
-                            "7d94fafd-5ad3-40e0-bc4e-914920af2226" :
-                            "6669f82f-61ac-46ea-a346-7c3444d45819";
-
-        internal string RedirectUri => UseMSAL ?
-                            "urn:ietf:wg:oauth:2.0:oob" :
-                            "MS-APPX-WEB://MICROSOFT.AAD.BROKERPLUGIN/S-1-15-2-2615261976-468863395-2165854654-1528528134-2599808767-1175204876-2313817458";
-
-        private const string CommonAuth = "https://login.microsoftonline.com/common/oauth2/";
-
-        internal string AuthorityOAuth2 => UseMSAL ?
-                            CommonAuth + "v2.0/" :
-                            CommonAuth;
+        internal bool InTransient { get; private set; }
 
         private IDictionary<Type, object> _vmCache = new Dictionary<Type, object>();
+
+        private Logger _logger;
 
         public App()
         {
             InitializeComponent();
 
-            Logger = new Logger();
+            _logger = new Logger();
 
             // The root page of your application
             MainPage = new NavigationPage(new ConnectPage());
@@ -57,49 +45,57 @@ namespace Meeting_Manager_Xamarin
         internal bool UseMSAL { get; set; }
 
         private Page CurrentPage => (MainPage as IPageContainer<Page>).CurrentPage;
-        private Logger Logger { get; set; }
 
-        internal async Task InitializeApp()
+        internal async void InitializeApp(string authCode, Microsoft.Identity.Client.IPlatformParameters platformParameters=null)
         {
+            AuthorizationCode = authCode;
+
+            CreateServices(platformParameters);
+
             var user = await App.Me.GraphService.GetUser();
 
             if (user != null)
             {
-                App.Me.UserId = user.UserPrincipalName;
+                UserId = user.UserPrincipalName;
 
-                await App.Me.PushAsync("Calendar");
+                await PushAsync("Calendar");
             }
-        }
-
-        internal void CreateServices(Microsoft.Identity.Client.IPlatformParameters platformParameters)
-        {
-            AuthenticationService = UseMSAL ? new AuthenticationHelperMSAL(platformParameters) as IAuthenticationService
-                                            : new AuthenticationHelper(Logger);
-
-            GraphService = UseHttp ? new HttpGraphService(AuthenticationService, Logger) as IGraphService
-                           : new SDKGraphService(AuthenticationService, Logger);
         }
 
         internal async Task PushAsync(string pageToken, object data=null)
         {
-            var viewModelNameSpace = GetType().Namespace + ".ViewModels";
-            var viewNameSpace = GetType().Namespace + ".Views";
+            Type viewModelType;
+            Type viewType;
 
-            var viewModelTypeName = viewModelNameSpace + "." + pageToken + "PageViewModel";
-            var viewModelType = Type.GetType(viewModelTypeName);
+            if (!GetTypes(pageToken, "Page", out viewModelType, out viewType) &&
+                !GetTypes(pageToken, "Dialog", out viewModelType, out viewType))
+            {
+                throw new ArgumentException($"Cannot get view[model] type for {pageToken}!");
+            }
 
             var vm = GetViewModelInstance(viewModelType) as BaseViewModel;
-
-            var viewTypeName = viewNameSpace + "." + pageToken + "Page";
-            var viewType = Type.GetType(viewTypeName);
-
             var view = Activator.CreateInstance(viewType) as ContentPage;
 
-            vm.OnAppearing(data);
+            vm.NavigateTo(data);
             view.BindingContext = vm;
             vm.OnPropertyChanged();
 
             await CurrentPage.Navigation.PushAsync(view);
+        }
+
+        private bool GetTypes(string pageToken, string name,
+                                out Type viewModelType, out Type viewType)
+        {
+            var viewModelNameSpace = GetType().Namespace + ".ViewModels";
+            var viewNameSpace = GetType().Namespace + ".Views";
+
+            var viewModelTypeName = viewModelNameSpace + "." + pageToken + name + "ViewModel";
+            viewModelType = Type.GetType(viewModelTypeName);
+
+            var viewTypeName = viewNameSpace + "." + pageToken + name;
+            viewType = Type.GetType(viewTypeName);
+
+            return viewModelType != null && viewType != null;
         }
 
         internal async Task PushAsync(Page page)
@@ -130,16 +126,13 @@ namespace Meeting_Manager_Xamarin
             }
         }
 
-        internal async Task<string> DisplayActions(string title, params string[] actions)
-        {
-            return await CurrentPage.DisplayActionSheet(title, null/*"Cancel"*/, null, actions);
-        }
-
         private object GetViewModelInstance(Type viewModelType)
         {
             bool transient = typeof(ITransientViewModel)
                                 .GetTypeInfo()
                                 .IsAssignableFrom(viewModelType.GetTypeInfo());
+
+            InTransient = transient;
 
             if (transient || !_vmCache.ContainsKey(viewModelType))
             {
@@ -147,11 +140,6 @@ namespace Meeting_Manager_Xamarin
             }
 
             return _vmCache[viewModelType];
-        }
-
-        internal BaseViewModel ViewModelFromType(Type viewModelType)
-        {
-            return _vmCache[viewModelType] as BaseViewModel;
         }
 
         protected override void OnStart()
@@ -167,6 +155,15 @@ namespace Meeting_Manager_Xamarin
         protected override void OnResume()
         {
             // Handle when your app resumes
+        }
+
+        private void CreateServices(Microsoft.Identity.Client.IPlatformParameters platformParameters)
+        {
+            AuthenticationService = UseMSAL ? new AuthenticationHelperMSAL(platformParameters) as IAuthenticationService
+                                            : new AuthenticationHelper(_logger, AuthorizationCode);
+
+            GraphService = UseHttp ? new HttpGraphService(AuthenticationService, _logger) as IGraphService
+                           : new SDKGraphService(AuthenticationService, _logger);
         }
     }
 }

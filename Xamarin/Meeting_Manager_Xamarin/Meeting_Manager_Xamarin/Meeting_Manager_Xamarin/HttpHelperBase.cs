@@ -2,6 +2,7 @@
 //See LICENSE in the project root for license information.
 
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -132,7 +133,7 @@ namespace Meeting_Manager_Xamarin
             {
                 return new HttpResponseMessage
                 {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    StatusCode = HttpStatusCode.BadRequest,
                     Content = new StringContent(ex.Message)
                 };
             }

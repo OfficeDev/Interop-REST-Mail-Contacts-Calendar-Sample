@@ -3,9 +3,9 @@
 
 namespace Meeting_Manager_Xamarin.Views
 {
-    public partial class TimeSlotsPage : Xamarin.Forms.ContentPage
+    public partial class AcceptDeclineDialog : Xamarin.Forms.ContentPage
     {
-        public TimeSlotsPage()
+        public AcceptDeclineDialog()
         {
             InitializeComponent();
         }

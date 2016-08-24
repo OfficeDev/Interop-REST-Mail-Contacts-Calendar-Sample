@@ -683,6 +683,15 @@ namespace Meeting_Manager_Xamarin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No free slots are found.
+        /// </summary>
+        internal static string NoFreeSlots {
+            get {
+                return ResourceManager.GetString("NoFreeSlots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location not specified.
         /// </summary>
         internal static string NoLocation {

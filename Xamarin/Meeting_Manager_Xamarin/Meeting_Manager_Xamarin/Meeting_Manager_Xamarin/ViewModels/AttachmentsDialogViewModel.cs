@@ -9,29 +9,33 @@ using Xamarin.Forms;
 
 namespace Meeting_Manager_Xamarin.ViewModels
 {
-    class AttachmentsPageViewModel : BaseViewModel, ITransientViewModel
+    class AttachmentsDialogViewModel : DialogViewModel
     {
         private string _eventId;
         private bool _isOrganizer;
 
-        public Command<FileAttachment> DeleteAttachmentCommand => new Command<FileAttachment>(DeleteAttachment, CanDelete);
-        public Command<FileAttachment> OpenAttachmentCommand => new Command<FileAttachment>(OpenAttachment);
+        public Command<FileAttachment> DeleteCommand => new Command<FileAttachment>(DeleteAttachment, CanDelete);
+        public Command<FileAttachment> ViewCommand => new Command<FileAttachment>(OpenAttachment);
 
         public ObservableCollection<FileAttachment> Items { get; private set; }
 
-        public override void OnAppearing(object data)
+        protected override void OnNavigatedTo(object parameter)
         {
-            var tuple = JSON.Deserialize<Tuple<List<FileAttachment>, string, bool>>(data);
+            var tuple = JSON.Deserialize<Tuple<List<FileAttachment>, string, bool>>(parameter);
 
             Items = new ObservableCollection<FileAttachment>(tuple.Item1);
-            OnPropertyChanged(() => Items);
             _eventId = tuple.Item2;
-            _isOrganizer = tuple.Item3;
+            _isOrganizer = string.IsNullOrEmpty(_eventId) || tuple.Item3;
+
+            OnPropertyChanged(() => Items);
         }
 
-        private void OpenAttachment(FileAttachment item)
+        private async void OpenAttachment(FileAttachment item)
         {
-            DependencyService.Get<IAttachmentOpener>().Open(item);
+            using (new Loading(this))
+            {
+                await UI.OpenAttachment(item);
+            }
         }
 
         private bool CanDelete(FileAttachment item)
@@ -50,7 +54,7 @@ namespace Meeting_Manager_Xamarin.ViewModels
             }
 
             Items.Remove(item);
-            Publish(item);
+            UI.Publish(item);
         }
     }
 }

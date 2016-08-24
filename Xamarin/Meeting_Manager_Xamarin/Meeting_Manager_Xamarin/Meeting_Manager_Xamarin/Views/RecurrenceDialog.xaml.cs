@@ -6,9 +6,9 @@ using System.Globalization;
 
 namespace Meeting_Manager_Xamarin.Views
 {
-    public partial class RecurrencePage : Xamarin.Forms.ContentPage
+    public partial class RecurrenceDialog : Xamarin.Forms.ContentPage
     {
-        public RecurrencePage()
+        public RecurrenceDialog()
         {
             InitializeComponent();
         }

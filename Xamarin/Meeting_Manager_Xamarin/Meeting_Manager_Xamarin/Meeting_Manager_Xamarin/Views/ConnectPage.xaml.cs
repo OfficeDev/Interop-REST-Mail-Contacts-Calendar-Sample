@@ -27,15 +27,13 @@ namespace Meeting_Manager_Xamarin.Views
 
         public async void OnClicked(object sender, EventArgs args)
         {
-            App.Me.CreateServices(PlatformParameters);
-
             if (!App.Me.UseMSAL)
             {
-                await Navigation.PushAsync(new LoginPage());
+                await App.Me.PushAsync("Login");
             }
             else
             {
-                await App.Me.InitializeApp();
+                App.Me.InitializeApp(null, PlatformParameters);
             }
         }
 

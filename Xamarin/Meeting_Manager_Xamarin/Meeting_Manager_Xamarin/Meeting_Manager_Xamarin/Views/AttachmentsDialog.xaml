@@ -4,10 +4,10 @@ See LICENSE in the project root for license information. -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
-             Title="{v:ResxString FilesTitle}"
+             Title="{v:ResxString AttachmentsTitle}"
              x:Name="ThisPage"
              Style="{StaticResource Page}"
-             x:Class="Meeting_Manager_Xamarin.Views.FilesPage">
+             x:Class="Meeting_Manager_Xamarin.Views.AttachmentsDialog">
 
   <Grid x:Name="MainGrid" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
 
@@ -23,32 +23,31 @@ See LICENSE in the project root for license information. -->
           <ActivityIndicator IsRunning="{Binding IsLoading}" HorizontalOptions="FillAndExpand"
                              IsVisible="{Binding IsLoading}"/>
         </StackLayout>
-        
-        <Button Text="{v:ResxString UpCaption}" Command="{Binding UpCommand}" IsEnabled="{Binding IsRootFolder, Converter={StaticResource Negation}}"/>
-
       </StackLayout>
 
       <Frame Style="{StaticResource Frame}" Padding="2">
         <ListView
-          ItemsSource="{Binding Files}"
+          ItemsSource="{Binding Items}"          
         >
 
           <ListView.ItemTemplate>
             <DataTemplate>
+
               <TextCell Text="{Binding Name}"
-                         Command="{Binding BindingContext.ItemTappedCommand, Source={v:ElementReference ThisPage}}"
+                         Command="{Binding BindingContext.ViewCommand, Source={x:Reference ThisPage}}"
                          CommandParameter="{Binding}">
 
                 <TextCell.ContextActions>
                   <MenuItem Text="{v:ResxString ViewOption}"
-                          Command="{Binding BindingContext.ViewFileCommand, Source={v:ElementReference ThisPage}}"
+                          Command="{Binding BindingContext.ViewCommand, Source={x:Reference ThisPage}}"
                           CommandParameter="{Binding}"/>
                   <MenuItem Text="{v:ResxString DeleteOption}" IsDestructive="true"
-                          Command="{Binding BindingContext.DeleteFileCommand, Source={v:ElementReference ThisPage}}"
+                          Command="{Binding BindingContext.DeleteCommand, Source={x:Reference ThisPage}}"
                           CommandParameter="{Binding}"/>
                 </TextCell.ContextActions>
 
               </TextCell>
+
             </DataTemplate>
           </ListView.ItemTemplate>
 

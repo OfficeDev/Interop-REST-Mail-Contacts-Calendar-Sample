@@ -3,9 +3,9 @@
 
 namespace Meeting_Manager_Xamarin.Views
 {
-    public partial class FilesPage : Xamarin.Forms.ContentPage
+    public partial class AttachmentsDialog : Xamarin.Forms.ContentPage
     {
-        public FilesPage()
+        public AttachmentsDialog()
         {
             InitializeComponent();
         }

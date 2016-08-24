@@ -17,75 +17,44 @@ namespace Meeting_Manager_Xamarin.ViewModels
         private const string KindSend = "send";
         private const string KindSilent = "silent";
 
-        private ObservableCollection<Attendee> _attendees;
-        private string _dateTimeDescription;
-
-        private Meeting _meeting;
         private IEnumerable<FileAttachment> _attachments;
 
-        public Command EditCommand => new Command(EditMeeting);
-        public Command ReplyCommand => new Command(SendReply);
-        public Command SendEmailCommand => new Command(SendEmail);
-        public Command ReplyAllCommand => new Command(SendReplyAll);
-        public Command ForwardCommand => new Command(SendForward);
-        public Command LateCommand => new Command(SendLate);
-        public Command AcceptCommand => new Command(AcceptMeeting);
-        public Command DeclineCommand => new Command(DeclineMeeting);
-        public Command TentativeCommand => new Command(TentativeMeeting);
-        public Command ShowAttachmentsCommand => new Command(ShowAttachments);
+        public Command ReplyCommand => new Command(() => NavigateToEmail(OData.Reply));
+        public Command ReplyAllCommand => new Command(() => NavigateToEmail(OData.ReplyAll));
+        public Command ForwardCommand => new Command(() => NavigateToEmail(OData.Forward));
+        public Command LateCommand => new Command(() => SendRunningLate(Meeting));
+        public Command<string> AcceptCommand => new Command<string>((kind) => AcceptOrDecline(OData.Accept, kind));
+        public Command<string> DeclineCommand => new Command<string>((kind) => AcceptOrDecline(OData.Decline, kind));
+        public Command<string> TentativeCommand => new Command<string>((kind) => AcceptOrDecline(OData.TentativelyAccept, kind));
 
-        public Meeting Meeting
-        {
-            get { return _meeting; }
-            private set { SetProperty(ref _meeting, value); }
-        }
+        public Command ShowAttachmentsCommand => new Command(() => NavigateToAttachments(_attachments, Meeting));
+
+        public Meeting Meeting { get; private set; }
 
         public string Location
         {
             get
             {
-                var location = _meeting.Location.DisplayName;
+                var location = Meeting.Location.DisplayName;
 
                 return string.IsNullOrEmpty(location) ? GetString("NoLocation") : location;
             }
         }
 
-        public string Description => Meeting.Body.Content;
+        public string DateTimeDescription { get; private set; }
 
-        public string DateTimeDescription
+        public ObservableCollection<Attendee> Attendees { get; private set; }
+
+        public string Organizer => Meeting.OrganizerName;
+
+        public bool HasAttachments => _attachments?.Any() == true;
+
+        protected override async void OnNavigatedTo(object parameter)
         {
-            get { return _dateTimeDescription; }
-            private set { SetProperty(ref _dateTimeDescription, value); }
-        }
-
-        public ObservableCollection<Attendee> Attendees
-        {
-            get { return _attendees; }
-            private set { SetProperty(ref _attendees, value); }
-        }
-
-        public bool IsContentText { get; set; }
-
-        public string Organizer => _meeting.OrganizerName;
-
-        public bool HasAttachments => _attachments != null && _attachments.Any();
-
-        public HtmlWebViewSource HtmlSource
-        {
-            get
+            if (parameter != null)
             {
-                return new HtmlWebViewSource()
-                {
-                    Html = Meeting.Body.Content ?? String.Empty
-                };
-            }
-        }
-
-        public override async void OnAppearing(object data)
-        {
-            if (data != null)
-            {
-                Meeting = JSON.Deserialize<Meeting>(data);
+                Meeting = JSON.Deserialize<Meeting>(parameter);
+                OnPropertyChanged(() => Meeting);
 
                 using (new Loading(this))
                 {
@@ -99,13 +68,13 @@ namespace Meeting_Manager_Xamarin.ViewModels
 
         private void Populate()
         {
-            IsContentText = Meeting.Body.ContentType.EqualsCaseInsensitive("text");
-            OnPropertyChanged(() => HtmlSource);
-            OnPropertyChanged(() => Description);
+            DateTimeDescription = BuildDateTimeDescription(Meeting);
 
-            DateTimeDescription = BuildDateTimeDescription(_meeting);
+            Attendees = new ObservableCollection<Attendee>(Meeting.Attendees);
+            Attendees.ForEach(a => a.OrganizerAddress = Meeting.Organizer?.EmailAddress.Address);
 
-            Attendees = new ObservableCollection<Attendee>(_meeting.Attendees);
+            OnPropertyChanged(() => Attendees);
+            OnPropertyChanged(() => DateTimeDescription);
         }
 
         private string BuildDateTimeDescription(Meeting meeting)
@@ -141,114 +110,9 @@ namespace Meeting_Manager_Xamarin.ViewModels
             return $"{date} {time}";
         }
 
-        private async void EditMeeting()
+        private void NavigateToEmail(string action)
         {
-            await UI.NavigateTo("Edit", _meeting);
-        }
-
-        private async void SendEmail()
-        {
-            var options = new Dictionary<string, Action>
-            {
-                [GetString("ReplyOption")] = SendReply,
-                [GetString("ReplyAllOption")] = SendReplyAll,
-                [GetString("ForwardOption")] = SendForward,
-                [GetString("LateOption")] = SendLate,
-            };
-
-            await UI.DisplayAndExecuteAction(GetString("MailOperationCaption"), options);
-        }
-
-        private async void SendReply()
-        {
-            await NavigateToEmail(OData.Reply);
-        }
-
-        private async void SendReplyAll()
-        {
-            await NavigateToEmail(OData.ReplyAll);
-        }
-
-        private async void SendForward()
-        {
-            await NavigateToEmail(OData.Forward);
-        }
-
-        private async Task NavigateToEmail(string action, string comment = null)
-        {
-            await base.NavigateToEmail(Meeting, action, comment);
-        }
-
-        private async void SendLate()
-        {
-            await SendRunningLate(Meeting);
-        }
-
-        private async void AcceptDeclineChoice(Action<string> action)
-        {
-            var edit = GetString("EditResponseOption");
-            var send = GetString("SendResponseOption");
-            var silent = GetString("NoResponseOption");
-
-            var operation = await UI.DisplayActions(GetString("AcceptDeclineCaption"), edit, send, silent);
-
-            if (operation == edit)
-            {
-                action(KindEdit);
-            }
-            else if (operation == send)
-            {
-                action(KindSend);
-            }
-            else if (operation == silent)
-            {
-                action(KindSilent);
-            }
-        }
-
-        private void AcceptMeeting()
-        {
-            AcceptDeclineChoice(AcceptMeeting);
-        }
-
-        private void DeclineMeeting()
-        {
-            AcceptDeclineChoice(DeclineMeeting);
-        }
-
-        private void TentativeMeeting()
-        {
-            AcceptDeclineChoice(TentativeMeeting);
-        }
-
-        private void VerifyKind(string kind)
-        {
-            switch (kind.ToLower())
-            {
-                case KindEdit:
-                case KindSend:
-                case KindSilent:
-                    return;
-                default:
-                    throw new ArgumentException("Invalid kind: " + kind);
-            }
-        }
-
-        private void AcceptMeeting(string kind)
-        {
-            AcceptOrDecline(OData.Accept, kind);
-        }
-
-        private void DeclineMeeting(string kind)
-        {
-            VerifyKind(kind);
-            AcceptOrDecline(OData.Decline, kind);
-        }
-
-        private void TentativeMeeting(string kind)
-        {
-            VerifyKind(kind);
-            AcceptOrDecline(OData.TentativelyAccept, kind);
+            NavigateToEmail(Meeting, action, comment: null);
         }
 
         private void AcceptOrDecline(string action, string kind)
@@ -264,38 +128,38 @@ namespace Meeting_Manager_Xamarin.ViewModels
                 case KindSilent:
                     SilentlyAcceptOrDecline(action);
                     break;
+                default:
+                    throw new ArgumentException("Invalid kind: " + kind);
             }
         }
 
-        private async void EditAndSendAcceptOrDecline(string action)
+        private void EditAndSendAcceptOrDecline(string action)
         {
-            await PromptAcceptOrDecline(action);
+            PromptAcceptOrDecline(action);
         }
 
-        private async void SendAcceptOrDecline(string action)
+        private void SendAcceptOrDecline(string action)
         {
-            await AcceptOrDeclineAndBack(action, string.Empty, sendResponse: true);
+            AcceptOrDeclineAndBack(action, string.Empty, sendResponse: true);
         }
 
-        private async void SilentlyAcceptOrDecline(string action)
+        private void SilentlyAcceptOrDecline(string action)
         {
-            await AcceptOrDeclineAndBack(action, null, sendResponse: false);
+            AcceptOrDeclineAndBack(action, null, sendResponse: false);
         }
 
-        private async Task AcceptOrDeclineAndBack(string action, string comment, bool sendResponse)
+        private async void AcceptOrDeclineAndBack(string action, string comment, bool sendResponse)
         {
-            await GraphService.AcceptOrDecline(Meeting.Id, action, comment, sendResponse);
-            await UI.GoBack();
+            using (new Loading(this))
+            {
+                await GraphService.AcceptOrDecline(Meeting.Id, action, comment, sendResponse);
+            }
+            GoBack();
         }
 
-        private async void ShowAttachments()
+        private void PromptAcceptOrDecline(string action)
         {
-            await NavigateToAttachments(_attachments, Meeting);
-        }
-
-        private async Task PromptAcceptOrDecline(string action)
-        {
-            await UI.NavigateTo("AcceptOrDecline", Tuple.Create(action, Meeting.Id));
+            UI.NavigateTo("AcceptDecline", Tuple.Create(action, Meeting.Id));
         }
     }
 }

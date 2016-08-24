@@ -34,9 +34,22 @@ See LICENSE in the project root for license information. -->
         <StackLayout Orientation="Horizontal">
           <Button Text ="{v:ResxString AttachCaption}" Command="{Binding AttachCommand}" Style="{StaticResource TopButton}"/>
           <Button Text ="{v:ResxString RecurrenceCaption}" Command="{Binding RecurrenceCommand}" Style="{StaticResource TopButton}"/>
-          <Button Text ="{v:ResxString EmailCaption}" Command="{Binding EmailCommand}" Style="{StaticResource TopButton}"
+
+          <v:MenuButton Text ="{v:ResxString EmailCaption}" Style="{StaticResource TopButton}"
                    IsEnabled="{Binding HasAttendees}"
-                   IsVisible="{Binding IsNewMeeting, Converter={StaticResource Negation}}"/>
+                   IsVisible="{Binding IsNewMeeting, Converter={StaticResource Negation}}">
+
+            <v:MenuButton.Menu>
+              <x:Array Type="{x:Type MenuItem}">
+                <MenuItem Text="{v:ResxString ReplyAllOption}"
+                            Command="{Binding BindingContext.ReplyAllCommand, Source={x:Reference ThisPage}}"/>
+                <MenuItem Text="{v:ResxString ForwardOption}"
+                            Command="{Binding BindingContext.ForwardCommand, Source={x:Reference ThisPage}}"/>
+                <MenuItem Text="{v:ResxString LateOption}"
+                            Command="{Binding BindingContext.LateCommand, Source={x:Reference ThisPage}}"/>
+              </x:Array>
+            </v:MenuButton.Menu>
+          </v:MenuButton>
 
           <Button Text ="{Binding SaveCaption}" Command="{Binding SaveCommand}" Style="{StaticResource TopButton}"/>
         </StackLayout>
@@ -80,7 +93,7 @@ See LICENSE in the project root for license information. -->
         <Label Grid.Column="0" Grid.Row="0" 
               Text="{v:ResxString FromCaption}" VerticalOptions="Center"/>
         <DatePicker Grid.Column="1" Grid.Row="0" Style="{StaticResource DatePicker}"
-                    Date="{Binding StartDate, Mode=TwoWay}"/>
+                    Date="{Binding StartDate, Mode=TwoWay, Converter={StaticResource DateToOffset}}"/>
         <TimePicker Grid.Column="2" Grid.Row="0" Style="{StaticResource TimePicker}"
                     Time="{Binding StartTime, Mode=TwoWay}" IsEnabled="{Binding IsAllDay, Converter={StaticResource Negation}}"/>
       
@@ -92,14 +105,24 @@ See LICENSE in the project root for license information. -->
         <Label Grid.Column="0" Grid.Row="1" VerticalOptions="Center"
                     Text="{v:ResxString ToCaption}" />
         <DatePicker Grid.Column="1" Grid.Row="1" Style="{StaticResource DatePicker}"
-                    Date="{Binding EndDate, Mode=TwoWay}"/>
+                    Date="{Binding EndDate, Mode=TwoWay, Converter={StaticResource DateToOffset}}"/>
         <TimePicker Grid.Column="2" Grid.Row="1" Style="{StaticResource TimePicker}"
                     Time="{Binding EndTime, Mode=TwoWay}" IsEnabled="{Binding IsAllDay, Converter={StaticResource Negation}}"/>
 
-        <Button Grid.Column="3" Grid.Row="0" 
-                  Text ="{v:ResxString TimeSlotsBtnCaption}" Style="{StaticResource CmdButton}" HorizontalOptions="Fill" VerticalOptions="Center"
-                  Command="{Binding TimeSlotsCommand}"
-                />
+        <v:MenuButton Grid.Column="3" Grid.Row="0" 
+                      Text ="{v:ResxString TimeSlotsBtnCaption}" Style="{StaticResource CmdButton}"
+                      HorizontalOptions="Fill" VerticalOptions="Center"
+                >
+
+          <v:MenuButton.Menu>
+            <x:Array Type="{x:Type MenuItem}">
+              <MenuItem Text="{v:ResxString SelectSlotOption}"
+                          Command="{Binding BindingContext.GetSuggestedTimeCommand, Source={x:Reference ThisPage}}"/>
+              <MenuItem Text="{v:ResxString ASAPOption}"
+                          Command="{Binding BindingContext.ASAPCommand, Source={x:Reference ThisPage}}"/>
+           </x:Array>
+          </v:MenuButton.Menu>
+        </v:MenuButton>
 
       </Grid>
 
@@ -139,16 +162,16 @@ See LICENSE in the project root for license information. -->
       </Grid>
       
       <Editor Grid.Row="3" 
-              Text="{Binding Description, Mode=TwoWay}" IsVisible="{Binding IsContentText}"
+              Text="{Binding Meeting.Body.Content, Mode=TwoWay}" IsVisible="{Binding Meeting.IsContentText}"
               BackgroundColor="#f0fff0"
               />
 
-      <Frame Grid.Row="3" IsVisible="{Binding IsContentText, Converter={StaticResource Negation}}"
-             Style="{StaticResource StaticFrame}">
-        <WebView Source="{Binding HtmlSource}"/>
+      <Frame Grid.Row="3" IsVisible="{Binding Meeting.IsContentText, Converter={StaticResource Negation}}"
+             Padding="2" Style="{StaticResource StaticFrame}">
+        <WebView Source="{Binding Meeting.Body.Content, Converter={StaticResource StringToHtml}}"/>
       </Frame>
 
-      <Frame Grid.Row="4" Style="{StaticResource Frame}" Padding="0">
+      <Frame Grid.Row="4" Style="{StaticResource Frame}" Padding="2">
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -160,23 +183,43 @@ See LICENSE in the project root for license information. -->
           <ListView.ItemTemplate>
             <DataTemplate>
 
-              <TextCell Text="{Binding Name}">
-                <TextCell.ContextActions>
+              <ViewCell>
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                  </Grid.ColumnDefinitions>
+
+                  <Label Grid.Column="0" Text="{Binding Name}"/>
+                  <Label Grid.Column="1" Text="{Binding ResponseStatus}"/>
+                </Grid>
+               
+                <ViewCell.ContextActions>
                   <MenuItem Text="Delete" IsDestructive="true"
-                          Command="{Binding BindingContext.DeleteAttendeeCommand, Source={v:ElementReference ThisPage}}"
-                          CommandParameter="{Binding}"/>
-                </TextCell.ContextActions>
-              </TextCell>
+                            Command="{Binding BindingContext.DeleteAttendeeCommand, Source={x:Reference ThisPage}}"
+                            CommandParameter="{Binding}"/>
+                </ViewCell.ContextActions>
+              </ViewCell>
 
             </DataTemplate>
           </ListView.ItemTemplate>
 
         </ListView>
 
-        <Button Grid.Row="1"
-                Text ="{v:ResxString AddAttendeeCaption}" Command="{Binding AddAttendeeCommand}"/>
-        </Grid>
-      </Frame>
+        <v:MenuButton Grid.Row="1" Text ="{v:ResxString AddAttendeeCaption}">
+          
+          <v:MenuButton.Menu>
+            <x:Array Type="{x:Type MenuItem}">
+              <MenuItem Text="{v:ResxString AddressListOption}"
+                          Command="{Binding BindingContext.AddUserCommand, Source={x:Reference ThisPage}}"/>
+              <MenuItem Text="{v:ResxString ContactsOption}"
+                          Command="{Binding BindingContext.AddContactCommand, Source={x:Reference ThisPage}}"/>
+            </x:Array>
+          </v:MenuButton.Menu>  
+        </v:MenuButton>
+    
+      </Grid>
+    </Frame>
       
     </Grid>
 

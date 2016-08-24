@@ -2,13 +2,11 @@
 See LICENSE in the project root for license information. -->
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:vm="clr-namespace:Meeting_Manager_Xamarin.ViewModels"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
-             Title="{Binding Title}"
+             Title="{v:ResxString TimeSlotsTitle}"
              x:Name="ThisPage"
-             Style="{StaticResource Page}"
-             x:Class="Meeting_Manager_Xamarin.Views.UsersPage">
+             x:Class="Meeting_Manager_Xamarin.Views.TimeSlotsDialog">
 
   <Grid x:Name="MainGrid" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
 
@@ -18,7 +16,6 @@ See LICENSE in the project root for license information. -->
     </Grid.RowDefinitions>
 
     <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-
       <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
 
         <StackLayout HorizontalOptions="FillAndExpand">
@@ -26,29 +23,21 @@ See LICENSE in the project root for license information. -->
                              IsVisible="{Binding IsLoading}"/>
         </StackLayout>
 
-        <Button Text="&lt;&lt;" Command="{Binding PrevCommand}" IsEnabled="{Binding HasPrev}"/>
-        <Button Text=">>" Command="{Binding NextCommand}" IsEnabled="{Binding HasNext}"/>
       </StackLayout>
 
-      <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-        <Entry Text="{Binding Filter, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
-        <Button Text="Filter" Command="{Binding FilterCommand}"/>
-      </StackLayout>
+        <ListView ItemsSource="{Binding Items}">
 
-      <ListView
-          ItemsSource="{Binding Users}"
-          SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
-        >
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <TextCell Text="{Binding TimeSlot}"
+                         Command="{Binding BindingContext.ItemSelectedCommand, Source={x:Reference ThisPage}}"
+                         CommandParameter="{Binding}">
 
-        <ListView.ItemTemplate>
-          <DataTemplate>
-            <TextCell Text="{Binding Name}" Detail="{Binding UserPrincipalName}"
-                       Command="{Binding BindingContext.ItemTappedCommand, Source={v:ElementReference ThisPage}}"
-                       />
-          </DataTemplate>
-        </ListView.ItemTemplate>
+              </TextCell>
+            </DataTemplate>
+          </ListView.ItemTemplate>
 
-      </ListView>
+        </ListView>
     </StackLayout>
 
     <Frame Grid.Row="1" Style="{StaticResource Frame}" Padding="2">

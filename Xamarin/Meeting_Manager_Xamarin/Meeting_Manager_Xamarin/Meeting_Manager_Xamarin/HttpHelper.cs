@@ -48,7 +48,7 @@ namespace Meeting_Manager_Xamarin
             }
             else
             {
-                await HandleFailure(await GetErrorMessage(response), response);
+                HandleFailure(await GetErrorMessage(response), response);
             }
 
             LogResponse(request, requestBody, response);
@@ -99,13 +99,13 @@ namespace Meeting_Manager_Xamarin
             return BaseGraphUri + uri;
         }
 
-        protected virtual async Task HandleFailure(string errorMessage, HttpResponseMessage response)
+        protected virtual async void HandleFailure(string errorMessage, HttpResponseMessage response)
         {
             var message = string.IsNullOrEmpty(errorMessage) ?
                     string.Format("Failed with {0}", response.StatusCode) :
                     errorMessage;
 
-            await UI.Alert("Http error", message);
+            await UI.MessageDialog(message);
         }
 
         private async Task SetAuthorizationHeaderAsync(HttpRequestMessage request)

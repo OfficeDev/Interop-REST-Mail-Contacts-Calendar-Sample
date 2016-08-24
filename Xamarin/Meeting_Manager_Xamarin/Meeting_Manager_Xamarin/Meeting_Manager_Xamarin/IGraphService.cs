@@ -17,7 +17,7 @@ namespace Meeting_Manager_Xamarin
         Task<Meeting> UpdateEvent(Meeting meeting);
         Task CancelEvent(string eventId);
         Task<EventMessage> CreateInvitationResponse(Meeting meeting, string action);
-        Task<bool> UpdateAndSendMessage(Message message, string comment, IEnumerable<Message.Recipient> recipients);
+        Task<bool> UpdateAndSendMessage(Message message);
         Task DeleteDraftMessage(string messageid);
         Task AcceptOrDecline(string eventId, string action, string comment, bool sendResponse = true);
         Task<int> GetContactsCount();

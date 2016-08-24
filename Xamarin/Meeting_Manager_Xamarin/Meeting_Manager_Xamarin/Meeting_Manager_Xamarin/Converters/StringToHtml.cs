@@ -3,20 +3,18 @@
 
 using System;
 using System.Globalization;
+using Xamarin.Forms;
 
 namespace Meeting_Manager_Xamarin.Converters
 {
-    public sealed class DateFormat : Xamarin.Forms.IValueConverter
+    class StringToHtml : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || parameter == null)
+            return new HtmlWebViewSource()
             {
-                return null;
-            }
-
-            var result = string.Format((string)parameter, value);
-            return result;
+                Html = value as string ?? String.Empty
+            };
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

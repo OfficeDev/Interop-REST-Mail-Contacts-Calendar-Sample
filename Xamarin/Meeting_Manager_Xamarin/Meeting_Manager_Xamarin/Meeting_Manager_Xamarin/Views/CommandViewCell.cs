@@ -9,10 +9,7 @@ namespace Meeting_Manager_Xamarin.Views
     class CommandViewCell : ViewCell
     {
         public static readonly BindableProperty CommandProperty =
-            BindableProperty.Create("Command", typeof(ICommand), typeof(CommandViewCell), null, BindingMode.Default, null,
-                propertyChanged: (sender, oldValue, newValue) =>
-                {
-                });
+            BindableProperty.Create("Command", typeof(ICommand), typeof(CommandViewCell), null, BindingMode.Default, null);
 
         public ICommand Command
         {
@@ -24,9 +21,9 @@ namespace Meeting_Manager_Xamarin.Views
         {
             base.OnTapped();
 
-            if (Command != null && Command.CanExecute(this))
+            if (Command?.CanExecute(this) == true)
             {
-                Command.Execute(this);
+                Command.Execute(this.BindingContext);
             }
         }
     }

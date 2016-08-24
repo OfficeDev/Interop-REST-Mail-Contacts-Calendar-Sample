@@ -4,25 +4,29 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Meeting_Manager_Xamarin
 {
-    class AuthenticationHelper : IAuthenticationService
+    sealed class AuthenticationHelper : IAuthenticationService
     {
         private readonly IDictionary<string, AccessTokenResponse> _tokenResponses = new Dictionary<string, AccessTokenResponse>();
 
         private readonly Logger _logger;
+        private readonly string _authCode;
 
-        public AuthenticationHelper(Logger logger)
+        public AuthenticationHelper(Logger logger, string authCode)
         {
             _logger = logger;
+            _authCode = authCode;
         }
 
-        private string TokenUri => App.Me.AuthorityOAuth2 + "token";
+        internal string RedirectUri => App.Current.Resources["ida:RedirectUri"].ToString();
+
+        private string ClientID => App.Current.Resources["ida:ClientID"].ToString();
+
+        private string AADInstance => App.Current.Resources["ida:AADInstance"].ToString();
 
         public async Task<string> GetTokenAsync(string resourceId)
         {
@@ -49,8 +53,8 @@ namespace Meeting_Manager_Xamarin
         private async Task<AccessTokenResponse> QueryAccessToken(string resourceId)
         {
             var body = "grant_type=authorization_code" +
-                        $"&code={App.Me.AuthorizationCode}" +
-                        $"&redirect_uri={WebUtility.UrlEncode(App.Me.RedirectUri)}" +
+                        $"&code={_authCode}" +
+                        $"&redirect_uri={WebUtility.UrlEncode(RedirectUri)}" +
                         GraphId(resourceId);
 
             return await DoTokenHttp(body);
@@ -67,13 +71,14 @@ namespace Meeting_Manager_Xamarin
 
         private string GraphId(string resourceId)
         {
-            return $"&client_id={WebUtility.UrlEncode(App.Me.ClientId)}" +
+            return $"&client_id={WebUtility.UrlEncode(ClientID)}" +
                    $"&resource={WebUtility.UrlEncode(resourceId)}";
         }
 
         private async Task<AccessTokenResponse> DoTokenHttp(string body)
         {
-            var atr = await new HttpHelper(this, _logger).PostItemAsync<string, AccessTokenResponse>(TokenUri, body);
+            var tokenUri = AADInstance + "common/oauth2/token";
+            var atr = await new HttpHelper(this, _logger).PostItemAsync<string, AccessTokenResponse>(tokenUri, body);
 
             if (atr != null)
             {

@@ -37,11 +37,6 @@ namespace Meeting_Manager_Xamarin.Models
         public string OriginalStartTimeZone { get; set; }
         public string OriginalEndTimeZone { get; set; }
 
-        public bool HasAttachments { get; set; }
-
-        [JsonIgnore]
-        public string Description => Body.Content;
-
         [JsonIgnore]
         public string AttendeeList => string.Join(";\n", Attendees);
 

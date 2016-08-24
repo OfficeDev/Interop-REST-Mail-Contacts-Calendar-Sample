@@ -10,11 +10,20 @@ See LICENSE in the project root for license information. -->
   
   <Application.Resources>
     <ResourceDictionary>
+      <!-- Add your client id here. -->
+      <x:String x:Key="ida:ClientID">6669f82f-61ac-46ea-a346-7c3444d45819</x:String>
+      <x:String x:Key="ida:RedirectUri">MS-APPX-WEB://MICROSOFT.AAD.BROKERPLUGIN/S-1-15-2-2615261976-468863395-2165854654-1528528134-2599808767-1175204876-2313817458</x:String>
+      <x:String x:Key="ida:ClientID_V2">7d94fafd-5ad3-40e0-bc4e-914920af2226</x:String>
+      <x:String x:Key="ida:RedirectUri_V2">urn:ietf:wg:oauth:2.0:oob</x:String>
+      <x:String x:Key="ida:AADInstance">https://login.microsoftonline.com/</x:String>
+
       <cvt:Negation x:Key="Negation"/>
       <cvt:BoolToIndex x:Key="BoolToIndex"/>
       <cvt:IndexToBackground x:Key="IndexToBackground"/>
       <cvt:BoolToBackground x:Key="BoolToBackground"/>
-      <cvt:DateFormat x:Key="DateFormat"/>
+      <cvt:IntToBool x:Key="IntToBool"/>
+      <cvt:StringToHtml x:Key="StringToHtml"/>
+      <cvt:DateTimeToDateTimeOffset x:Key="DateToOffset"/>
 
       <OnPlatform x:TypeArguments="Font" Android="Default" x:Key="ButtonFontSize" />
 

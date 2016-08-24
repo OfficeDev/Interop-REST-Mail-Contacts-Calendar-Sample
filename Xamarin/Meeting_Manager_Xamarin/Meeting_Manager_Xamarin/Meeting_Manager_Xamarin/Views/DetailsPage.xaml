@@ -6,6 +6,7 @@ See LICENSE in the project root for license information. -->
              xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
              Title="{v:ResxString DetailsTitle}"
              Style="{StaticResource Page}"
+             x:Name="ThisPage"
              x:Class="Meeting_Manager_Xamarin.Views.DetailsPage">
 
   <Grid x:Name="MainGrid" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
@@ -32,10 +33,66 @@ See LICENSE in the project root for license information. -->
         </StackLayout>
 
         <StackLayout Orientation="Horizontal">
-          <Button Text="{v:ResxString AcceptCaption}" Command="{Binding AcceptCommand}" Style="{StaticResource TopButton}"/>
-          <Button Text="{v:ResxString DeclineCaption}" Command="{Binding DeclineCommand}" Style="{StaticResource TopButton}"/> 
-          <Button Text="{v:ResxString TentativeCaption}" Command="{Binding TentativeCommand}" Style="{StaticResource TopButton}"/>
-          <Button Text="{v:ResxString EmailCaption}" Command="{Binding SendEmailCommand}" Style="{StaticResource TopButton}"/>
+
+          <v:MenuButton Text="{v:ResxString AcceptCaption}" Style="{StaticResource TopButton}">
+
+            <v:MenuButton.Menu>
+              <x:Array Type="{x:Type MenuItem}">
+                <MenuItem Text="{v:ResxString EditResponseOption}"
+                            Command="{Binding BindingContext.AcceptCommand, Source={x:Reference ThisPage}}" CommandParameter="edit"/>
+                <MenuItem Text="{v:ResxString SendResponseOption}"
+                            Command="{Binding BindingContext.AcceptCommand, Source={x:Reference ThisPage}}" CommandParameter="send"/>
+                <MenuItem Text="{v:ResxString NoResponseOption}"
+                            Command="{Binding BindingContext.AcceptCommand, Source={x:Reference ThisPage}}" CommandParameter="silent"/>
+              </x:Array>
+            </v:MenuButton.Menu>
+
+          </v:MenuButton>
+
+          <v:MenuButton Text="{v:ResxString DeclineCaption}" Style="{StaticResource TopButton}">
+
+            <v:MenuButton.Menu>
+              <x:Array Type="{x:Type MenuItem}">
+                <MenuItem Text="{v:ResxString EditResponseOption}"
+                            Command="{Binding BindingContext.DeclineCommand, Source={x:Reference ThisPage}}" CommandParameter="edit"/>
+                <MenuItem Text="{v:ResxString SendResponseOption}"
+                            Command="{Binding BindingContext.DeclineCommand, Source={x:Reference ThisPage}}" CommandParameter="send"/>
+                <MenuItem Text="{v:ResxString NoResponseOption}"
+                            Command="{Binding BindingContext.DeclineCommand, Source={x:Reference ThisPage}}" CommandParameter="silent"/>
+              </x:Array>
+            </v:MenuButton.Menu>
+
+          </v:MenuButton>
+
+          <v:MenuButton Text="{v:ResxString TentativeCaption}" Style="{StaticResource TopButton}">
+            <v:MenuButton.Menu>
+              <x:Array Type="{x:Type MenuItem}">
+                <MenuItem Text="{v:ResxString EditResponseOption}"
+                            Command="{Binding BindingContext.TentativeCommand, Source={x:Reference ThisPage}}" CommandParameter="edit"/>
+                <MenuItem Text="{v:ResxString SendResponseOption}"
+                            Command="{Binding BindingContext.TentativeCommand, Source={x:Reference ThisPage}}" CommandParameter="send"/>
+                <MenuItem Text="{v:ResxString NoResponseOption}"
+                            Command="{Binding BindingContext.TentativeCommand, Source={x:Reference ThisPage}}" CommandParameter="silent"/>
+              </x:Array>
+            </v:MenuButton.Menu>
+
+          </v:MenuButton>
+
+          <v:MenuButton Text="{v:ResxString EmailCaption}" Style="{StaticResource TopButton}">
+            <v:MenuButton.Menu>
+              <x:Array Type="{x:Type MenuItem}">
+                <MenuItem Text="{v:ResxString ReplyOption}"
+                            Command="{Binding BindingContext.ReplyCommand, Source={x:Reference ThisPage}}"/>
+                <MenuItem Text="{v:ResxString ReplyAllOption}"
+                            Command="{Binding BindingContext.ReplyAllCommand, Source={x:Reference ThisPage}}"/>
+                <MenuItem Text="{v:ResxString ForwardOption}"
+                            Command="{Binding BindingContext.ForwardCommand, Source={x:Reference ThisPage}}"/>
+                <MenuItem Text="{v:ResxString LateOption}"
+                            Command="{Binding BindingContext.LateCommand, Source={x:Reference ThisPage}}"/>
+              </x:Array>
+            </v:MenuButton.Menu>
+          </v:MenuButton>
+
         </StackLayout>
       </StackLayout>
 
@@ -57,20 +114,39 @@ See LICENSE in the project root for license information. -->
 
       </StackLayout>
 
-      <Frame Grid.Row="2" Padding="2" Style="{StaticResource StaticFrame}" IsVisible="{Binding IsContentText}">
+      <Frame Grid.Row="2" Padding="2" Style="{StaticResource StaticFrame}" IsVisible="{Binding Meeting.IsContentText}">
         <ScrollView Orientation="Vertical">
-          <Label Text="{Binding Description}" />
+          <Label Text="{Binding Meeting.Body.Content}" />
         </ScrollView>
       </Frame>
 
-      <Frame Grid.Row="2" Padding="2" Style="{StaticResource StaticFrame}">
-        <WebView Source="{Binding HtmlSource}" IsVisible="{Binding IsContentText, Converter={StaticResource Negation}}"
-               HeightRequest="150"
-             />
+      <Frame Grid.Row="2" Padding="2" Style="{StaticResource StaticFrame}"
+             IsVisible="{Binding Meeting.IsContentText, Converter={StaticResource Negation}}">
+        <WebView Source="{Binding Meeting.Body.Content, Converter={StaticResource StringToHtml}}"/>
       </Frame>
 
       <Frame Grid.Row="3" Padding="2" Style="{StaticResource StaticFrame}">
-        <ListView ItemsSource="{Binding Attendees}"/>
+        <ListView ItemsSource="{Binding Attendees}">
+ 
+          <ListView.ItemTemplate>
+            <DataTemplate>
+
+              <ViewCell>
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                  </Grid.ColumnDefinitions>
+
+                  <Label Grid.Column="0" Text="{Binding Name}"/>
+                  <Label Grid.Column="1" Text="{Binding ResponseStatus}"/>  
+                </Grid>
+              </ViewCell>
+              
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        
+        </ListView>
       </Frame>
 
     </Grid>

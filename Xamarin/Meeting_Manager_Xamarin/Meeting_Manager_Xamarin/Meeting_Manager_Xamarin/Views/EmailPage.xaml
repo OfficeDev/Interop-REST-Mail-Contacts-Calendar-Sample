@@ -45,12 +45,12 @@ See LICENSE in the project root for license information. -->
 
       <Frame Grid.Row="2" Padding="2" Style="{StaticResource StaticFrame}" IsVisible="{Binding IsContentText}">
         <ScrollView Orientation="Vertical">
-          <Label Text="{Binding Description}" />
+          <Label Text="{Binding Message.Body.Content}" />
         </ScrollView>
       </Frame>
 
       <Frame Grid.Row="2" Padding="2" Style="{StaticResource Frame}" IsVisible="{Binding IsContentText, Converter={StaticResource Negation}}">
-          <WebView Source="{Binding HtmlSource}"/>
+        <WebView Source="{Binding Meeting.Body.Content, Converter={StaticResource StringToHtml}}"/>
       </Frame>
         
       <Frame Grid.Row="3" Padding="2" Style="{StaticResource StaticFrame}">
@@ -69,7 +69,7 @@ See LICENSE in the project root for license information. -->
 
                   <TextCell.ContextActions>
                     <MenuItem Text="{v:ResxString DeleteOption}" IsDestructive="True"
-                            Command="{Binding BindingContext.DeleteRecipientCommand, Source={v:ElementReference ThisPage}}"
+                            Command="{Binding BindingContext.DeleteRecipientCommand, Source={x:Reference ThisPage}}"
                             CommandParameter="{Binding}"/>
                   </TextCell.ContextActions>
                 </TextCell>
@@ -80,7 +80,18 @@ See LICENSE in the project root for license information. -->
 
           </ListView>
 
-          <Button  Grid.Row="1" Text="{v:ResxString AddRecipientCaption}" Command="{Binding AddRecipientCommand}"/>
+          <v:MenuButton  Grid.Row="1" Text="{v:ResxString AddRecipientCaption}">
+
+            <v:MenuButton.Menu>
+              <x:Array Type="{x:Type MenuItem}">
+                <MenuItem Text="{v:ResxString AddressListOption}"
+                            Command="{Binding BindingContext.AddUserCommand, Source={x:Reference ThisPage}}"/>
+                <MenuItem Text="{v:ResxString ContactsOption}"
+                            Command="{Binding BindingContext.AddContactCommand, Source={x:Reference ThisPage}}"/>
+              </x:Array>
+            </v:MenuButton.Menu>
+            
+          </v:MenuButton>
         </Grid>
       </Frame>
 

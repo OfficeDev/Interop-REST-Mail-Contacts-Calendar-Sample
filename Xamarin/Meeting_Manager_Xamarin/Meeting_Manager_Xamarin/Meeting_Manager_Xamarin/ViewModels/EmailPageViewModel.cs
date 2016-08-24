@@ -3,68 +3,41 @@
 
 using Meeting_Manager_Xamarin.Models;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Meeting_Manager_Xamarin.ViewModels
 {
     class EmailPageViewModel : BaseViewModel
     {
-        private EventMessage _message;
-        private string _comment;
         private bool _mailHasBeenSent;
-        private ObservableCollection<Message.Recipient> _recipients;
 
         public EmailPageViewModel()
         {
-            Subscribe<User>(UserSelected);
-            Subscribe<Contact>(ContactSelected);
+            UI.Subscribe<User>(UserSelected);
+            UI.Subscribe<Contact>(ContactSelected);
         }
 
-        public Command SendCommand => new Command(SendMail);
-        public Command AddRecipientCommand => new Command(AddRecipient);
+        public Command SendCommand => new Command(SendMail, () => Recipients.Any());
+        public Command AddUserCommand => new Command(() => NavigateToUsers(true));
+        public Command AddContactCommand => new Command(() => NavigateToContacts());
         public Command<Message.Recipient> DeleteRecipientCommand => new Command<Message.Recipient>(DeleteRecipient);
 
-        public EventMessage Message
-        {
-            get { return _message; }
-            private set { SetProperty(ref _message, value); }
-        }
+        public EventMessage Message { get; private set; }
 
         public string Title { get; private set; }
 
-        public string Comment
+        public string Comment { get; set; }
+
+        public ObservableCollection<Message.Recipient> Recipients { get; private set; }
+
+        public bool IsContentText { get; private set; }
+
+        protected override void OnNavigatedTo(object parameter)
         {
-            get { return _comment; }
-            set { SetProperty(ref _comment, value); }
-        }
-
-        public ObservableCollection<Message.Recipient> Recipients
-        {
-            get { return _recipients; }
-            private set { SetProperty(ref _recipients, value); }
-        }
-
-        public bool IsContentText { get; set; }
-
-        public HtmlWebViewSource HtmlSource
-        {
-            get
-            {
-                return new HtmlWebViewSource()
-                {
-                    Html = _message.Body.Content ?? String.Empty
-                };
-            }
-        }
-
-        public string Description => _message.Body.Content; 
-
-        public override void OnAppearing(object data)
-        {
-            var tuple = JSON.Deserialize<Tuple<EventMessage, string, string>>(data);
+            var tuple = JSON.Deserialize<Tuple<EventMessage, string, string>>(parameter);
 
             Message = tuple.Item1;
             var action = tuple.Item2.ToLower();
@@ -75,17 +48,20 @@ namespace Meeting_Manager_Xamarin.ViewModels
             IsContentText = Message.Body.ContentType.EqualsCaseInsensitive("text");
 
             SetTitle(action);
-            PopulateRecipients();
+            Recipients = new ObservableCollection<Message.Recipient>(Message.ToRecipients);
 
-            OnPropertyChanged(() => HtmlSource);
-            OnPropertyChanged(() => Description);
+            OnPropertyChanged(() => Message);
+            OnPropertyChanged(() => Recipients);
         }
 
-        public override async void OnDisappearing()
+        protected override async void OnNavigatingFrom()
         {
             if (!_mailHasBeenSent)
             {
-                await GraphService.DeleteDraftMessage(Message.Id);
+                using (new Loading(this))
+                {
+                    await GraphService.DeleteDraftMessage(Message.Id);
+                }
             }
         }
 
@@ -106,32 +82,32 @@ namespace Meeting_Manager_Xamarin.ViewModels
             OnPropertyChanged(() => Title);
         }
 
-        private void PopulateRecipients()
-        {
-            Recipients = new ObservableCollection<Message.Recipient>(Message.ToRecipients);
-        }
-
         private async void SendMail()
         {
+            Message.Body.Content = Comment + Message.Body.Content;
+
+            if (Recipients != null)
+            {
+                Message.ToRecipients = new List<Message.Recipient>(Recipients);
+            }
+
             using (new Loading(this))
             {
-                _mailHasBeenSent = await GraphService.UpdateAndSendMessage(Message, Comment, Recipients);
+                _mailHasBeenSent = await GraphService.UpdateAndSendMessage(Message);
             }
-            await UI.GoBack();
-        }
-
-        private void AddRecipient()
-        {
-            BaseViewModel.AddUserOrContact();
+            GoBack();
         }
 
         private void DeleteRecipient(Message.Recipient recipient)
         {
+            if (recipient == null) return;
+
             int pos = Recipients.IndexOf(x => x.EmailAddress.IsEqualTo(recipient.EmailAddress));
             Recipients.RemoveAt(pos);
+            OnPropertyChanged(() => SendCommand);
         }
 
-        private void UserSelected(object sender, User user)
+        private void UserSelected(User user)
         {
             var recipient = new Message.Recipient
             {
@@ -145,21 +121,20 @@ namespace Meeting_Manager_Xamarin.ViewModels
             AddRecipient(recipient);
         }
 
-        private void ContactSelected(object sender, Contact contact)
+        private void ContactSelected(Contact contact)
         {
-            var recipient = new Message.Recipient
+            AddRecipient(new Message.Recipient
             {
                 EmailAddress = contact.EmailAddresses[0]
-            };
-
-            AddRecipient(recipient);
+            });
         }
 
         private void AddRecipient(Message.Recipient recipient)
         {
-            if (Recipients.FirstOrDefault(x => x.EmailAddress.IsEqualTo(recipient.EmailAddress)) == null)
+            if (!Recipients.Any(x => x.EmailAddress.IsEqualTo(recipient.EmailAddress)))
             {
                 Recipients.Add(recipient);
+                OnPropertyChanged(() => SendCommand);
             }
         }
     }

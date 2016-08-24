@@ -6,20 +6,20 @@ using Xamarin.Forms;
 
 namespace Meeting_Manager_Xamarin.ViewModels
 {
-    class AcceptOrDeclinePageViewModel : BaseViewModel, ITransientViewModel
+    class AcceptDeclineDialogViewModel : DialogViewModel
     {
         private string _action;
         private string _meetingId;
 
         public Command SendCommand => new Command(Send);
 
-        public string Title { get; set; }
+        public string Title { get; private set; }
 
         public string Comment { get; set; }
 
-        public override void OnAppearing(object data)
+        protected override void OnNavigatedTo(object parameter)
         {
-            var payload = JSON.Deserialize<Tuple<string, string>>(data);
+            var payload = JSON.Deserialize<Tuple<string, string>>(parameter);
 
             _action = payload.Item1.ToLower();
             _meetingId = payload.Item2;
@@ -47,7 +47,7 @@ namespace Meeting_Manager_Xamarin.ViewModels
                 await GraphService.AcceptOrDecline(_meetingId, _action, Comment);
             }
 
-            await UI.GoBack();
+            GoBack();
         }
     }
 }

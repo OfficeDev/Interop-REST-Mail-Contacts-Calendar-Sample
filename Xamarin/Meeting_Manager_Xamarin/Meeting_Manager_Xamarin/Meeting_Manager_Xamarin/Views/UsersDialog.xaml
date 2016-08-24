@@ -3,12 +3,12 @@ See LICENSE in the project root for license information. -->
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:vm="clr-namespace:Meeting_Manager_Xamarin.ViewModels"
-             xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
+             Title="{Binding Title}"
              x:Name="ThisPage"
-             Title="{v:ResxString ContactsTitle}"
              Style="{StaticResource Page}"
-             x:Class="Meeting_Manager_Xamarin.Views.ContactsPage">
+             x:Class="Meeting_Manager_Xamarin.Views.UsersDialog">
 
   <Grid x:Name="MainGrid" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
 
@@ -18,9 +18,9 @@ See LICENSE in the project root for license information. -->
     </Grid.RowDefinitions>
 
     <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-      
+
       <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-      
+
         <StackLayout HorizontalOptions="FillAndExpand">
           <ActivityIndicator IsRunning="{Binding IsLoading}" HorizontalOptions="FillAndExpand"
                              IsVisible="{Binding IsLoading}"/>
@@ -28,17 +28,24 @@ See LICENSE in the project root for license information. -->
 
         <Button Text="&lt;&lt;" Command="{Binding PrevCommand}" IsEnabled="{Binding HasPrev}"/>
         <Button Text=">>" Command="{Binding NextCommand}" IsEnabled="{Binding HasNext}"/>
-        
       </StackLayout>
 
-        <ListView
-          ItemsSource="{Binding Contacts}"
-          SelectedItem="{Binding SelectedContact, Mode=TwoWay}">
+      <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+        <Entry x:Name="filterEntry" Text="{Binding Filter, Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+        <Button Text="Filter" Command="{Binding FilterCommand}"
+                IsEnabled="{Binding Source={x:Reference Name=filterEntry}, Path=Text.Length, Converter={StaticResource IntToBool}, Mode=OneWay}"
+                />
+      </StackLayout>
+
+      <ListView
+          ItemsSource="{Binding Users}"
+          SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
+        >
 
         <ListView.ItemTemplate>
           <DataTemplate>
-            <ImageCell ImageSource="{Binding Photo}" Text="{Binding Name}"
-                       Command="{Binding BindingContext.PickCommand, Source={v:ElementReference ThisPage}}"
+            <TextCell Text="{Binding Name}" Detail="{Binding UserPrincipalName}"
+                       Command="{Binding BindingContext.ItemSelectedCommand, Source={x:Reference ThisPage}}"
                        />
           </DataTemplate>
         </ListView.ItemTemplate>
@@ -47,7 +54,7 @@ See LICENSE in the project root for license information. -->
     </StackLayout>
 
     <Frame Grid.Row="1" Style="{StaticResource Frame}" Padding="2">
-      <v:LogWindowControl Grid.Row="1"/>
+      <v:LogWindowControl/>
     </Frame>
 
   </Grid>

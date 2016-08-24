@@ -10,25 +10,35 @@ using Xamarin.Forms;
 
 namespace Meeting_Manager_Xamarin.ViewModels
 {
-    class FilesPageViewModel : BaseViewModel, ITransientViewModel
+    class FilesDialogViewModel : DialogViewModel
     {
-        private ObservableCollection<DriveItem> _files;
         private Stack<string> _folders = new Stack<string>();
+        private DriveItem _selectedItem;
+        private ObservableCollection<DriveItem> _items;
+
+        public Command<DriveItem> ItemSelectedCommand => new Command<DriveItem>(ItemSelected);
+        public Command<DriveItem> DeleteCommand => new Command<DriveItem>(DeleteFile);
+        public Command<DriveItem> ViewCommand => new Command<DriveItem>(ViewFile);
+        public Command UpCommand => new Command(GoUp);
 
         public bool IsRootFolder => !_folders.Any();
 
-        public Command<DriveItem> ItemTappedCommand => new Command<DriveItem>(ItemTapped);
-        public Command<DriveItem> ViewFileCommand => new Command<DriveItem>(ViewFile);
-        public Command<DriveItem> DeleteFileCommand => new Command<DriveItem>(DeleteFile);
-        public Command UpCommand => new Command(GoUp);
-
-        public ObservableCollection<DriveItem> Files
+        public ObservableCollection<DriveItem> Items
         {
-            get { return _files; }
-            private set { SetProperty(ref _files, value); }
+            get { return _items; }
+            private set { SetCollectionProperty(ref _items, value); }
         }
 
-        public override async void OnAppearing(object data)
+        public DriveItem SelectedItem
+        {
+            get { return _selectedItem; }
+            set
+            {
+                SetProperty(ref _selectedItem, value);
+            }
+        }
+
+        protected override async void OnNavigatedTo(object parameter)
         {
             await GetDriveItems();
         }
@@ -38,9 +48,10 @@ namespace Meeting_Manager_Xamarin.ViewModels
             using (new Loading(this))
             {
                 var folderId = !IsRootFolder ? _folders.Peek() : string.Empty;
-                var files = await GraphService.GetDriveItems(folderId, 0, 100);
 
-                Files = new ObservableCollection<DriveItem>(files);
+                var items = await GraphService.GetDriveItems(folderId, 0, 100);
+                Items = new ObservableCollection<DriveItem>(items);
+                OnPropertyChanged(() => Items);
             }
         }
 
@@ -51,12 +62,21 @@ namespace Meeting_Manager_Xamarin.ViewModels
             OnPropertyChanged(() => IsRootFolder);
         }
 
-        private async void ItemTapped(DriveItem item)
+        private void ItemSelected(DriveItem item)
         {
-            if (item.File != null)
+            HandleItem(item);
+
+            if (!IsFolder(item))
             {
-                await UI.GoBack();
-                Publish(item);
+                GoBack();
+            }
+        }
+
+        private async void HandleItem(DriveItem item)
+        {
+            if (!IsFolder(item))
+            {
+                UI.Publish(item);
             }
             else
             {
@@ -74,7 +94,7 @@ namespace Meeting_Manager_Xamarin.ViewModels
 
                 if (data != null)
                 {
-                    DependencyService.Get<IAttachmentOpener>().Open(new FileAttachment
+                    await UI.OpenAttachment(new FileAttachment
                     {
                         Name = item.Name,
                         ContentBytes = data,
@@ -88,8 +108,13 @@ namespace Meeting_Manager_Xamarin.ViewModels
             using (new Loading(this))
             {
                 await GraphService.DeleteDriveItem(item.Id);
-                Files.Remove(item);
+                Items.Remove(item);
             }
+        }
+
+        private bool IsFolder(DriveItem item)
+        {
+            return item?.Folder != null;
         }
     }
 }

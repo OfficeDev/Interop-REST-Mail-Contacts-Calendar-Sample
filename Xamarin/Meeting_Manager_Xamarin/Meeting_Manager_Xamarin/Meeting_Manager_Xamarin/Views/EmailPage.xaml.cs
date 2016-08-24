@@ -17,7 +17,10 @@ namespace Meeting_Manager_Xamarin.Views
         {
             base.OnDisappearing();
 
-            (BindingContext as BaseViewModel).OnDisappearing();
+            if (!App.Me.InTransient)
+            {
+                (BindingContext as BaseViewModel).NavigateFrom();
+            }
         }
     }
 }

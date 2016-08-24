@@ -34,7 +34,7 @@ See LICENSE in the project root for license information. -->
 
       <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
         <Label Text="{v:ResxString SelectDate}" VerticalOptions="Center"/>
-        <DatePicker Date="{Binding SelectedDate, Mode=TwoWay}"
+        <DatePicker Date="{Binding SelectedDate, Mode=TwoWay, Converter={StaticResource DateToOffset}}" Format="D"
             VerticalOptions="Center" Style="{StaticResource DatePicker}"
          >          
         </DatePicker>
@@ -61,17 +61,40 @@ See LICENSE in the project root for license information. -->
             <Label Grid.Column="3" Text="{v:ResxString AttendeesHeader}" FontAttributes="Bold"/>
           </Grid>
 
-          <ListView SelectedItem="{Binding SelectedMeeting}"
+          <ListView SelectedItem="{Binding SelectedMeeting, Mode=TwoWay}"
                       ItemsSource="{Binding Meetings}"
                       BackgroundColor="#f5f5f5"
                       Grid.Row="1"
                       HasUnevenRows="True"
                     >
+            <ListView.Resources>
+              <ResourceDictionary>
+                
+                <x:Array x:Key="viewMenu" Type="{x:Type MenuItem}">
+                  <MenuItem Text="Series"
+                              Command="{Binding BindingContext.ViewSeriesCommand, Source={x:Reference ThisPage}}"
+                              />
+                  <MenuItem Text="Instance"
+                              Command="{Binding BindingContext.ViewInstanceCommand, Source={x:Reference ThisPage}}"
+                              />
+                </x:Array>
+
+                <x:Array x:Key="cancelMenu" Type="{x:Type MenuItem}">
+                  <MenuItem Text="Series"
+                              Command="{Binding BindingContext.CancelSeriesCommand, Source={x:Reference ThisPage}}"
+                              />
+                  <MenuItem Text="Instance"
+                              Command="{Binding BindingContext.CancelInstanceCommand, Source={x:Reference ThisPage}}"
+                              />
+                </x:Array>
+              </ResourceDictionary>
+              
+            </ListView.Resources>
 
               <ListView.ItemTemplate>
                 <DataTemplate>
-                  <v:CommandViewCell
-                      Command="{Binding BindingContext.ListTappedCommand, Source={v:ElementReference ThisPage}}">
+                  <v:CommandViewCell x:Name="cell"
+                      Command="{Binding BindingContext.SelectItemCommand, Source={x:Reference ThisPage}}">
                     
                     <Grid BackgroundColor="{Binding Index, Converter={StaticResource IndexToBackground}, ConverterParameter=#addbe8:#d3d3d3}">
 
@@ -90,12 +113,20 @@ See LICENSE in the project root for license information. -->
                     </Grid>
 
                     <ViewCell.ContextActions>
-                      <MenuItem Text="{v:ResxString ViewOption}"
-                              Command="{Binding BindingContext.ViewCommand, Source={v:ElementReference ThisPage}}"
-                              CommandParameter="{Binding}"/>
-                      <MenuItem Text="{v:ResxString CancelOption}" IsDestructive="True"
-                              Command="{Binding BindingContext.CancelCommand, Source={v:ElementReference ThisPage}}"
-                              CommandParameter="{Binding}"/>
+                      <v:MeetingMenuItem Text="{v:ResxString ViewOption}"
+                                  Command="{Binding BindingContext.ViewInstanceCommand, Source={x:Reference ThisPage}}"
+                                  CommandParameter="{Binding}"
+                                  Page="{Binding Source={x:Reference ThisPage}}"
+                                  SubMenu="{StaticResource viewMenu}"
+                              />
+
+                      <v:MeetingMenuItem Text="{v:ResxString CancelOption}" IsDestructive="True"
+                                  Command="{Binding BindingContext.CancelInstanceCommand, Source={x:Reference ThisPage}}"
+                                  CommandParameter="{Binding}"
+                                  Page="{Binding Source={x:Reference ThisPage}}"
+                                  SubMenu="{StaticResource cancelMenu}"
+                              />
+                    
                     </ViewCell.ContextActions>
 
                   </v:CommandViewCell>

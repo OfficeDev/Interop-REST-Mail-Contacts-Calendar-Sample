@@ -4,6 +4,7 @@
 using Meeting_Manager_Xamarin.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
@@ -26,37 +27,24 @@ namespace Meeting_Manager_Xamarin.ViewModels
 
         protected IGraphService GraphService => App.Me.GraphService;
 
-        protected async Task NavigateTo(string pageToken, object data = null)
+        protected static void NavigateToContacts()
         {
-            using (new Loading(this))
-            {
-                await UI.NavigateTo(pageToken, data);
-            }
+            UI.NavigateTo("Contacts");
         }
 
-        protected static async void NavigateToContacts()
+        protected static void NavigateToUsers(bool getHumans)
         {
-            await UI.NavigateTo("Contacts");
+            UI.NavigateTo("Users", getHumans);
         }
 
-        private static async void NavigateToHumans()
+        protected void SendRunningLate(Meeting meeting)
         {
-            await NavigateToUsers(true);
+            NavigateToEmail(meeting, OData.ReplyAll, GetString("RunningLate"));
         }
 
-        protected static async Task NavigateToUsers(bool getHumans)
+        protected void NavigateToAttachments(IEnumerable<FileAttachment> attachments, Meeting meeting)
         {
-            await UI.NavigateTo("Users", getHumans);
-        }
-
-        protected async Task SendRunningLate(Meeting meeting)
-        {
-            await NavigateToEmail(meeting, OData.ReplyAll, GetString("RunningLate"));
-        }
-
-        protected async Task NavigateToAttachments(IEnumerable<FileAttachment> attachments, Meeting meeting)
-        {
-            await UI.NavigateTo("Attachments", Tuple.Create(attachments, meeting.Id, meeting.IsOrganizer));
+            UI.NavigateTo("Attachments", Tuple.Create(attachments, meeting.Id, meeting.IsOrganizer));
         }
 
         protected static string GetString(string id)
@@ -64,17 +52,12 @@ namespace Meeting_Manager_Xamarin.ViewModels
             return ResMan.GetString(id);
         }
 
-        protected void Publish<T>(T data)
+        protected static void GoBack()
         {
-            MessagingCenter.Send<object, T>(this, typeof(T).Name, data);
+            UI.GoBack();
         }
 
-        protected void Subscribe<T>(Action<object, T> action)
-        {
-            MessagingCenter.Subscribe<object, T>(this, typeof(T).Name, action);
-        }
-
-        protected async Task NavigateToEmail(Meeting meeting, string action, string comment = null)
+        protected async void NavigateToEmail(Meeting meeting, string action, string comment = null)
         {
             using (new Loading(this))
             {
@@ -83,11 +66,11 @@ namespace Meeting_Manager_Xamarin.ViewModels
                 if (response != null)
                 {
                     var parameter = Tuple.Create(response, action, comment);
-                    await UI.NavigateTo("Email", parameter);
+                    UI.NavigateTo("Email", parameter);
                 }
                 else
                 {
-                    await UI.DisplayAlert("Alert", GetString("CantReply"), GetString("OKCaption"));
+                    await UI.MessageDialog(GetString("CantReply"));
                 }
             }
         }
@@ -100,20 +83,21 @@ namespace Meeting_Manager_Xamarin.ViewModels
             }
         }
 
-        protected static async void AddUserOrContact()
+        public void NavigateTo(object parameter)
         {
-            await UI.DisplayAndExecuteAction(GetString("UserOrContactCaption"), new Dictionary<string, Action>
-            {
-                [GetString("AddressListOption")] = NavigateToHumans,
-                [GetString("ContactsOption")] = NavigateToContacts,
-            });
+            OnNavigatedTo(parameter);
         }
 
-        public virtual void OnAppearing(object data)
+        protected virtual void OnNavigatedTo(object parameter)
         {
         }
 
-        public virtual void OnDisappearing()
+        public void NavigateFrom()
+        {
+            OnNavigatingFrom();
+        }
+
+        protected virtual void OnNavigatingFrom()
         {
         }
 
@@ -130,7 +114,25 @@ namespace Meeting_Manager_Xamarin.ViewModels
             }
         }
 
-        public virtual bool SetProperty<T>(
+        protected bool SetCollectionProperty<T>(
+            ref ObservableCollection<T> storage,
+            ObservableCollection<T> value,
+            [CallerMemberName] string propertyName = null
+            )
+        {
+            if (object.Equals(storage, value))
+            {
+                return false;
+            }
+
+            // Work around Xamarin bug
+            UI.UpdateObservableCollection(ref storage, value);
+            this.NotifyPropertyChanged(propertyName);
+
+            return true;
+        }
+
+        protected bool SetProperty<T>(
             ref T storage,
             T value,
             [CallerMemberName] string propertyName = null)

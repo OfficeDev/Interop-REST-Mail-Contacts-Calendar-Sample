@@ -5,38 +5,33 @@ using Meeting_Manager_Xamarin.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Meeting_Manager_Xamarin.ViewModels
 {
-    class TimeSlotsPageViewModel : BaseViewModel, ITransientViewModel
+    class TimeSlotsDialogViewModel : DialogViewModel
     {
-        private ObservableCollection<MeetingTimeCandidate> _items;
         private Meeting _meeting;
 
-        public Command<MeetingTimeCandidate> ItemTappedCommand => new Command<MeetingTimeCandidate>(ItemTapped);
+        public Command<MeetingTimeCandidate> ItemSelectedCommand => new Command<MeetingTimeCandidate>(ItemSelected);
 
-        public ObservableCollection<MeetingTimeCandidate> Items
-        {
-            get { return _items; }
-            private set { SetProperty(ref _items, value); }
-        }
+        public ObservableCollection<MeetingTimeCandidate> Items { get; set; }
 
-        public override async void OnAppearing(object data)
+        protected override async void OnNavigatedTo(object parameter)
         {
-            _meeting = JSON.Deserialize<Meeting>(data);
+            _meeting = JSON.Deserialize<Meeting>(parameter);
 
             var items = await GetAllTimeCandidates(_meeting);
             SetTimeSlotProperties(items);
 
             Items = new ObservableCollection<MeetingTimeCandidate>(items);
+            OnPropertyChanged(() => Items);
         }
 
-        private async void ItemTapped(MeetingTimeCandidate item)
+        private void ItemSelected(MeetingTimeCandidate item)
         {
-            await UI.GoBack();
-            Publish(item);
+            GoBack();
+            UI.Publish(item);
         }
 
         private void SetTimeSlotProperties(IEnumerable<MeetingTimeCandidate> items)

@@ -6,7 +6,7 @@ See LICENSE in the project root for license information. -->
              xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
              Title="{v:ResxString RecurrenceTitle}"
              Style="{StaticResource Page}"
-             x:Class="Meeting_Manager_Xamarin.Views.RecurrencePage">
+             x:Class="Meeting_Manager_Xamarin.Views.RecurrenceDialog">
   
   <ContentPage.Resources>
     <ResourceDictionary>

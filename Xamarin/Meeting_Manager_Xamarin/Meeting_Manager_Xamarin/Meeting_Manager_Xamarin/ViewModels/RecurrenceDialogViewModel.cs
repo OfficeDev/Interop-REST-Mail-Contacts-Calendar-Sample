@@ -10,7 +10,7 @@ using Xamarin.Forms;
 
 namespace Meeting_Manager_Xamarin.ViewModels
 {
-    class RecurrencePageViewModel : BaseViewModel, ITransientViewModel
+    class RecurrenceDialogViewModel : BaseViewModel, ITransientViewModel
     {
         private const int TypeDaily = 0;
         private const int TypeWeekly = 1;
@@ -63,10 +63,6 @@ namespace Meeting_Manager_Xamarin.ViewModels
         {
             OData.First, OData.Second, OData.Third, OData.Fourth, OData.Last
         };
-
-        public RecurrencePageViewModel()
-        {
-        }
 
         public Command SubmitCommand => new Command(SubmitRecurrence);
 
@@ -359,9 +355,9 @@ namespace Meeting_Manager_Xamarin.ViewModels
             set { SetProperty(ref _yearlyIsVisible, value); }
         }
 
-        public override void OnAppearing(object data)
+        protected override void OnNavigatedTo(object parameter)
         {
-            _recurrence = JSON.Deserialize<Meeting.EventRecurrence>(data);
+            _recurrence = JSON.Deserialize<Meeting.EventRecurrence>(parameter);
             PopulatePatternViews();
 
             switch (_recurrence.Range.Type.ToLower())
@@ -460,7 +456,7 @@ namespace Meeting_Manager_Xamarin.ViewModels
             OnPropertyChanged(() => CanSubmit);
         }
 
-        private async void SubmitRecurrence()
+        private void SubmitRecurrence()
         {
             var pattern = _recurrence.Pattern;
             pattern.DaysOfWeek = new List<string>();
@@ -518,8 +514,8 @@ namespace Meeting_Manager_Xamarin.ViewModels
             _recurrence.Range.StartDate = StartDate.DateToApiString();
             _recurrence.Range.EndDate = EndDate.DateToApiString();
 
-            Publish(_recurrence);
-            await UI.GoBack();
+            UI.Publish(_recurrence);
+            GoBack();
         }
     }
 }

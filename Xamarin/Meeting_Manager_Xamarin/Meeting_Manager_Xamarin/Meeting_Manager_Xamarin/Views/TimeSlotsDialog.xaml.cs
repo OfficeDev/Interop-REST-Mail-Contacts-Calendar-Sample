@@ -3,9 +3,9 @@
 
 namespace Meeting_Manager_Xamarin.Views
 {
-    public partial class AttachmentsPage : Xamarin.Forms.ContentPage
+    public partial class TimeSlotsDialog : Xamarin.Forms.ContentPage
     {
-        public AttachmentsPage()
+        public TimeSlotsDialog()
         {
             InitializeComponent();
         }

@@ -19,9 +19,6 @@ namespace Meeting_Manager_Xamarin.Models
         public ImageSource Photo { get; set; }
 
         [JsonIgnore]
-        public System.IO.Stream Data { get; set; }
-
-        [JsonIgnore]
         public string Name => ToString();
 
         public event PropertyChangedEventHandler PropertyChanged;

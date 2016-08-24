@@ -546,4 +546,7 @@
   <data name="YearsCaption" xml:space="preserve">
     <value>year(s)</value>
   </data>
+  <data name="NoFreeSlots" xml:space="preserve">
+    <value>No free slots are found</value>
+  </data>
 </root>

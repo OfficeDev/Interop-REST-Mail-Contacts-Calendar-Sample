@@ -43,10 +43,12 @@
     <Compile Include="Converters\BoolToBackground.cs" />
     <Compile Include="Converters\BoolToIndex.cs" />
     <Compile Include="Converters\ColorParser.cs" />
-    <Compile Include="Converters\DateFormat.cs" />
+    <Compile Include="Converters\DateTimeToDateTimeOffset.cs" />
     <Compile Include="Converters\IndexToBackground.cs" />
     <Compile Include="Converters\IndexToBool.cs" />
+    <Compile Include="Converters\IntToBool.cs" />
     <Compile Include="Converters\Negation.cs" />
+    <Compile Include="Converters\StringToHtml.cs" />
     <Compile Include="DateTimeUtils.cs" />
     <Compile Include="Extentions.cs" />
     <Compile Include="HttpGraphService.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="Models\Meeting.cs" />
     <Compile Include="Models\MeetingTimes.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\NavigationArgs.cs" />
     <Compile Include="Models\ResponseStatus.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="OData.cs" />
@@ -84,42 +87,41 @@
     <Compile Include="SDKGraphService.cs" />
     <Compile Include="UI.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="ViewModels\AcceptOrDeclinePageViewModel.cs" />
-    <Compile Include="ViewModels\AttachmentsPageViewModel.cs" />
-    <Compile Include="ViewModels\FilesPageViewModel.cs" />
+    <Compile Include="ViewModels\AcceptDeclineDialogViewModel.cs" />
+    <Compile Include="ViewModels\AttachmentsDialogViewModel.cs" />
+    <Compile Include="ViewModels\DialogViewModel.cs" />
+    <Compile Include="ViewModels\FilesDialogViewModel.cs" />
     <Compile Include="ViewModels\Loading.cs" />
-    <Compile Include="ViewModels\TimeSlotsPageViewModel.cs" />
+    <Compile Include="ViewModels\LoginPageViewModel.cs" />
+    <Compile Include="ViewModels\TimeSlotsDialogViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\CalendarPageViewModel.cs" />
-    <Compile Include="ViewModels\ConnectPageViewModel.cs" />
-    <Compile Include="ViewModels\ContactsPageViewModel.cs" />
+    <Compile Include="ViewModels\ContactsDialogViewModel.cs" />
     <Compile Include="ViewModels\DetailsPageViewModel.cs" />
     <Compile Include="ViewModels\EditPageViewModel.cs" />
-    <Compile Include="Views\AcceptOrDeclinePage.xaml.cs">
-      <DependentUpon>AcceptOrDeclinePage.xaml</DependentUpon>
+    <Compile Include="Views\AcceptDeclineDialog.xaml.cs">
+      <DependentUpon>AcceptDeclineDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\AttachmentsPage.xaml.cs">
-      <DependentUpon>AttachmentsPage.xaml</DependentUpon>
+    <Compile Include="Views\AttachmentsDialog.xaml.cs">
+      <DependentUpon>AttachmentsDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CommandSwitch.cs" />
+    <Compile Include="Views\CascadeMenuItem.cs" />
     <Compile Include="Views\CommandViewCell.cs" />
-    <Compile Include="Views\ElementReference.cs" />
     <Compile Include="Views\EmailPage.xaml.cs">
       <DependentUpon>EmailPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\EmailPageViewModel.cs" />
     <Compile Include="ViewModels\ITransientViewModel.cs" />
-    <Compile Include="ViewModels\LoginPageViewModel.cs" />
-    <Compile Include="ViewModels\RecurrencePageViewModel.cs" />
-    <Compile Include="ViewModels\UsersPageViewModel.cs" />
+    <Compile Include="ViewModels\RecurrenceDialogViewModel.cs" />
+    <Compile Include="ViewModels\UsersDialogViewModel.cs" />
     <Compile Include="Views\CalendarPage.xaml.cs">
       <DependentUpon>CalendarPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ConnectPage.xaml.cs">
       <DependentUpon>ConnectPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ContactsPage.xaml.cs">
-      <DependentUpon>ContactsPage.xaml</DependentUpon>
+    <Compile Include="Views\ContactsDialog.xaml.cs">
+      <DependentUpon>ContactsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DetailsPage.xaml.cs">
       <DependentUpon>DetailsPage.xaml</DependentUpon>
@@ -127,9 +129,11 @@
     <Compile Include="Views\EditPage.xaml.cs">
       <DependentUpon>EditPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\FilesPage.xaml.cs">
-      <DependentUpon>FilesPage.xaml</DependentUpon>
+    <Compile Include="Views\FilesDialog.xaml.cs">
+      <DependentUpon>FilesDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MeetingMenuItem.cs" />
+    <Compile Include="Views\MenuButton.cs" />
     <Compile Include="Views\OnPlatformEx.cs" />
     <Compile Include="Views\ImageResourceExtension.cs" />
     <Compile Include="Views\JsonPage.xaml.cs">
@@ -144,16 +148,17 @@
     <Compile Include="Views\LogWindowPage.xaml.cs">
       <DependentUpon>LogWindowPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RecurrencePage.xaml.cs">
-      <DependentUpon>RecurrencePage.xaml</DependentUpon>
+    <Compile Include="Views\RecurrenceDialog.xaml.cs">
+      <DependentUpon>RecurrenceDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ResxStringExtension.cs" />
-    <Compile Include="Views\TimeSlotsPage.xaml.cs">
-      <DependentUpon>TimeSlotsPage.xaml</DependentUpon>
+    <Compile Include="Views\TimeSlotsDialog.xaml.cs">
+      <DependentUpon>TimeSlotsDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UsersPage.xaml.cs">
-      <DependentUpon>UsersPage.xaml</DependentUpon>
+    <Compile Include="Views\UsersDialog.xaml.cs">
+      <DependentUpon>UsersDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\WebView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -201,15 +206,15 @@
       <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\References\Windows.Foundation.UniversalApiContract\2.0.0.0\Windows.Foundation.UniversalApiContract.winmd</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.0.49\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.1.114\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.0.49\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.1.114\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.0.49\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.1.114\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -220,19 +225,19 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\UsersPage.xaml">
+    <EmbeddedResource Include="Views\UsersDialog.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\ContactsPage.xaml">
+    <EmbeddedResource Include="Views\ContactsDialog.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\RecurrencePage.xaml">
+    <EmbeddedResource Include="Views\RecurrenceDialog.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -259,7 +264,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\AcceptOrDeclinePage.xaml">
+    <EmbeddedResource Include="Views\AcceptDeclineDialog.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -283,19 +288,19 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\AttachmentsPage.xaml">
+    <EmbeddedResource Include="Views\AttachmentsDialog.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\FilesPage.xaml">
+    <EmbeddedResource Include="Views\FilesDialog.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\TimeSlotsPage.xaml">
+    <EmbeddedResource Include="Views\TimeSlotsDialog.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -306,10 +311,10 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.2.3.0.49\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.2.3.0.49\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.2.3.1.114\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.2.3.1.114\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets'))" />
   </Target>
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Import Project="..\..\packages\Xamarin.Forms.2.3.0.49\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.0.49\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
+  <Import Project="..\..\packages\Xamarin.Forms.2.3.1.114\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.1.114\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

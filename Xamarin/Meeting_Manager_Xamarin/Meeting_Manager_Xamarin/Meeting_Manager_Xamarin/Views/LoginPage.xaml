@@ -3,13 +3,22 @@ See LICENSE in the project root for license information. -->
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
              x:Class="Meeting_Manager_Xamarin.Views.LoginPage">
 
-  <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+  <Grid x:Name="MainGrid" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
 
-    <WebView x:Name="webView" Navigating="OnNavigating"
-             HeightRequest="500" WidthRequest="500"/>
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
 
-  </StackLayout>
+    <v:WebView Source="{Binding LoginUrl}" Command="{Binding NavigationCommand}"/>
+
+    <Frame Grid.Row="1" Style="{StaticResource Frame}" Padding="2">
+      <v:LogWindowControl/>
+    </Frame>
+  
+  </Grid>
 
 </ContentPage>

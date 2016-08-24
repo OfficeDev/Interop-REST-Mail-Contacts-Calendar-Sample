@@ -228,7 +228,7 @@ namespace Meeting_Manager_Xamarin
             return TimeZoneInfo.ConvertTime(dateTime.DateTime, TimeZoneInfo.Local);
         }
 
-        public static DateTime FromLocalTime(this ZonedDateTime dateTime, DateTime localDateTime)
+        public static DateTime ToUtcTime(this DateTime localDateTime)
         {
             return TimeZoneInfo.ConvertTime(localDateTime, TimeZoneInfo.Utc);
         }

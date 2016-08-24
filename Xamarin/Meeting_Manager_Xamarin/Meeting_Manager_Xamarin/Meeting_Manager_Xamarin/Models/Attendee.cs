@@ -44,7 +44,10 @@ namespace Meeting_Manager_Xamarin.Models
         public string Name => ToString();
 
         [JsonIgnore]
-        public bool IsOrganizer { get; set; }
+        public bool IsOrganizer => EmailAddress.Address.EqualsCaseInsensitive(OrganizerAddress);
+
+        [JsonIgnore]
+        public string OrganizerAddress { get; set; }
 
         public override string ToString()
         {

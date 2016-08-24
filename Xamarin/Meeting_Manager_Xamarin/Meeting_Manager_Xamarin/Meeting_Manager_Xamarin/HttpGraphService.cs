@@ -83,15 +83,8 @@ namespace Meeting_Manager_Xamarin
             await GetHttpHelper().DeleteItemAsync(uri);
         }
 
-        public async Task<bool> UpdateAndSendMessage(Message message, string comment, IEnumerable<Message.Recipient> recipients)
+        public async Task<bool> UpdateAndSendMessage(Message message)
         {
-            message.Body.Content = comment + message.Body.Content;
-
-            if (recipients != null)
-            {
-                message.ToRecipients = new List<Message.Recipient>(recipients);
-            }
-
             string uri = MessagesFolder + message.Id;
             var helper = GetHttpHelper();
 
@@ -156,11 +149,11 @@ namespace Meeting_Manager_Xamarin
             {
             }
 
-            protected override async Task HandleFailure(string errorMessage, HttpResponseMessage response)
+            protected override void HandleFailure(string errorMessage, HttpResponseMessage response)
             {
                 if (response.StatusCode != HttpStatusCode.NotFound)
                 {
-                    await base.HandleFailure(errorMessage, response);
+                    base.HandleFailure(errorMessage, response);
                 }
             }
         }
@@ -288,11 +281,10 @@ namespace Meeting_Manager_Xamarin
 
             var invites = await GetHttpHelper().GetItemsAsync<EventMessage>(uri);
 
-            var orderedInvites = invites.OrderBy(x => x.CreatedDateTime);
+            // Put most recent invite on top
+            var orderedInvites = invites.OrderByDescending(x => x.CreatedDateTime);
 
-            var invite = orderedInvites.FirstOrDefault(x => x.Type.EqualsCaseInsensitive("#microsoft.graph.eventMessage"));
-
-            return invite;
+            return orderedInvites.FirstOrDefault(x => x.Type.EqualsCaseInsensitive("#microsoft.graph.eventMessage"));
         }
 
         private string BuildInvitationsUri(Meeting meeting)
@@ -416,12 +408,7 @@ namespace Meeting_Manager_Xamarin
 
                 var list = await _httpHelper.GetItemAsync<HttpHelper.ODataList<User>>(_nextPageUri);
 
-                if (list == null)
-                {
-                    return new List<User>();
-                }
-
-                var items = list.value;
+                var items = list?.value;
 
                 if (next)
                 {
@@ -432,7 +419,7 @@ namespace Meeting_Manager_Xamarin
                     --_curPage;
                 }
 
-                _nextPageUri = GetNextPageUri(_nextPageUri, list.NextLink);
+                _nextPageUri = GetNextPageUri(_nextPageUri, list?.NextLink);
 
                 if (_nextPageUri != null && _nextPageUri.Contains("$skiptoken"))
                 {
@@ -460,7 +447,7 @@ namespace Meeting_Manager_Xamarin
 
                 if (nextUri[nextUri.Length - 1] != '&')
                 {
-                        nextUri += '&';
+                    nextUri += '&';
                 }
 
                 nextUri += skiptoken;

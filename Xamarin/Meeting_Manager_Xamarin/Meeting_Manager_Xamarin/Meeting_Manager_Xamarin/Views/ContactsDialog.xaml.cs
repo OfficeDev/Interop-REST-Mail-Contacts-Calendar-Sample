@@ -3,9 +3,9 @@
 
 namespace Meeting_Manager_Xamarin.Views
 {
-    public partial class AcceptOrDeclinePage : Xamarin.Forms.ContentPage
+    public partial class ContactsDialog : Xamarin.Forms.ContentPage
     {
-        public AcceptOrDeclinePage()
+        public ContactsDialog()
         {
             InitializeComponent();
         }

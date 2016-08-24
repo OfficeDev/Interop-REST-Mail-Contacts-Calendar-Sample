@@ -1,29 +1,43 @@
 ﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
 //See LICENSE in the project root for license information.
 
+using Meeting_Manager_Xamarin.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Meeting_Manager_Xamarin
 {
     internal static class UI
     {
-        internal static async Task NavigateTo(string pageToken, object data = null)
+        internal static async void NavigateTo(string pageToken, object data = null)
         {
             await App.Me.PushAsync(pageToken, SerializeParameter(data));
         }
 
-        internal static async Task GoBack()
+        internal static async void GoBack()
         {
             await App.Me.PopAsync();
         }
 
+        internal static void Publish<T>(T data)
+        {
+            MessagingCenter.Send<object, T>(App.Me, typeof(T).Name, data);
+        }
+
+        internal static void Subscribe<T>(Action<T> action)
+        {
+            Action<object, T> superDelegate = (object that, T arg) => action.Invoke(arg);
+
+            MessagingCenter.Subscribe(App.Me, typeof(T).Name, superDelegate);
+        }
+
         internal static ObservableCollection<T> UpdateObservableCollection<T>(ref ObservableCollection<T> collection, IEnumerable<T> items)
         {
-            if (items.Any())
+            if (items?.Any() == true)
             {
                 collection = new ObservableCollection<T>(items);
             }
@@ -44,30 +58,33 @@ namespace Meeting_Manager_Xamarin
             return await App.Me.DisplayAlert(ResMan.GetString("AlertTitle"), message, ResMan.GetString("YesCaption"), ResMan.GetString("NoCaption"));
         }
 
-        internal static async Task<bool> Alert(string title, string message)
+        internal static async Task MessageDialog(string message)
         {
-            return await App.Me.DisplayAlert(title, message, ResMan.GetString("OKCaption"), null);
+            await App.Me.DisplayAlert(ResMan.GetString("AlertTitle"), message, ResMan.GetString("OKCaption"));
         }
 
-        internal static async Task DisplayAndExecuteAction(string title, IDictionary<string, Action> options)
+        internal static async Task OpenAttachment(FileAttachment item)
         {
-            var captions = options.Keys.ToArray();
-            var actionTag = await DisplayActions(title, captions);
+            DependencyService.Get<IAttachmentOpener>().Open(item);
+            await Task.FromResult(0);
+        }
 
-            if (actionTag != null)
+        internal static Task<ImageSource> BytesToPhoto(byte[] data)
+        {
+            ImageSource result;
+
+            if (data == null)
             {
-                options[actionTag].Invoke();
+                result = ImageSource.FromResource("Meeting_Manager_Xamarin.Images.outlook_small.png");
             }
-        }
+            else
+            {
+                var ms = new System.IO.MemoryStream(data);
 
-        internal static async Task<string> DisplayActions(string title, params string[] actions)
-        {
-            return await App.Me.DisplayActions(title, actions);
-        }
+                result = ImageSource.FromStream(() => ms);
+            }
 
-        internal static async Task DisplayAlert(string title, string message, string cancelCaption)
-        {
-            await App.Me.DisplayAlert(title, message, cancelCaption);
+            return Task.FromResult(result);
         }
 
         private static object SerializeParameter(object parameter = null)

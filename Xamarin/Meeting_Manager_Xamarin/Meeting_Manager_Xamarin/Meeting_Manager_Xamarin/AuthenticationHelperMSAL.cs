@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 
 namespace Meeting_Manager_Xamarin
 {
-    class AuthenticationHelperMSAL : IAuthenticationService
+    sealed class AuthenticationHelperMSAL : IAuthenticationService
     {
         private PublicClientApplication _identityClient;
+        private string ClientId => App.Current.Resources["ida:ClientID_V2"].ToString();
 
         private string TokenForUser { get; set; }
         private DateTimeOffset Expiration { get; set; }
 
         public AuthenticationHelperMSAL(IPlatformParameters platformParameters)
         {
-            _identityClient = new PublicClientApplication(App.Me.ClientId);
+            _identityClient = new PublicClientApplication(ClientId);
             _identityClient.PlatformParameters = platformParameters;
         }
 

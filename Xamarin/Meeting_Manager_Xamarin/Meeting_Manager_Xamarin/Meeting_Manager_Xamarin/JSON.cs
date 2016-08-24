@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Meeting_Manager_Xamarin
 {
-    class JSON
+    static class JSON
     {
         internal static string Serialize(object obj)
         {

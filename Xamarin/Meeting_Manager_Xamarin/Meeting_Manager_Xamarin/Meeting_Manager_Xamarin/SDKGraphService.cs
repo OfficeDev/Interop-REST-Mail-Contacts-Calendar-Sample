@@ -185,15 +185,8 @@ namespace Meeting_Manager_Xamarin
             await _graphClient.Me.MailFolders.Drafts.Messages[messageid].Request().DeleteAsync();
         }
 
-        public async Task<bool> UpdateAndSendMessage(MMM.Message message, string comment, IEnumerable<MMM.Message.Recipient> recipients)
+        public async Task<bool> UpdateAndSendMessage(MMM.Message message)
         {
-            message.Body.Content = comment + message.Body.Content;
-
-            if (recipients != null)
-            {
-                message.ToRecipients = new List<MMM.Message.Recipient>(recipients);
-            }
-
             var newMessage = message.ConvertObject<Microsoft.Graph.Message>();
 
             if (await _graphClient.Me.Messages[message.Id].Request().UpdateAsync(newMessage) == null)

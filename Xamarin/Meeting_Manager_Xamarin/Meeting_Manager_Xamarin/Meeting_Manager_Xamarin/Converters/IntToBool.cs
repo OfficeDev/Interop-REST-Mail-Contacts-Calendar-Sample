@@ -4,11 +4,11 @@ using Xamarin.Forms;
 
 namespace Meeting_Manager_Xamarin.Converters
 {
-    public class IndexToBool : IValueConverter
+    class IntToBool : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (int)value == 1;
+            return value is int && (int)value != 0;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

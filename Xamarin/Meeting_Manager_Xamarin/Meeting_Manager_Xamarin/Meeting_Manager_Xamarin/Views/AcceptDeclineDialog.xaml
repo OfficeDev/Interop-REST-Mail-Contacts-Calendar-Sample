@@ -5,7 +5,7 @@ See LICENSE in the project root for license information. -->
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:v="clr-namespace:Meeting_Manager_Xamarin.Views"
              Style="{StaticResource Page}"
-             x:Class="Meeting_Manager_Xamarin.Views.AcceptOrDeclinePage"
+             x:Class="Meeting_Manager_Xamarin.Views.AcceptDeclineDialog"
              Title="{Binding Title}"
              >
   
