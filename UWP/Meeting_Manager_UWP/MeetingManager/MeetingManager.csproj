@@ -170,6 +170,7 @@
     <Compile Include="Views\AttachmentsDialog.xaml.cs">
       <DependentUpon>AttachmentsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CalendarDatePicker.cs" />
     <Compile Include="Views\CalendarPage.xaml.cs">
       <DependentUpon>CalendarPage.xaml</DependentUpon>
     </Compile>
