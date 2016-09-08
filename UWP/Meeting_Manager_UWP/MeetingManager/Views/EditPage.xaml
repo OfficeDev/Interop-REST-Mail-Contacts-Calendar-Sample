@@ -130,7 +130,7 @@ See LICENSE in the project root for license information. -->
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 
-                <CalendarDatePicker Date="{Binding StartDate, Mode=TwoWay}"
+                <local:CalendarDatePicker SelectedDate="{Binding StartDate, Mode=TwoWay}"
                     DateFormat = "{} Start: {dayofweek.full}‎, ‎{month.full}‎ ‎{day.integer}‎, ‎{year.full}"
                     Margin="0,0,0,0" HorizontalAlignment="Stretch"
                     />
@@ -140,7 +140,7 @@ See LICENSE in the project root for license information. -->
                 <CheckBox Content="All Day" IsChecked="{Binding IsAllDay, Mode=TwoWay}"
                             Grid.Column="2" VerticalAlignment="Bottom" Margin="10,0,0,0"/>
 
-                <CalendarDatePicker Date="{Binding EndDate, Mode=TwoWay}" 
+                <local:CalendarDatePicker SelectedDate="{Binding EndDate, Mode=TwoWay}" 
                     DateFormat = "{} End: {dayofweek.full}‎, ‎{month.full}‎ ‎{day.integer}‎, ‎{year.full}"
                     Grid.Row="1" Margin="0,25,0,0" HorizontalAlignment="Stretch"
                     />
