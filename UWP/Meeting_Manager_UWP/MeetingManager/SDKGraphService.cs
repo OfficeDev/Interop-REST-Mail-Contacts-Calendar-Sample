@@ -45,24 +45,21 @@ namespace MeetingManager
 
             public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
             {
-                var response = await _httpClient.SendAsync(request);
-                LogResponse(response);
-                
-                return response;
-            }
-
-            private async void LogResponse(HttpResponseMessage response)
-            {
-                var request = response.RequestMessage;
-
-                var method = request.Method.Method;
-                var uri = request.RequestUri.ToString();
-                string requestBody = string.Empty;
-
+                var requestBody = string.Empty;
                 if (request.Content != null)
                 {
                     requestBody = await request.Content.ReadAsStringAsync();
                 }
+
+                var response = await _httpClient.SendAsync(request);
+                LogResponse(request, requestBody, response);
+                return response;
+            }
+
+            private async void LogResponse(HttpRequestMessage request, string requestBody, HttpResponseMessage response)
+            {
+                var method = request.Method.Method;
+                var uri = request.RequestUri.ToString();
 
                 var statusCode = $"{(int)response.StatusCode} ({response.StatusCode.ToString()})";
                 string responseBody = string.Empty;
