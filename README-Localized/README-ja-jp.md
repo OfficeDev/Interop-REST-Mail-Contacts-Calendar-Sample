@@ -1,3 +1,13 @@
+---
+page_type: sample
+products:
+- office-365
+languages:
+- csharp
+extensions:
+  contentType: samples
+  createdDate: 9/16/2015 10:17:29 AM
+---
 # Interop REST Mail Contacts Calendar アプリ
 
 このプロジェクトでは、[Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/) が採用されています。詳細については、「[規範に関する FAQ](https://opensource.microsoft.com/codeofconduct/faq/)」を参照してください。または、その他の質問やコメントがあれば、[opencode@microsoft.com](mailto:opencode@microsoft.com) までにお問い合わせください。

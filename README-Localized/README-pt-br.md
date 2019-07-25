@@ -1,3 +1,13 @@
+---
+page_type: sample
+products:
+- office-365
+languages:
+- csharp
+extensions:
+  contentType: samples
+  createdDate: 9/16/2015 10:17:29 AM
+---
 # Aplicativo de Calendário de Contatos de Email de REST de Interoperabilidade
 
 Este projeto adotou o [Código de Conduta do Código Aberto da Microsoft](https://opensource.microsoft.com/codeofconduct/). Para saber mais, confira as [Perguntas frequentes do Código de Conduta](https://opensource.microsoft.com/codeofconduct/faq/) ou contate [opencode@microsoft.com](mailto:opencode@microsoft.com) se tiver outras dúvidas ou comentários.
