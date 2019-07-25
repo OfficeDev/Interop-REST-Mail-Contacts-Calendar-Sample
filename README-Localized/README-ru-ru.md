@@ -1,3 +1,13 @@
+---
+page_type: sample
+products:
+- office-365
+languages:
+- csharp
+extensions:
+  contentType: samples
+  createdDate: 9/16/2015 10:17:29 AM
+---
 # Приложение для межпрограммного взаимодействия между REST, почтовыми контактами и календарем
 
 Этот проект соответствует [правилам поведения Майкрософт, касающимся обращения с открытым кодом](https://opensource.microsoft.com/codeofconduct/). Читайте дополнительные сведения в [разделе вопросов и ответов по правилам поведения](https://opensource.microsoft.com/codeofconduct/faq/) или отправляйте новые вопросы и замечания по адресу [opencode@microsoft.com](mailto:opencode@microsoft.com).

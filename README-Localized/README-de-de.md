@@ -1,3 +1,13 @@
+---
+page_type: sample
+products:
+- office-365
+languages:
+- csharp
+extensions:
+  contentType: samples
+  createdDate: 9/16/2015 10:17:29 AM
+---
 # Interop REST-App für E-Mail-Kontakte und Kalender
 
 In diesem Projekt wurden die [Microsoft Open Source-Verhaltensregeln](https://opensource.microsoft.com/codeofconduct/) übernommen. Weitere Informationen finden Sie unter [Häufig gestellte Fragen zu Verhaltensregeln](https://opensource.microsoft.com/codeofconduct/faq/), oder richten Sie Ihre Fragen oder Kommentare an [opencode@microsoft.com](mailto:opencode@microsoft.com).

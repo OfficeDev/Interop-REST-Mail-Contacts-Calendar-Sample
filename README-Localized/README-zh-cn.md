@@ -1,3 +1,13 @@
+---
+page_type: sample
+products:
+- office-365
+languages:
+- csharp
+extensions:
+  contentType: samples
+  createdDate: 9/16/2015 10:17:29 AM
+---
 # 互操作 REST 邮件联系人日历应用
 
 此项目采用 [Microsoft 开源行为准则](https://opensource.microsoft.com/codeofconduct/)。有关详细信息，请参阅 [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/)（行为准则常见问题解答），有任何其他问题或意见，也可联系 [opencode@microsoft.com](mailto:opencode@microsoft.com)。
